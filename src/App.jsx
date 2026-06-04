@@ -36,6 +36,11 @@ function getPlatformColor(platform) {
   return platformColors[platform] ?? { bg: "#475569", text: "#ffffff" };
 }
 
+function getPageFillSetting(poster, pageIndex) {
+  const override = poster.pageFillOverrides?.[pageIndex];
+  return typeof override === "boolean" ? override : poster.fillEmptySpace;
+}
+
 async function waitForExportAssets(root) {
   if (document.fonts?.ready) {
     await document.fonts.ready;
@@ -115,6 +120,7 @@ function App() {
     [pages],
   );
   const currentPage = Math.min(pageIndex, pages.length - 1);
+  const currentPageFill = getPageFillSetting(poster, currentPage);
 
   useLayoutEffect(() => {
     if (!measureRef.current) return undefined;
@@ -154,6 +160,16 @@ function App() {
 
   function updatePoster(key, value) {
     setPoster((current) => ({ ...current, [key]: value }));
+  }
+
+  function updateCurrentPageFill(value) {
+    setPoster((current) => ({
+      ...current,
+      pageFillOverrides: {
+        ...(current.pageFillOverrides ?? {}),
+        [currentPage]: value,
+      },
+    }));
   }
 
   function updateGame(index, key, value) {
@@ -330,7 +346,7 @@ function App() {
               type="checkbox"
               onChange={(event) => updatePoster("fillEmptySpace", event.target.checked)}
             />
-            自动补齐当前页空白
+            默认补齐空白
           </label>
           <label>
             选择内置 Logo
@@ -385,6 +401,14 @@ function App() {
             </button>
           ))}
         </div>
+        <label className="toggle-field page-fill-toggle">
+          <input
+            checked={currentPageFill}
+            type="checkbox"
+            onChange={(event) => updateCurrentPageFill(event.target.checked)}
+          />
+          当前页补齐空白
+        </label>
 
         <div className="games-editor">
           <div className="section-title">
@@ -454,6 +478,7 @@ function App() {
           <PosterPage
             pageGames={pages[currentPage]}
             pageOffset={pageStartOffsets[currentPage] ?? 0}
+            fillSpace={currentPageFill}
             poster={poster}
             posterRef={posterRef}
             theme={theme}
@@ -488,7 +513,7 @@ function MeasurementLayer({ games, measureRef, theme }) {
   );
 }
 
-function PosterPage({ poster, pageGames, pageOffset, posterRef, theme }) {
+function PosterPage({ poster, pageGames, pageOffset, fillSpace, posterRef, theme }) {
   return (
     <div
       className={`poster theme-${theme.id}`}
@@ -516,7 +541,7 @@ function PosterPage({ poster, pageGames, pageOffset, posterRef, theme }) {
         </div>
       </header>
 
-      <section className={`poster-list ${poster.fillEmptySpace ? "fill-space" : ""}`}>
+      <section className={`poster-list ${fillSpace ? "fill-space" : ""}`}>
         {pageGames.map((game, index) => (
           <GameCard key={`${game.title}-${index}`} game={game} number={pageOffset + index + 1} />
         ))}
