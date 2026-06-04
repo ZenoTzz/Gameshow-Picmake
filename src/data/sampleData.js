@@ -1,0 +1,65 @@
+export const initialPoster = {
+  theme: "stateOfPlay",
+  fillEmptySpace: true,
+  logoImages: {
+    stateOfPlay: "",
+    summerGameFest: "",
+    xbox: "",
+  },
+  eventLabel: "State of Play",
+  title: "发布会重磅大作",
+  subtitle: "发售日期 / 登陆平台 / 关键信息速览",
+  note: "* 发售信息以官方发布为准",
+  games: [
+    {
+      title: "《漫威金刚狼》",
+      date: "2026年09月15日",
+      platforms: ["PS5"],
+      info: "现已开始预购，PlayStation港区商店价格548港币（约合473元人民币）",
+      image: "",
+    },
+    {
+      title: "《控制：共振》",
+      date: "2026年9月24日",
+      platforms: ["PS5", "Xbox Series", "Mac", "PC"],
+      info: "现已开始预购，PlayStation港区商店价格428港币（约合370元人民币），Steam国区商店价格268元",
+      image: "",
+    },
+    {
+      title: "《寂静岭：Townfall》",
+      date: "2026年9月24日",
+      platforms: ["PS5", "PC"],
+      info: "现已开始预购，PlayStation港区商店价格348港币（约合300元人民币），Steam国区商店价格310元",
+      image: "",
+    },
+    {
+      title: "《鬼武者 Way of the Sword》",
+      date: "2026年9月25日",
+      platforms: ["PS5", "Xbox Series", "PC"],
+      info: "现已开始预购，PlayStation港区商店价格518港币（约合447元人民币），Steam国区商店价格298元，试玩demo现已上线",
+      image: "",
+    },
+    {
+      title: "《影之刃零》",
+      date: "2026年10月29日",
+      platforms: ["PS5", "PC"],
+      info: "完整预告片及预购将于2026年夏季开启。游戏玩法与剧情深度演示将于2026年夏末的State of Play发布会上亮相",
+      image: "",
+    },
+    {
+      title: "《战神：劳菲（God of War Laufey）》",
+      date: "未定",
+      platforms: ["PS5"],
+      info: "现已支持加入愿望单，更多信息将于日后公布",
+      image: "",
+    },
+  ],
+};
+
+export const blankGame = {
+  title: "《新公布游戏》",
+  date: "待公布",
+  platforms: ["PS5"],
+  info: "在这里填写预购、价格、试玩、发售窗口或其他关键信息。",
+  image: "",
+};
