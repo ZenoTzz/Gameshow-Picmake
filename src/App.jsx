@@ -15,6 +15,13 @@ import { themes } from "./data/themes";
 import { paginateGames } from "./utils/paginate";
 
 const platformOptions = ["PS5", "Xbox Series", "Switch", "Switch 2", "PC", "Mac", "iOS", "Android"];
+const baseUrl = import.meta.env.BASE_URL ?? "/";
+
+function resolveLogoSrc(src) {
+  if (!src) return "";
+  if (src.startsWith("data:") || src.startsWith("http://") || src.startsWith("https://")) return src;
+  return `${baseUrl}${src}`.replace(/\/{2,}/g, "/");
+}
 
 function cloneGame(game = blankGame) {
   return {
@@ -397,7 +404,7 @@ function PosterPage({ poster, pageGames, pageOffset, posterRef, theme }) {
 function BrandMark({ logoImage }) {
   return (
     <div className="brand-mark logo-slot" aria-label="Logo">
-      {logoImage && <img alt="" src={logoImage} />}
+      {logoImage && <img alt="" src={resolveLogoSrc(logoImage)} />}
     </div>
   );
 }
