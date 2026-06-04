@@ -303,6 +303,17 @@ textarea:focus {
   font-size: 14px;
 }
 
+.export-stage {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 1440px;
+  height: 1920px;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: -1;
+}
+
 .poster-scale-wrap {
   width: 720px;
   height: 960px;

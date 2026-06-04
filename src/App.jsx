@@ -36,6 +36,23 @@ function getPlatformColor(platform) {
   return platformColors[platform] ?? { bg: "#475569", text: "#ffffff" };
 }
 
+async function waitForExportAssets(root) {
+  if (document.fonts?.ready) {
+    await document.fonts.ready;
+  }
+
+  const images = Array.from(root.querySelectorAll("img"));
+  await Promise.all(
+    images.map((image) => {
+      if (image.complete && image.naturalWidth > 0) return Promise.resolve();
+      return new Promise((resolve) => {
+        image.onload = resolve;
+        image.onerror = resolve;
+      });
+    }),
+  );
+}
+
 function getTemplateFields(poster) {
   return {
     theme: poster.theme,
@@ -228,14 +245,21 @@ function App() {
 
   async function exportCurrentPage() {
     if (!posterRef.current) return;
+    const stage = document.createElement("div");
     const clone = posterRef.current.cloneNode(true);
-    clone.style.transform = "none";
-    clone.style.position = "fixed";
-    clone.style.left = "-9999px";
-    clone.style.top = "0";
-    document.body.appendChild(clone);
+
+    stage.className = "export-stage";
+    clone.style.setProperty("transform", "none", "important");
+    clone.style.setProperty("position", "relative", "important");
+    clone.style.setProperty("left", "auto", "important");
+    clone.style.setProperty("top", "auto", "important");
+    clone.style.setProperty("width", "1440px", "important");
+    clone.style.setProperty("height", "1920px", "important");
+    stage.appendChild(clone);
+    document.body.appendChild(stage);
 
     try {
+      await waitForExportAssets(clone);
       const dataUrl = await toPng(clone, {
         width: 1440,
         height: 1920,
@@ -248,7 +272,7 @@ function App() {
       link.href = dataUrl;
       link.click();
     } finally {
-      clone.remove();
+      stage.remove();
     }
   }
 
