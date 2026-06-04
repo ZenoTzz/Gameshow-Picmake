@@ -137,6 +137,45 @@ textarea:focus {
   gap: 14px;
 }
 
+.bulk-parser {
+  display: grid;
+  gap: 12px;
+  margin: 0 0 20px;
+  padding: 14px;
+  border: 1px solid rgba(125, 211, 252, 0.18);
+  border-radius: 8px;
+  background: rgba(14, 165, 233, 0.06);
+}
+
+.bulk-textarea {
+  min-height: 150px;
+}
+
+.bulk-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.bulk-actions button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+  border: 1px solid rgba(125, 211, 252, 0.34);
+  border-radius: 8px;
+  background: #1d4ed8;
+  color: #ffffff;
+  font-weight: 800;
+}
+
+.parse-message {
+  margin: 0;
+  color: #7dd3fc;
+  font-size: 13px;
+  font-weight: 700;
+}
+
 .section-title {
   display: flex;
   align-items: center;

@@ -13,6 +13,7 @@ import { blankGame, initialPoster } from "./data/sampleData";
 import { logoLibrary } from "./data/logoLibrary";
 import { themes } from "./data/themes";
 import { paginateGames } from "./utils/paginate";
+import { parseGamesFromText } from "./utils/parseGames";
 
 const platformOptions = ["PS5", "Xbox Series", "Switch", "Switch 2", "PC", "Mac", "iOS", "Android"];
 const baseUrl = import.meta.env.BASE_URL ?? "/";
@@ -34,6 +35,8 @@ function App() {
   const [poster, setPoster] = useState(initialPoster);
   const [pageIndex, setPageIndex] = useState(0);
   const [cardHeights, setCardHeights] = useState([]);
+  const [bulkText, setBulkText] = useState("");
+  const [parseMessage, setParseMessage] = useState("");
   const posterRef = useRef(null);
   const measureRef = useRef(null);
 
@@ -152,6 +155,21 @@ function App() {
     }));
   }
 
+  function applyParsedGames(mode) {
+    const parsedGames = parseGamesFromText(bulkText);
+    if (!parsedGames.length) {
+      setParseMessage("没有识别到可生成的游戏条目。");
+      return;
+    }
+
+    setPoster((current) => ({
+      ...current,
+      games: mode === "replace" ? parsedGames : [...current.games, ...parsedGames],
+    }));
+    setPageIndex(0);
+    setParseMessage(`已识别 ${parsedGames.length} 个游戏条目。`);
+  }
+
   async function exportCurrentPage() {
     if (!posterRef.current) return;
     const clone = posterRef.current.cloneNode(true);
@@ -245,6 +263,27 @@ function App() {
             上传当前主题 Logo
             <input accept="image/*" type="file" onChange={(event) => handleLogoImage(event.target.files[0])} />
           </label>
+        </div>
+
+        <div className="bulk-parser">
+          <div className="section-title">
+            <span>批量粘贴解析</span>
+          </div>
+          <textarea
+            className="bulk-textarea"
+            placeholder={"粘贴整段发布会信息，例如：\n《游戏名》\n发售日期：2026年9月24日\n登陆平台：PS5 / PC\n现已开启预购，Steam国区售价268元"}
+            value={bulkText}
+            onChange={(event) => setBulkText(event.target.value)}
+          />
+          <div className="bulk-actions">
+            <button type="button" onClick={() => applyParsedGames("replace")}>
+              替换当前列表
+            </button>
+            <button type="button" onClick={() => applyParsedGames("append")}>
+              追加到列表
+            </button>
+          </div>
+          {parseMessage && <p className="parse-message">{parseMessage}</p>}
         </div>
 
         <div className="page-tabs">
