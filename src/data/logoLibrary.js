@@ -5,18 +5,23 @@ export const logoLibrary = [
     src: "",
   },
   {
-    id: "state-of-play",
-    name: "State of Play",
-    src: "/logos/state-of-play.svg",
+    id: "playstation-white",
+    name: "PlayStation 白色",
+    src: "/logos/PlayStation_logo 白色.png",
   },
   {
-    id: "summer-game-fest",
-    name: "Summer Game Fest",
-    src: "/logos/summer-game-fest.svg",
+    id: "playstation-black",
+    name: "PlayStation 黑色",
+    src: "/logos/PlayStation_logo 黑色.png",
   },
   {
-    id: "xbox-showcase",
-    name: "Xbox Showcase",
-    src: "/logos/xbox-showcase.svg",
+    id: "xbox",
+    name: "Xbox",
+    src: "/logos/Xbox_logo.svg",
+  },
+  {
+    id: "nintendo-switch-2",
+    name: "Nintendo Switch 2",
+    src: "/logos/Nintendo_Switch_2_logo.svg",
   },
 ];
