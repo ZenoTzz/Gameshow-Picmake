@@ -43,6 +43,11 @@ button {
   margin-bottom: 22px;
 }
 
+.header-actions {
+  display: grid;
+  gap: 10px;
+}
+
 .eyebrow {
   margin: 0 0 4px;
   color: #7dd3fc;
@@ -56,6 +61,7 @@ button {
 }
 
 .primary-button,
+.secondary-button,
 .section-title button,
 .page-tabs button {
   display: inline-flex;
@@ -68,6 +74,22 @@ button {
   border-radius: 8px;
   background: #0ea5e9;
   color: #ffffff;
+  font-weight: 700;
+}
+
+.secondary-button {
+  background: #17233a;
+  color: #dff7ff;
+}
+
+.template-message {
+  margin: -10px 0 18px;
+  padding: 10px 12px;
+  border: 1px solid rgba(125, 211, 252, 0.24);
+  border-radius: 8px;
+  background: rgba(14, 165, 233, 0.08);
+  color: #7dd3fc;
+  font-size: 13px;
   font-weight: 700;
 }
 

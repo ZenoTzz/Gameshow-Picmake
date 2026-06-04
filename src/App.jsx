@@ -7,6 +7,7 @@ import {
   Gift,
   ImagePlus,
   Plus,
+  Save,
   Trash2,
 } from "lucide-react";
 import { blankGame, initialPoster } from "./data/sampleData";
@@ -17,6 +18,35 @@ import { parseGamesFromText } from "./utils/parseGames";
 
 const platformOptions = ["PS5", "Xbox Series", "Switch", "Switch 2", "PC", "Mac", "iOS", "Android"];
 const baseUrl = import.meta.env.BASE_URL ?? "/";
+const templateStorageKey = "gameshow-pic-template-v1";
+
+function getTemplateFields(poster) {
+  return {
+    theme: poster.theme,
+    fillEmptySpace: poster.fillEmptySpace,
+    logoImages: poster.logoImages,
+    eventLabel: poster.eventLabel,
+    title: poster.title,
+    subtitle: poster.subtitle,
+    note: poster.note,
+  };
+}
+
+function getInitialPoster() {
+  if (typeof window === "undefined") return initialPoster;
+
+  try {
+    const savedTemplate = window.localStorage.getItem(templateStorageKey);
+    if (!savedTemplate) return initialPoster;
+    return {
+      ...initialPoster,
+      ...JSON.parse(savedTemplate),
+      games: initialPoster.games,
+    };
+  } catch {
+    return initialPoster;
+  }
+}
 
 function resolveLogoSrc(src) {
   if (!src) return "";
@@ -32,11 +62,12 @@ function cloneGame(game = blankGame) {
 }
 
 function App() {
-  const [poster, setPoster] = useState(initialPoster);
+  const [poster, setPoster] = useState(getInitialPoster);
   const [pageIndex, setPageIndex] = useState(0);
   const [cardHeights, setCardHeights] = useState([]);
   const [bulkText, setBulkText] = useState("");
   const [parseMessage, setParseMessage] = useState("");
+  const [templateMessage, setTemplateMessage] = useState("");
   const posterRef = useRef(null);
   const measureRef = useRef(null);
 
@@ -170,6 +201,15 @@ function App() {
     setParseMessage(`已识别 ${parsedGames.length} 个游戏条目。`);
   }
 
+  function saveTemplate() {
+    try {
+      window.localStorage.setItem(templateStorageKey, JSON.stringify(getTemplateFields(poster)));
+      setTemplateMessage("模板已保存，下次打开会自动恢复。");
+    } catch {
+      setTemplateMessage("保存失败，浏览器可能限制了本地存储。");
+    }
+  }
+
   async function exportCurrentPage() {
     if (!posterRef.current) return;
     const clone = posterRef.current.cloneNode(true);
@@ -204,11 +244,18 @@ function App() {
             <p className="eyebrow">Gameshow Pic</p>
             <h1>发布会一图流模板</h1>
           </div>
-          <button className="primary-button" type="button" onClick={exportCurrentPage}>
-            <Download size={18} />
-            导出当前页
-          </button>
+          <div className="header-actions">
+            <button className="secondary-button" type="button" onClick={saveTemplate}>
+              <Save size={18} />
+              保存模板
+            </button>
+            <button className="primary-button" type="button" onClick={exportCurrentPage}>
+              <Download size={18} />
+              导出当前页
+            </button>
+          </div>
         </div>
+        {templateMessage && <p className="template-message">{templateMessage}</p>}
 
         <div className="field-grid">
           <label>
