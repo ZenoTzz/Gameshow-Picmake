@@ -19,6 +19,22 @@ import { parseGamesFromText } from "./utils/parseGames";
 const platformOptions = ["PS5", "Xbox Series", "Switch", "Switch 2", "PC", "Mac", "iOS", "Android"];
 const baseUrl = import.meta.env.BASE_URL ?? "/";
 const templateStorageKey = "gameshow-pic-template-v1";
+const platformColors = {
+  PS5: { bg: "#1267e8", text: "#ffffff" },
+  PS4: { bg: "#1267e8", text: "#ffffff" },
+  "Xbox Series": { bg: "#107c10", text: "#ffffff" },
+  Xbox: { bg: "#107c10", text: "#ffffff" },
+  Switch: { bg: "#e60012", text: "#ffffff" },
+  "Switch 2": { bg: "#e60012", text: "#ffffff" },
+  PC: { bg: "#27272a", text: "#ffffff" },
+  Mac: { bg: "#f5f5f7", text: "#111827" },
+  iOS: { bg: "#f5f5f7", text: "#111827" },
+  Android: { bg: "#3ddc84", text: "#052e16" },
+};
+
+function getPlatformColor(platform) {
+  return platformColors[platform] ?? { bg: "#475569", text: "#ffffff" };
+}
 
 function getTemplateFields(poster) {
   return {
@@ -525,7 +541,15 @@ function GameCard({ game, number }) {
           <span className="row-label">登陆平台：</span>
           <div className="platforms">
             {game.platforms.map((platform) => (
-              <span key={platform}>{platform}</span>
+              <span
+                key={platform}
+                style={{
+                  "--platform-bg": getPlatformColor(platform).bg,
+                  "--platform-text": getPlatformColor(platform).text,
+                }}
+              >
+                {platform}
+              </span>
             ))}
           </div>
         </div>
