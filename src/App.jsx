@@ -2,6 +2,8 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { toPng } from "html-to-image";
 import {
   CalendarDays,
+  ChevronDown,
+  ChevronUp,
   Download,
   Gamepad2,
   Info,
@@ -409,6 +411,20 @@ function App() {
     setPageIndex(0);
   }
 
+  function moveGame(index, direction) {
+    const targetIndex = index + direction;
+    if (targetIndex < 0 || targetIndex >= poster.games.length) return;
+
+    setPoster((current) => {
+      const games = [...current.games];
+      [games[index], games[targetIndex]] = [games[targetIndex], games[index]];
+      return {
+        ...current,
+        games,
+      };
+    });
+  }
+
   function handleImage(index, file) {
     if (!file) return;
     const reader = new FileReader();
@@ -665,14 +681,34 @@ function App() {
             <article className="game-editor-card" key={`${index}-${game.title}`}>
               <div className="game-editor-top">
                 <strong>{String(index + 1).padStart(2, "0")}</strong>
-                <button
-                  aria-label="删除游戏"
-                  className="icon-button"
-                  type="button"
-                  onClick={() => removeGame(index)}
-                >
-                  <Trash2 size={16} />
-                </button>
+                <div className="game-editor-actions">
+                  <button
+                    aria-label="上移游戏"
+                    className="icon-button order-button"
+                    disabled={index === 0}
+                    type="button"
+                    onClick={() => moveGame(index, -1)}
+                  >
+                    <ChevronUp size={16} />
+                  </button>
+                  <button
+                    aria-label="下移游戏"
+                    className="icon-button order-button"
+                    disabled={index === poster.games.length - 1}
+                    type="button"
+                    onClick={() => moveGame(index, 1)}
+                  >
+                    <ChevronDown size={16} />
+                  </button>
+                  <button
+                    aria-label="删除游戏"
+                    className="icon-button"
+                    type="button"
+                    onClick={() => removeGame(index)}
+                  >
+                    <Trash2 size={16} />
+                  </button>
+                </div>
               </div>
               <label>
                 游戏名
