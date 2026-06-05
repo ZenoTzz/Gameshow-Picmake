@@ -391,7 +391,7 @@ textarea:focus {
 }
 
 .brand-mark {
-  position: relative;
+  position: absolute;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -403,6 +403,7 @@ textarea:focus {
 }
 
 .headline {
+  grid-column: 2;
   text-align: center;
 }
 
@@ -412,7 +413,25 @@ textarea:focus {
   width: 108px;
   height: 78px;
   padding: 0;
+  border: 2px dashed transparent;
+  border-radius: 8px;
+  cursor: move;
+  touch-action: none;
+  user-select: none;
+  z-index: 12;
   text-shadow: none;
+}
+
+.logo-slot:hover,
+.logo-slot:focus-visible,
+.logo-slot.is-dragging {
+  border-color: color-mix(in srgb, var(--line), #ffffff 36%);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--glow), transparent 66%);
+}
+
+.logo-slot.is-dragging {
+  cursor: grabbing;
 }
 
 .logo-slot img {

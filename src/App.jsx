@@ -50,6 +50,7 @@ const defaultThemeText = {
     subtitle: defaultSubtitle,
   },
 };
+const defaultLogoPosition = { x: 72, y: 72 };
 const platformColors = {
   PS5: { bg: "#1267e8", text: "#ffffff" },
   PS4: { bg: "#1267e8", text: "#ffffff" },
@@ -94,10 +95,21 @@ function getDefaultThemeText() {
   }, {});
 }
 
+function getDefaultLogoPositions() {
+  return Object.keys(themes).reduce((positions, themeId) => {
+    positions[themeId] = { ...defaultLogoPosition };
+    return positions;
+  }, {});
+}
+
 function normalizePosterTemplate(poster) {
   const themeText = {
     ...getDefaultThemeText(),
     ...(poster.themeText ?? {}),
+  };
+  const logoPositions = {
+    ...getDefaultLogoPositions(),
+    ...(poster.logoPositions ?? {}),
   };
 
   if (!poster.themeText && (poster.eventLabel || poster.title || poster.subtitle)) {
@@ -114,6 +126,7 @@ function normalizePosterTemplate(poster) {
   return {
     ...poster,
     themeText,
+    logoPositions,
   };
 }
 
@@ -140,6 +153,7 @@ function getTemplateFields(poster) {
     fillEmptySpace: poster.fillEmptySpace,
     pageFillOverrides: poster.pageFillOverrides,
     logoImages: poster.logoImages,
+    logoPositions: poster.logoPositions,
     footerLogoImage: poster.footerLogoImage,
     footerCreditText: poster.footerCreditText,
     themeText: getAllThemeText(poster),
@@ -341,6 +355,16 @@ function App() {
         },
       };
     });
+  }
+
+  function updateLogoPosition(themeId, position) {
+    setPoster((current) => ({
+      ...current,
+      logoPositions: {
+        ...(current.logoPositions ?? {}),
+        [themeId]: position,
+      },
+    }));
   }
 
   function updateCurrentPageFill(value) {
@@ -697,6 +721,7 @@ function App() {
             pageGames={pages[currentPage]}
             pageOffset={pageStartOffsets[currentPage] ?? 0}
             fillSpace={currentPageFill}
+            onLogoPositionChange={updateLogoPosition}
             poster={poster}
             posterRef={posterRef}
             theme={theme}
@@ -731,8 +756,9 @@ function MeasurementLayer({ games, measureRef, theme }) {
   );
 }
 
-function PosterPage({ poster, pageGames, pageOffset, fillSpace, posterRef, theme }) {
+function PosterPage({ poster, pageGames, pageOffset, fillSpace, onLogoPositionChange, posterRef, theme }) {
   const themeText = getThemeText(poster, poster.theme);
+  const logoPosition = poster.logoPositions?.[poster.theme] ?? defaultLogoPosition;
 
   return (
     <div
@@ -752,8 +778,13 @@ function PosterPage({ poster, pageGames, pageOffset, fillSpace, posterRef, theme
       }}
     >
       <PosterDecor decor={theme.decor} />
+      <BrandMark
+        logoImage={poster.logoImages?.[poster.theme]}
+        logoPosition={logoPosition}
+        onLogoPositionChange={(position) => onLogoPositionChange(poster.theme, position)}
+        posterRef={posterRef}
+      />
       <header className="poster-header">
-        <BrandMark logoImage={poster.logoImages?.[poster.theme]} />
         <div className="headline">
           <div className="event-label">{themeText.eventLabel}</div>
           <h2>{themeText.title}</h2>
@@ -781,9 +812,87 @@ function PosterPage({ poster, pageGames, pageOffset, fillSpace, posterRef, theme
   );
 }
 
-function BrandMark({ logoImage }) {
+function BrandMark({ logoImage, logoPosition, onLogoPositionChange, posterRef }) {
+  const markRef = useRef(null);
+  const dragRef = useRef(null);
+  const [isDragging, setIsDragging] = useState(false);
+
+  function getCanvasPoint(event) {
+    const posterRect = posterRef.current?.getBoundingClientRect();
+    if (!posterRect) return null;
+
+    const scale = posterRect.width / 1440;
+    return {
+      x: (event.clientX - posterRect.left) / scale,
+      y: (event.clientY - posterRect.top) / scale,
+    };
+  }
+
+  function clampLogoPosition(position) {
+    const markRect = markRef.current?.getBoundingClientRect();
+    const posterRect = posterRef.current?.getBoundingClientRect();
+    const scale = posterRect ? posterRect.width / 1440 : 1;
+    const logoWidth = markRect ? markRect.width / scale : 108;
+    const logoHeight = markRect ? markRect.height / scale : 78;
+
+    return {
+      x: Math.max(0, Math.min(Math.round(position.x), Math.round(1440 - logoWidth))),
+      y: Math.max(0, Math.min(Math.round(position.y), Math.round(1920 - logoHeight))),
+    };
+  }
+
+  function handlePointerDown(event) {
+    event.preventDefault();
+    const point = getCanvasPoint(event);
+    if (!point) return;
+
+    dragRef.current = {
+      pointerId: event.pointerId,
+      offsetX: point.x - logoPosition.x,
+      offsetY: point.y - logoPosition.y,
+    };
+    event.currentTarget.setPointerCapture(event.pointerId);
+    setIsDragging(true);
+  }
+
+  function handlePointerMove(event) {
+    const drag = dragRef.current;
+    if (!drag || drag.pointerId !== event.pointerId) return;
+
+    const point = getCanvasPoint(event);
+    if (!point) return;
+
+    onLogoPositionChange(
+      clampLogoPosition({
+        x: point.x - drag.offsetX,
+        y: point.y - drag.offsetY,
+      }),
+    );
+  }
+
+  function finishDrag(event) {
+    if (dragRef.current?.pointerId === event.pointerId) {
+      dragRef.current = null;
+      setIsDragging(false);
+    }
+  }
+
   return (
-    <div className="brand-mark logo-slot" aria-label="Logo">
+    <div
+      aria-label="Logo"
+      className={`brand-mark logo-slot ${isDragging ? "is-dragging" : ""}`}
+      ref={markRef}
+      role="button"
+      style={{
+        left: `${logoPosition.x}px`,
+        top: `${logoPosition.y}px`,
+      }}
+      tabIndex={0}
+      onPointerCancel={finishDrag}
+      onPointerDown={handlePointerDown}
+      onPointerMove={handlePointerMove}
+      onPointerUp={finishDrag}
+    >
       {logoImage && <img alt="" src={resolveLogoSrc(logoImage)} />}
     </div>
   );

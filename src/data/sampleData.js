@@ -7,6 +7,12 @@ export const initialPoster = {
     xbox: "",
     nintendoDirect: "",
   },
+  logoPositions: {
+    stateOfPlay: { x: 72, y: 72 },
+    summerGameFest: { x: 72, y: 72 },
+    xbox: { x: 72, y: 72 },
+    nintendoDirect: { x: 72, y: 72 },
+  },
   footerLogoImage: "",
   footerCreditText: "信息整理",
   eventLabel: "State of Play",
