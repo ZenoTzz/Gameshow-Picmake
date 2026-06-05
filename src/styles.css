@@ -352,6 +352,7 @@ textarea:focus {
   content: "";
   position: absolute;
   inset: 328px 0 auto;
+  z-index: -1;
   height: 2px;
   background: linear-gradient(90deg, transparent, var(--line), transparent);
   box-shadow: 0 0 20px var(--glow);
@@ -663,6 +664,7 @@ textarea:focus {
 
 .game-image {
   position: relative;
+  z-index: 1;
   align-self: center;
   aspect-ratio: 16 / 9;
   width: 368px;
@@ -694,6 +696,8 @@ textarea:focus {
 }
 
 .game-copy {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -784,6 +788,8 @@ textarea:focus {
 }
 
 .theme-summerGameFest .game-card {
+  position: relative;
+  z-index: 1;
   border-color: rgba(255, 255, 255, 0.88);
   grid-template-columns: 96px 340px 1fr;
   gap: 24px;
@@ -800,11 +806,10 @@ textarea:focus {
 }
 
 .theme-summerGameFest .game-copy {
-  position: relative;
-  z-index: 0;
+  z-index: 3;
   padding: 8px 12px;
   border-radius: 8px;
-  background: linear-gradient(90deg, rgba(18, 10, 58, 0.72), rgba(12, 47, 82, 0.64));
+  background: linear-gradient(90deg, #150a46, #0b355d);
   box-shadow:
     inset 0 0 0 1px rgba(255, 255, 255, 0.08),
     0 4px 12px rgba(15, 7, 58, 0.16);
@@ -822,11 +827,12 @@ textarea:focus {
 }
 
 .theme-summerGameFest .game-image {
+  z-index: 3;
   width: 340px;
   border-color: rgba(255, 255, 255, 0.85);
   background:
     radial-gradient(circle at 36% 36%, rgba(255, 255, 255, 0.13), transparent 42%),
-    linear-gradient(135deg, rgba(40, 30, 106, 0.92), rgba(255, 88, 184, 0.38));
+    linear-gradient(135deg, #281e6a, #6b2f74);
 }
 
 .theme-summerGameFest .game-copy h3 {
