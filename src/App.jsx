@@ -1,4 +1,4 @@
-import { useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { toPng } from "html-to-image";
 import {
   CalendarDays,
@@ -19,6 +19,14 @@ import { parseGamesFromText } from "./utils/parseGames";
 const platformOptions = ["PS5", "Xbox Series", "Switch", "Switch 2", "PC", "Mac", "iOS", "Android"];
 const baseUrl = import.meta.env.BASE_URL ?? "/";
 const templateStorageKey = "gameshow-pic-template-v1";
+const githubTokenStorageKey = "gameshow-pic-github-token";
+const remoteTemplatePath = "template.json";
+const remoteTemplateUrl = `${baseUrl}${remoteTemplatePath}`.replace(/\/{2,}/g, "/");
+const githubRepo = {
+  owner: "ZenoTzz",
+  repo: "Gameshow-Picmake",
+  branch: "gh-pages",
+};
 const platformColors = {
   PS5: { bg: "#1267e8", text: "#ffffff" },
   PS4: { bg: "#1267e8", text: "#ffffff" },
@@ -62,6 +70,7 @@ function getTemplateFields(poster) {
   return {
     theme: poster.theme,
     fillEmptySpace: poster.fillEmptySpace,
+    pageFillOverrides: poster.pageFillOverrides,
     logoImages: poster.logoImages,
     footerLogoImage: poster.footerLogoImage,
     footerCreditText: poster.footerCreditText,
@@ -87,6 +96,62 @@ function getInitialPoster() {
   }
 }
 
+function getInitialGithubToken() {
+  if (typeof window === "undefined") return "";
+
+  try {
+    return window.localStorage.getItem(githubTokenStorageKey) ?? "";
+  } catch {
+    return "";
+  }
+}
+
+function encodeBase64(text) {
+  const bytes = new TextEncoder().encode(text);
+  let binary = "";
+  bytes.forEach((byte) => {
+    binary += String.fromCharCode(byte);
+  });
+  return window.btoa(binary);
+}
+
+async function githubRequest(path, token, options = {}) {
+  const response = await fetch(`https://api.github.com${path}`, {
+    ...options,
+    headers: {
+      Accept: "application/vnd.github+json",
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+      "X-GitHub-Api-Version": "2022-11-28",
+      ...(options.headers ?? {}),
+    },
+  });
+
+  if (response.status === 404) return { ok: false, status: 404 };
+
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw new Error(data.message || `GitHub 请求失败：${response.status}`);
+  }
+  return { ok: true, data };
+}
+
+async function saveRemoteTemplate(template, token) {
+  const apiPath = `/repos/${githubRepo.owner}/${githubRepo.repo}/contents/${remoteTemplatePath}`;
+  const current = await githubRequest(`${apiPath}?ref=${githubRepo.branch}`, token);
+  const body = {
+    message: "Update saved poster template",
+    branch: githubRepo.branch,
+    content: encodeBase64(JSON.stringify(template, null, 2)),
+    ...(current.ok && current.data?.sha ? { sha: current.data.sha } : {}),
+  };
+
+  await githubRequest(apiPath, token, {
+    method: "PUT",
+    body: JSON.stringify(body),
+  });
+}
+
 function resolveLogoSrc(src) {
   if (!src) return "";
   if (src.startsWith("data:") || src.startsWith("http://") || src.startsWith("https://")) return src;
@@ -102,6 +167,7 @@ function cloneGame(game = blankGame) {
 
 function App() {
   const [poster, setPoster] = useState(getInitialPoster);
+  const [githubToken, setGithubToken] = useState(getInitialGithubToken);
   const [pageIndex, setPageIndex] = useState(0);
   const [cardHeights, setCardHeights] = useState([]);
   const [bulkText, setBulkText] = useState("");
@@ -122,6 +188,34 @@ function App() {
   );
   const currentPage = Math.min(pageIndex, pages.length - 1);
   const currentPageFill = getPageFillSetting(poster, currentPage);
+
+  useEffect(() => {
+    let ignore = false;
+
+    async function loadRemoteTemplate() {
+      try {
+        const response = await fetch(`${remoteTemplateUrl}?v=${Date.now()}`, { cache: "no-store" });
+        if (!response.ok) return;
+        const remoteTemplate = await response.json();
+        if (ignore) return;
+
+        setPoster((current) => ({
+          ...current,
+          ...remoteTemplate,
+          games: current.games,
+        }));
+        window.localStorage.setItem(templateStorageKey, JSON.stringify(remoteTemplate));
+        setTemplateMessage("已加载线上模板。");
+      } catch {
+        // Missing or unreachable remote templates should not block local editing.
+      }
+    }
+
+    loadRemoteTemplate();
+    return () => {
+      ignore = true;
+    };
+  }, []);
 
   useLayoutEffect(() => {
     if (!measureRef.current) return undefined;
@@ -258,12 +352,27 @@ function App() {
     setParseMessage(`已识别 ${parsedGames.length} 个游戏条目。`);
   }
 
-  function saveTemplate() {
+  async function saveTemplate() {
+    const template = getTemplateFields(poster);
     try {
-      window.localStorage.setItem(templateStorageKey, JSON.stringify(getTemplateFields(poster)));
-      setTemplateMessage("模板已保存，下次打开会自动恢复。");
+      window.localStorage.setItem(templateStorageKey, JSON.stringify(template));
+      window.localStorage.setItem(githubTokenStorageKey, githubToken);
     } catch {
       setTemplateMessage("保存失败，浏览器可能限制了本地存储。");
+      return;
+    }
+
+    if (!githubToken.trim()) {
+      setTemplateMessage("模板已保存在本机；填写 PAT 后可同步到线上。");
+      return;
+    }
+
+    setTemplateMessage("正在同步线上模板...");
+    try {
+      await saveRemoteTemplate(template, githubToken.trim());
+      setTemplateMessage("模板已保存到本机，并同步到线上。");
+    } catch (error) {
+      setTemplateMessage(`本机已保存，线上同步失败：${error.message}`);
     }
   }
 
@@ -347,6 +456,16 @@ function App() {
           <label>
             底部署名文字
             <input value={poster.footerCreditText} onChange={(event) => updatePoster("footerCreditText", event.target.value)} />
+          </label>
+          <label className="wide-field">
+            GitHub PAT（本机）
+            <input
+              autoComplete="off"
+              placeholder="github_pat_..."
+              type="password"
+              value={githubToken}
+              onChange={(event) => setGithubToken(event.target.value)}
+            />
           </label>
           <label className="toggle-field">
             <input
