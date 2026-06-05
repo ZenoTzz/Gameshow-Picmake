@@ -628,6 +628,27 @@ textarea:focus {
   right: 70px;
 }
 
+.decor-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.decor-image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.decor-nintendo-switch-logo {
+  inset: 42px 58px auto auto;
+  width: 198px;
+  height: 198px;
+  opacity: 0.94;
+  filter: drop-shadow(0 12px 22px rgba(129, 0, 10, 0.24));
+}
+
 .decor-grid {
   display: none;
 }

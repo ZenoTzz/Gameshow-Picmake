@@ -704,13 +704,20 @@ function BrandMark({ logoImage }) {
 function PosterDecor({ decor }) {
   return (
     <>
+      {decor === "nintendoSwitchLogo" ? (
+        <div className="decor-field decor-image decor-nintendo-switch-logo">
+          <img alt="" src={resolveLogoSrc("/logos/Nintendo_Switch_2_logo.svg")} />
+        </div>
+      ) : null}
       {decor === "none" ? null : (
-      <div className={`decor-field decor-${decor}`}>
-        <span />
-        <span />
-        <span />
-        <span />
-      </div>
+        decor === "nintendoSwitchLogo" ? null : (
+          <div className={`decor-field decor-${decor}`}>
+            <span />
+            <span />
+            <span />
+            <span />
+          </div>
+        )
       )}
       <div className="light-line light-line-a" />
       <div className="light-line light-line-b" />

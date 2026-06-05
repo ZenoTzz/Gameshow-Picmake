@@ -74,6 +74,6 @@ export const themes = {
     chipBg: "#e60012",
     chipText: "#ffffff",
     titleShadow: "0 5px 0 rgba(139, 0, 10, .72), 0 0 20px rgba(255, 255, 255, .44)",
-    decor: "switch",
+    decor: "nintendoSwitchLogo",
   },
 };
