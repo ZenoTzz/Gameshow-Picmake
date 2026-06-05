@@ -369,7 +369,7 @@ textarea:focus {
 }
 
 .theme-summerGameFest::after {
-  inset: 294px -120px auto;
+  inset: 268px -120px auto;
   height: 140px;
   border-top: 8px solid rgba(255, 245, 144, 0.76);
   border-radius: 50%;
@@ -615,7 +615,7 @@ textarea:focus {
   grid-auto-rows: auto;
   gap: 8px;
   align-content: start;
-  height: 1440px;
+  height: 1488px;
   overflow: hidden;
   padding-bottom: 8px;
 }
@@ -769,7 +769,7 @@ textarea:focus {
 }
 
 .theme-summerGameFest .poster-header {
-  min-height: 318px;
+  min-height: 270px;
 }
 
 .theme-summerGameFest .event-label,
@@ -785,8 +785,10 @@ textarea:focus {
 
 .theme-summerGameFest .game-card {
   border-color: rgba(255, 255, 255, 0.88);
-  min-height: 224px;
-  padding: 9px 18px;
+  grid-template-columns: 96px 340px 1fr;
+  gap: 24px;
+  min-height: 208px;
+  padding: 7px 16px;
   background:
     linear-gradient(90deg, rgba(23, 14, 77, 0.96), rgba(55, 22, 105, 0.95) 42%, rgba(14, 69, 112, 0.94)),
     var(--card);
@@ -800,7 +802,7 @@ textarea:focus {
 .theme-summerGameFest .game-copy {
   position: relative;
   z-index: 0;
-  padding: 10px 14px;
+  padding: 8px 12px;
   border-radius: 8px;
   background: linear-gradient(90deg, rgba(18, 10, 58, 0.72), rgba(12, 47, 82, 0.64));
   box-shadow:
@@ -809,6 +811,9 @@ textarea:focus {
 }
 
 .theme-summerGameFest .card-number {
+  width: 76px;
+  height: 62px;
+  margin-top: 10px;
   border-color: rgba(255, 255, 255, 0.88);
   background: linear-gradient(145deg, #ff4baa, #8d55ff 58%, #38f3ff);
   color: #ffffff;
@@ -817,6 +822,7 @@ textarea:focus {
 }
 
 .theme-summerGameFest .game-image {
+  width: 340px;
   border-color: rgba(255, 255, 255, 0.85);
   background:
     radial-gradient(circle at 36% 36%, rgba(255, 255, 255, 0.13), transparent 42%),
@@ -825,7 +831,7 @@ textarea:focus {
 
 .theme-summerGameFest .game-copy h3 {
   color: #ffffff;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
   text-shadow:
     0 2px 0 rgba(16, 7, 48, 0.98),
     1px 0 0 rgba(16, 7, 48, 0.76),
@@ -833,8 +839,8 @@ textarea:focus {
 }
 
 .theme-summerGameFest .info-row {
-  margin-top: 7px;
-  line-height: 1.38;
+  margin-top: 5px;
+  line-height: 1.34;
 }
 
 .theme-summerGameFest .info-row svg {
