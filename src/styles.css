@@ -870,14 +870,6 @@ textarea:focus {
   color: rgba(255, 255, 255, 0.78);
 }
 
-.poster-note {
-  text-align: center;
-  color: rgba(255, 255, 255, 0.58);
-  font-size: 21px;
-  line-height: 1.25;
-  letter-spacing: 2px;
-}
-
 .poster-credit {
   display: grid;
   justify-items: center;

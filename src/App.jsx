@@ -67,7 +67,6 @@ function getTemplateFields(poster) {
     eventLabel: poster.eventLabel,
     title: poster.title,
     subtitle: poster.subtitle,
-    note: poster.note,
   };
 }
 
@@ -344,10 +343,6 @@ function App() {
             副标题
             <input value={poster.subtitle} onChange={(event) => updatePoster("subtitle", event.target.value)} />
           </label>
-          <label className="wide-field">
-            底部注释
-            <input value={poster.note} onChange={(event) => updatePoster("note", event.target.value)} />
-          </label>
           <label className="toggle-field">
             <input
               checked={poster.fillEmptySpace}
@@ -561,7 +556,6 @@ function PosterPage({ poster, pageGames, pageOffset, fillSpace, posterRef, theme
       </section>
 
       <footer className="poster-footer">
-        {poster.note && <div className="poster-note">{poster.note}</div>}
         <div className="poster-credit">
           <span>信息整理</span>
           {poster.footerLogoImage ? (

@@ -10,7 +10,6 @@ export const initialPoster = {
   eventLabel: "State of Play",
   title: "发布会重磅大作",
   subtitle: "发售日期 / 登陆平台 / 关键信息速览",
-  note: "* 发售信息以官方发布为准",
   games: [
     {
       title: "漫威金刚狼",
