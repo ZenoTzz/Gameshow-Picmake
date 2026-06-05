@@ -58,4 +58,22 @@ export const themes = {
     titleShadow: "0 5px 0 rgba(6, 54, 16, .85), 0 0 24px rgba(78, 255, 101, .42)",
     decor: "none",
   },
+  nintendoDirect: {
+    id: "nintendoDirect",
+    label: "Nintendo Direct",
+    logo: "ND",
+    fontFamily: "'Noto Sans SC', 'Microsoft YaHei', Arial, sans-serif",
+    bg:
+      "radial-gradient(circle at 82% 8%, rgba(255, 255, 255, .24), transparent 22%)," +
+      "linear-gradient(180deg, #e60012 0%, #e60012 28%, #ffffff 28.2%, #f5f5f5 100%)",
+    panel: "rgba(255, 255, 255, .86)",
+    card: "linear-gradient(90deg, rgba(255, 255, 255, .98), rgba(255, 246, 246, .96))",
+    line: "#e60012",
+    glow: "rgba(230, 0, 18, .42)",
+    accent: "#ffffff",
+    chipBg: "#e60012",
+    chipText: "#ffffff",
+    titleShadow: "0 5px 0 rgba(139, 0, 10, .72), 0 0 20px rgba(255, 255, 255, .44)",
+    decor: "switch",
+  },
 };

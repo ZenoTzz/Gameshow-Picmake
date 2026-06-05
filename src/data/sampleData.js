@@ -5,6 +5,7 @@ export const initialPoster = {
     stateOfPlay: "",
     summerGameFest: "",
     xbox: "",
+    nintendoDirect: "",
   },
   footerLogoImage: "",
   footerCreditText: "信息整理",
