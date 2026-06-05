@@ -4,7 +4,7 @@ import {
   CalendarDays,
   Download,
   Gamepad2,
-  Gift,
+  Info,
   ImagePlus,
   Plus,
   Save,
@@ -63,6 +63,7 @@ function getTemplateFields(poster) {
     theme: poster.theme,
     fillEmptySpace: poster.fillEmptySpace,
     logoImages: poster.logoImages,
+    footerLogoImage: poster.footerLogoImage,
     eventLabel: poster.eventLabel,
     title: poster.title,
     subtitle: poster.subtitle,
@@ -225,6 +226,13 @@ function App() {
     reader.readAsDataURL(file);
   }
 
+  function handleFooterLogoImage(file) {
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => updatePoster("footerLogoImage", reader.result);
+    reader.readAsDataURL(file);
+  }
+
   function chooseLibraryLogo(src) {
     setPoster((current) => ({
       ...current,
@@ -365,6 +373,11 @@ function App() {
             <ImagePlus size={16} />
             上传当前主题 Logo
             <input accept="image/*" type="file" onChange={(event) => handleLogoImage(event.target.files[0])} />
+          </label>
+          <label className="file-field logo-upload">
+            <ImagePlus size={16} />
+            上传底部署名图标
+            <input accept="image/*" type="file" onChange={(event) => handleFooterLogoImage(event.target.files[0])} />
           </label>
         </div>
 
@@ -547,7 +560,17 @@ function PosterPage({ poster, pageGames, pageOffset, fillSpace, posterRef, theme
         ))}
       </section>
 
-      <footer className="poster-note">{poster.note}</footer>
+      <footer className="poster-footer">
+        {poster.note && <div className="poster-note">{poster.note}</div>}
+        <div className="poster-credit">
+          <span>信息整理</span>
+          {poster.footerLogoImage ? (
+            <img alt="" className="footer-logo" src={resolveLogoSrc(poster.footerLogoImage)} />
+          ) : (
+            <div className="footer-logo-placeholder">上传底部署名图标</div>
+          )}
+        </div>
+      </footer>
     </div>
   );
 }
@@ -563,12 +586,14 @@ function BrandMark({ logoImage }) {
 function PosterDecor({ decor }) {
   return (
     <>
+      {decor === "none" ? null : (
       <div className={`decor-field decor-${decor}`}>
         <span />
         <span />
         <span />
         <span />
       </div>
+      )}
       <div className="light-line light-line-a" />
       <div className="light-line light-line-b" />
     </>
@@ -602,7 +627,7 @@ function GameCard({ game, number }) {
             ))}
           </div>
         </div>
-        <InfoRow icon={<Gift />} label="" value={game.info} />
+        <InfoRow icon={<Info />} label="" value={game.info} />
       </div>
     </article>
   );

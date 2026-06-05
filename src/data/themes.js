@@ -56,6 +56,6 @@ export const themes = {
     chipBg: "#39d353",
     chipText: "#05130a",
     titleShadow: "0 5px 0 rgba(6, 54, 16, .85), 0 0 24px rgba(78, 255, 101, .42)",
-    decor: "grid",
+    decor: "none",
   },
 };

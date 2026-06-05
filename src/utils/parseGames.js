@@ -18,11 +18,8 @@ const datePatterns = [
   /(未定|待定|TBA|Coming Soon|即将推出)/i,
 ];
 
-function normalizeTitle(rawTitle) {
-  const title = rawTitle.trim().replace(/^[-*#\d.\s、]+/, "").trim();
-  if (!title) return "";
-  if (/^《.+》$/.test(title)) return title;
-  return `《${title.replace(/[《》]/g, "")}》`;
+function cleanTitle(rawTitle) {
+  return rawTitle.trim().replace(/^[-*#\d.\s、]+/, "").trim();
 }
 
 function unique(items) {
@@ -31,16 +28,16 @@ function unique(items) {
 
 function extractTitle(block, fallbackIndex) {
   const bracketTitle = block.match(/《([^》]{1,80})》/);
-  if (bracketTitle) return `《${bracketTitle[1].trim()}》`;
+  if (bracketTitle) return bracketTitle[1].trim();
 
   const lines = block
     .split(/\n+/)
     .map((line) => line.trim())
     .filter(Boolean);
   const firstUsefulLine = lines.find(
-    (line) => !/^(发售|发行|上市|上线|登陆|登录|平台|价格|预购|售价|备注|信息|日期)\s*[:：]/.test(line),
+    (line) => !/^(游戏名|标题|名称|发售|发行|上市|上线|登陆|登录|平台|价格|预购|售价|备注|信息|日期)\s*[:：]/.test(line),
   );
-  return normalizeTitle(firstUsefulLine || `新公布游戏 ${fallbackIndex}`);
+  return cleanTitle(firstUsefulLine || `新公布游戏 ${fallbackIndex}`);
 }
 
 function extractDate(block) {
