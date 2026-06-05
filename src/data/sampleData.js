@@ -7,6 +7,7 @@ export const initialPoster = {
     xbox: "",
   },
   footerLogoImage: "",
+  footerCreditText: "信息整理",
   eventLabel: "State of Play",
   title: "发布会重磅大作",
   subtitle: "发售日期 / 登陆平台 / 关键信息速览",

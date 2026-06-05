@@ -885,7 +885,7 @@ textarea:focus {
 .poster-credit {
   display: grid;
   justify-items: center;
-  gap: 2px;
+  gap: 8px;
   color: #ffffff;
   text-shadow: 0 0 14px rgba(0, 0, 0, 0.45);
 }
