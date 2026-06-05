@@ -27,6 +27,29 @@ const githubRepo = {
   repo: "Gameshow-Picmake",
   branch: "gh-pages",
 };
+const defaultSubtitle = "发售日期 / 登陆平台 / 关键信息速览";
+const defaultThemeText = {
+  stateOfPlay: {
+    eventLabel: "State of Play",
+    title: "发布会重磅大作",
+    subtitle: defaultSubtitle,
+  },
+  summerGameFest: {
+    eventLabel: "Summer Game Fest",
+    title: "发布会重磅大作",
+    subtitle: defaultSubtitle,
+  },
+  xbox: {
+    eventLabel: "Xbox Showcase",
+    title: "发布会重磅首曝",
+    subtitle: defaultSubtitle,
+  },
+  nintendoDirect: {
+    eventLabel: "Nintendo Direct",
+    title: "发布会重磅直面会",
+    subtitle: defaultSubtitle,
+  },
+};
 const platformColors = {
   PS5: { bg: "#1267e8", text: "#ffffff" },
   PS4: { bg: "#1267e8", text: "#ffffff" },
@@ -47,6 +70,51 @@ function getPlatformColor(platform) {
 function getPageFillSetting(poster, pageIndex) {
   const override = poster.pageFillOverrides?.[pageIndex];
   return typeof override === "boolean" ? override : poster.fillEmptySpace;
+}
+
+function getThemeText(poster, themeId = poster.theme) {
+  const fallback = defaultThemeText[themeId] ?? defaultThemeText.stateOfPlay;
+  return {
+    ...fallback,
+    ...(poster.themeText?.[themeId] ?? {}),
+  };
+}
+
+function getAllThemeText(poster) {
+  return Object.keys(themes).reduce((themeText, themeId) => {
+    themeText[themeId] = getThemeText(poster, themeId);
+    return themeText;
+  }, {});
+}
+
+function getDefaultThemeText() {
+  return Object.entries(defaultThemeText).reduce((themeText, [themeId, text]) => {
+    themeText[themeId] = { ...text };
+    return themeText;
+  }, {});
+}
+
+function normalizePosterTemplate(poster) {
+  const themeText = {
+    ...getDefaultThemeText(),
+    ...(poster.themeText ?? {}),
+  };
+
+  if (!poster.themeText && (poster.eventLabel || poster.title || poster.subtitle)) {
+    const themeId = poster.theme ?? initialPoster.theme;
+    const fallback = themeText[themeId] ?? defaultThemeText.stateOfPlay;
+    themeText[themeId] = {
+      ...fallback,
+      eventLabel: poster.eventLabel ?? fallback.eventLabel,
+      title: poster.title ?? fallback.title,
+      subtitle: poster.subtitle ?? fallback.subtitle,
+    };
+  }
+
+  return {
+    ...poster,
+    themeText,
+  };
 }
 
 async function waitForExportAssets(root) {
@@ -74,9 +142,7 @@ function getTemplateFields(poster) {
     logoImages: poster.logoImages,
     footerLogoImage: poster.footerLogoImage,
     footerCreditText: poster.footerCreditText,
-    eventLabel: poster.eventLabel,
-    title: poster.title,
-    subtitle: poster.subtitle,
+    themeText: getAllThemeText(poster),
   };
 }
 
@@ -85,14 +151,14 @@ function getInitialPoster() {
 
   try {
     const savedTemplate = window.localStorage.getItem(templateStorageKey);
-    if (!savedTemplate) return initialPoster;
-    return {
+    if (!savedTemplate) return normalizePosterTemplate(initialPoster);
+    return normalizePosterTemplate({
       ...initialPoster,
       ...JSON.parse(savedTemplate),
       games: initialPoster.games,
-    };
+    });
   } catch {
-    return initialPoster;
+    return normalizePosterTemplate(initialPoster);
   }
 }
 
@@ -177,6 +243,7 @@ function App() {
   const measureRef = useRef(null);
 
   const theme = themes[poster.theme] ?? themes.stateOfPlay;
+  const currentThemeText = getThemeText(poster, poster.theme);
   const pages = useMemo(() => paginateGames(poster.games, cardHeights), [poster.games, cardHeights]);
   const pageStartOffsets = useMemo(
     () =>
@@ -199,12 +266,15 @@ function App() {
         const remoteTemplate = await response.json();
         if (ignore) return;
 
-        setPoster((current) => ({
-          ...current,
+        const normalizedTemplate = normalizePosterTemplate({
+          ...initialPoster,
           ...remoteTemplate,
+        });
+        setPoster((current) => ({
+          ...normalizedTemplate,
           games: current.games,
         }));
-        window.localStorage.setItem(templateStorageKey, JSON.stringify(remoteTemplate));
+        window.localStorage.setItem(templateStorageKey, JSON.stringify(getTemplateFields(normalizedTemplate)));
         setTemplateMessage("已加载线上模板。");
       } catch {
         // Missing or unreachable remote templates should not block local editing.
@@ -255,6 +325,22 @@ function App() {
 
   function updatePoster(key, value) {
     setPoster((current) => ({ ...current, [key]: value }));
+  }
+
+  function updateThemeText(key, value) {
+    setPoster((current) => {
+      const themeText = getThemeText(current, current.theme);
+      return {
+        ...current,
+        themeText: {
+          ...(current.themeText ?? {}),
+          [current.theme]: {
+            ...themeText,
+            [key]: value,
+          },
+        },
+      };
+    });
   }
 
   function updateCurrentPageFill(value) {
@@ -443,15 +529,15 @@ function App() {
           </label>
           <label>
             顶部英文/标识
-            <input value={poster.eventLabel} onChange={(event) => updatePoster("eventLabel", event.target.value)} />
+            <input value={currentThemeText.eventLabel} onChange={(event) => updateThemeText("eventLabel", event.target.value)} />
           </label>
           <label>
             主标题
-            <input value={poster.title} onChange={(event) => updatePoster("title", event.target.value)} />
+            <input value={currentThemeText.title} onChange={(event) => updateThemeText("title", event.target.value)} />
           </label>
           <label>
             副标题
-            <input value={poster.subtitle} onChange={(event) => updatePoster("subtitle", event.target.value)} />
+            <input value={currentThemeText.subtitle} onChange={(event) => updateThemeText("subtitle", event.target.value)} />
           </label>
           <label>
             底部署名文字
@@ -646,6 +732,8 @@ function MeasurementLayer({ games, measureRef, theme }) {
 }
 
 function PosterPage({ poster, pageGames, pageOffset, fillSpace, posterRef, theme }) {
+  const themeText = getThemeText(poster, poster.theme);
+
   return (
     <div
       className={`poster theme-${theme.id}`}
@@ -667,9 +755,9 @@ function PosterPage({ poster, pageGames, pageOffset, fillSpace, posterRef, theme
       <header className="poster-header">
         <BrandMark logoImage={poster.logoImages?.[poster.theme]} />
         <div className="headline">
-          <div className="event-label">{poster.eventLabel}</div>
-          <h2>{poster.title}</h2>
-          <p>{poster.subtitle}</p>
+          <div className="event-label">{themeText.eventLabel}</div>
+          <h2>{themeText.title}</h2>
+          <p>{themeText.subtitle}</p>
         </div>
       </header>
 
