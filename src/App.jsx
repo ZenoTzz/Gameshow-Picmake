@@ -21,6 +21,7 @@ import { parseGamesFromText } from "./utils/parseGames";
 const platformOptions = ["PS5", "Xbox Series", "Switch", "Switch 2", "PC", "Mac", "iOS", "Android"];
 const baseUrl = import.meta.env.BASE_URL ?? "/";
 const templateStorageKey = "gameshow-pic-template-v1";
+const templateHistoryStorageKey = "gameshow-pic-template-history-v1";
 const githubTokenStorageKey = "gameshow-pic-github-token";
 const remoteTemplatePath = "template.json";
 const remoteTemplateUrl = `${baseUrl}${remoteTemplatePath}`.replace(/\/{2,}/g, "/");
@@ -53,6 +54,8 @@ const defaultThemeText = {
   },
 };
 const defaultLogoPosition = { x: 72, y: 72 };
+const defaultInfoFontSize = 20;
+const maxHistoryItems = 12;
 const platformColors = {
   PS5: { bg: "#1267e8", text: "#ffffff" },
   PS4: { bg: "#1267e8", text: "#ffffff" },
@@ -129,6 +132,7 @@ function normalizePosterTemplate(poster) {
     ...poster,
     themeText,
     logoPositions,
+    infoFontSize: poster.infoFontSize ?? defaultInfoFontSize,
   };
 }
 
@@ -158,8 +162,54 @@ function getTemplateFields(poster) {
     logoPositions: poster.logoPositions,
     footerLogoImage: poster.footerLogoImage,
     footerCreditText: poster.footerCreditText,
+    infoFontSize: poster.infoFontSize ?? defaultInfoFontSize,
     themeText: getAllThemeText(poster),
   };
+}
+
+function getInitialTemplateHistory() {
+  if (typeof window === "undefined") return [];
+
+  try {
+    const savedHistory = window.localStorage.getItem(templateHistoryStorageKey);
+    if (!savedHistory) return [];
+    const parsedHistory = JSON.parse(savedHistory);
+    return Array.isArray(parsedHistory) ? parsedHistory.slice(0, maxHistoryItems) : [];
+  } catch {
+    return [];
+  }
+}
+
+function createHistorySnapshot(poster) {
+  return {
+    id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+    savedAt: new Date().toISOString(),
+    template: getTemplateFields(poster),
+    games: poster.games.map(cloneGame),
+  };
+}
+
+function saveTemplateHistory(poster) {
+  if (typeof window === "undefined") return [];
+
+  const nextHistory = [createHistorySnapshot(poster), ...getInitialTemplateHistory()].slice(0, maxHistoryItems);
+  window.localStorage.setItem(templateHistoryStorageKey, JSON.stringify(nextHistory));
+  return nextHistory;
+}
+
+function formatHistoryTime(savedAt) {
+  if (!savedAt) return "未知时间";
+
+  try {
+    return new Intl.DateTimeFormat("zh-CN", {
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+    }).format(new Date(savedAt));
+  } catch {
+    return savedAt;
+  }
 }
 
 function getInitialPoster() {
@@ -255,6 +305,7 @@ function App() {
   const [bulkText, setBulkText] = useState("");
   const [parseMessage, setParseMessage] = useState("");
   const [templateMessage, setTemplateMessage] = useState("");
+  const [templateHistory, setTemplateHistory] = useState(getInitialTemplateHistory);
   const posterRef = useRef(null);
   const measureRef = useRef(null);
 
@@ -331,7 +382,7 @@ function App() {
       cancelAnimationFrame(frameId);
       resizeObserver.disconnect();
     };
-  }, [poster.games, poster.theme]);
+  }, [poster.games, poster.theme, poster.infoFontSize]);
 
   useLayoutEffect(() => {
     if (pageIndex > pages.length - 1) {
@@ -425,6 +476,17 @@ function App() {
     });
   }
 
+  function restoreHistory(historyItem) {
+    const restoredPoster = normalizePosterTemplate({
+      ...initialPoster,
+      ...(historyItem.template ?? historyItem),
+      games: (historyItem.games ?? initialPoster.games).map(cloneGame),
+    });
+    setPoster(restoredPoster);
+    setPageIndex(0);
+    setTemplateMessage("已恢复这条历史记录。");
+  }
+
   function handleImage(index, file) {
     if (!file) return;
     const reader = new FileReader();
@@ -483,6 +545,7 @@ function App() {
     try {
       window.localStorage.setItem(templateStorageKey, JSON.stringify(template));
       window.localStorage.setItem(githubTokenStorageKey, githubToken);
+      setTemplateHistory(saveTemplateHistory(poster));
     } catch {
       setTemplateMessage("保存失败，浏览器可能限制了本地存储。");
       return;
@@ -555,6 +618,24 @@ function App() {
           </div>
         </div>
         {templateMessage && <p className="template-message">{templateMessage}</p>}
+        {templateHistory.length > 0 && (
+          <div className="template-history">
+            <div className="section-title">
+              <span>历史记录</span>
+            </div>
+            <div className="history-list">
+              {templateHistory.slice(0, 6).map((historyItem, index) => (
+                <button
+                  key={historyItem.id ?? `${historyItem.savedAt}-${index}`}
+                  type="button"
+                  onClick={() => restoreHistory(historyItem)}
+                >
+                  {formatHistoryTime(historyItem.savedAt)} · {themes[historyItem.template?.theme]?.label ?? "模板"}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
 
         <div className="field-grid">
           <label>
@@ -576,12 +657,20 @@ function App() {
             <input value={currentThemeText.title} onChange={(event) => updateThemeText("title", event.target.value)} />
           </label>
           <label>
-            副标题
-            <input value={currentThemeText.subtitle} onChange={(event) => updateThemeText("subtitle", event.target.value)} />
-          </label>
-          <label>
             底部署名文字
             <input value={poster.footerCreditText} onChange={(event) => updatePoster("footerCreditText", event.target.value)} />
+          </label>
+          <label>
+            关键信息字号
+            <input
+              max="32"
+              min="14"
+              type="number"
+              value={poster.infoFontSize ?? defaultInfoFontSize}
+              onChange={(event) =>
+                updatePoster("infoFontSize", Number(event.target.value) || defaultInfoFontSize)
+              }
+            />
           </label>
           <label className="wide-field">
             GitHub PAT（本机）
@@ -632,7 +721,9 @@ function App() {
           </div>
           <textarea
             className="bulk-textarea"
-            placeholder={"粘贴整段发布会信息，例如：\n《游戏名》\n发售日期：2026年9月24日\n登陆平台：PS5 / PC\n现已开启预购，Steam国区售价268元"}
+            placeholder={
+              "推荐格式：\n游戏名称：游戏名\n发售日期：2026年9月24日\n登陆平台：PS5 / PC\n关键信息：现已开启预购，Steam国区售价268元\n\n多个游戏可以连续粘贴，重新写“游戏名称：”会自动分成下一张卡片。"
+            }
             value={bulkText}
             onChange={(event) => setBulkText(event.target.value)}
           />
@@ -754,6 +845,7 @@ function App() {
         </div>
         <div className="poster-scale-wrap">
           <PosterPage
+            infoFontSize={poster.infoFontSize ?? defaultInfoFontSize}
             pageGames={pages[currentPage]}
             pageOffset={pageStartOffsets[currentPage] ?? 0}
             fillSpace={currentPageFill}
@@ -763,13 +855,18 @@ function App() {
             theme={theme}
           />
         </div>
-        <MeasurementLayer games={poster.games} measureRef={measureRef} theme={theme} />
+        <MeasurementLayer
+          games={poster.games}
+          infoFontSize={poster.infoFontSize ?? defaultInfoFontSize}
+          measureRef={measureRef}
+          theme={theme}
+        />
       </section>
     </main>
   );
 }
 
-function MeasurementLayer({ games, measureRef, theme }) {
+function MeasurementLayer({ games, infoFontSize, measureRef, theme }) {
   return (
     <div
       aria-hidden="true"
@@ -786,13 +883,13 @@ function MeasurementLayer({ games, measureRef, theme }) {
       }}
     >
       {games.map((game, index) => (
-        <GameCard key={`measure-${index}-${game.title}`} game={game} number={index + 1} />
+        <GameCard key={`measure-${index}-${game.title}`} game={game} infoFontSize={infoFontSize} number={index + 1} />
       ))}
     </div>
   );
 }
 
-function PosterPage({ poster, pageGames, pageOffset, fillSpace, onLogoPositionChange, posterRef, theme }) {
+function PosterPage({ infoFontSize, poster, pageGames, pageOffset, fillSpace, onLogoPositionChange, posterRef, theme }) {
   const themeText = getThemeText(poster, poster.theme);
   const logoPosition = poster.logoPositions?.[poster.theme] ?? defaultLogoPosition;
 
@@ -824,26 +921,27 @@ function PosterPage({ poster, pageGames, pageOffset, fillSpace, onLogoPositionCh
         <div className="headline">
           <div className="event-label">{themeText.eventLabel}</div>
           <h2>{themeText.title}</h2>
-          <p>{themeText.subtitle}</p>
+          <div className="poster-credit header-credit">
+            <span>{poster.footerCreditText}</span>
+            {poster.footerLogoImage ? (
+              <img alt="" className="footer-logo" src={resolveLogoSrc(poster.footerLogoImage)} />
+            ) : (
+              <div className="footer-logo-placeholder">上传底部署名图标</div>
+            )}
+          </div>
         </div>
       </header>
 
       <section className={`poster-list ${fillSpace ? "fill-space" : ""}`}>
         {pageGames.map((game, index) => (
-          <GameCard key={`${game.title}-${index}`} game={game} number={pageOffset + index + 1} />
+          <GameCard
+            key={`${game.title}-${index}`}
+            game={game}
+            infoFontSize={infoFontSize}
+            number={pageOffset + index + 1}
+          />
         ))}
       </section>
-
-      <footer className="poster-footer">
-        <div className="poster-credit">
-          <span>{poster.footerCreditText}</span>
-          {poster.footerLogoImage ? (
-            <img alt="" className="footer-logo" src={resolveLogoSrc(poster.footerLogoImage)} />
-          ) : (
-            <div className="footer-logo-placeholder">上传底部署名图标</div>
-          )}
-        </div>
-      </footer>
     </div>
   );
 }
@@ -958,9 +1056,9 @@ function PosterDecor({ decor }) {
   );
 }
 
-function GameCard({ game, number }) {
+function GameCard({ game, infoFontSize, number }) {
   return (
-    <article className="game-card">
+    <article className="game-card" style={{ "--info-font-size": `${infoFontSize}px` }}>
       <div className="card-number">{String(number).padStart(2, "0")}</div>
       <div className="game-image">
         {game.image ? <img alt="" src={game.image} /> : <span>16:9 图片位</span>}
@@ -985,15 +1083,15 @@ function GameCard({ game, number }) {
             ))}
           </div>
         </div>
-        <InfoRow icon={<Info />} label="" value={game.info} />
+        <InfoRow className="detail-row" icon={<Info />} label="" value={game.info} />
       </div>
     </article>
   );
 }
 
-function InfoRow({ icon, label, value }) {
+function InfoRow({ className = "", icon, label, value }) {
   return (
-    <div className="info-row">
+    <div className={`info-row ${className}`.trim()}>
       {icon}
       {label && <span className="row-label">{label}</span>}
       <span>{value}</span>

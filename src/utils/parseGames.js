@@ -11,12 +11,28 @@ const platformAliases = [
 ];
 
 const datePatterns = [
-  /(?:发售日期|发售日|発売日|上市日期|上线日期|发行日期|日期)\s*[:：]?\s*([^\n，,。；;]+)/i,
+  /(?:发售日期|发售日|发布日期|上市日期|上线日期|发行日期|日期)\s*[:：]?\s*([^\n，。；;]+)/i,
   /((?:20\d{2}|19\d{2})\s*年\s*\d{1,2}\s*月\s*\d{1,2}\s*[日号]?)/,
   /((?:20\d{2}|19\d{2})[-/.]\d{1,2}[-/.]\d{1,2})/,
   /(\d{1,2}\s*月\s*\d{1,2}\s*[日号])/,
   /(未定|待定|TBA|Coming Soon|即将推出)/i,
 ];
+
+const labelMap = {
+  游戏名称: "title",
+  游戏名: "title",
+  名称: "title",
+  标题: "title",
+  发售日期: "date",
+  发售日: "date",
+  发布日期: "date",
+  登陆平台: "platforms",
+  登录平台: "platforms",
+  平台: "platforms",
+  关键信息: "info",
+  信息: "info",
+  备注: "info",
+};
 
 function cleanTitle(rawTitle) {
   return rawTitle.trim().replace(/^[-*#\d.\s、]+/, "").trim();
@@ -24,6 +40,16 @@ function cleanTitle(rawTitle) {
 
 function unique(items) {
   return [...new Set(items.filter(Boolean))];
+}
+
+function normalizePlatforms(rawPlatforms) {
+  const explicit = rawPlatforms
+    .split(/[,，、/|；;\n]+/)
+    .map((item) => item.trim())
+    .filter(Boolean);
+
+  if (explicit.length) return unique(explicit);
+  return extractPlatforms(rawPlatforms);
 }
 
 function extractTitle(block, fallbackIndex) {
@@ -35,9 +61,9 @@ function extractTitle(block, fallbackIndex) {
     .map((line) => line.trim())
     .filter(Boolean);
   const firstUsefulLine = lines.find(
-    (line) => !/^(游戏名|标题|名称|发售|发行|上市|上线|登陆|登录|平台|价格|预购|售价|备注|信息|日期)\s*[:：]/.test(line),
+    (line) => !/^(游戏名称|游戏名|标题|名称|发售|发行|上市|上线|登陆|登录|平台|价格|预购|售价|备注|信息|日期)\s*[:：]/.test(line),
   );
-  return cleanTitle(firstUsefulLine || `新公布游戏 ${fallbackIndex}`);
+  return cleanTitle(firstUsefulLine || `新公布游戏${fallbackIndex}`);
 }
 
 function extractDate(block) {
@@ -61,8 +87,8 @@ function stripKnownLines(block) {
     .split(/\n+/)
     .map((line) => line.trim())
     .filter(Boolean)
-    .filter((line) => !/^[-*#\d.\s、]*《[^》]+》$/.test(line))
-    .filter((line) => !/^(游戏名|标题|名称|发售日期|发售日|日期|登陆平台|登录平台|平台)\s*[:：]/.test(line))
+    .filter((line) => !/^[-*#\d.\s、]*《[^》]+》/.test(line))
+    .filter((line) => !/^(游戏名称|游戏名|标题|名称|发售日期|发售日|发布日期|日期|登陆平台|登录平台|平台)\s*[:：]/.test(line))
     .join("，")
     .replace(/《[^》]+》/g, "")
     .replace(/\s+/g, " ")
@@ -88,7 +114,68 @@ function splitBlocks(input) {
     .filter(Boolean);
 }
 
+function normalizeLabeledGame(game, fallbackIndex) {
+  return {
+    title: cleanTitle(game.title || `新公布游戏${fallbackIndex}`),
+    date: game.date?.trim() || "待公布",
+    platforms: normalizePlatforms(game.platforms || "待公布"),
+    info: game.info?.trim() || "在这里补充预购、价格、试玩、发售窗口或其他关键信息。",
+    image: "",
+  };
+}
+
+function parseLabeledGames(input) {
+  const lines = input
+    .replace(/\r/g, "")
+    .split(/\n+/)
+    .map((line) => line.trim())
+    .filter(Boolean);
+
+  const labeledLineCount = lines.filter((line) => {
+    const labelMatch = line.match(/^([^:：]{1,12})\s*[:：]/);
+    return labelMatch && labelMap[labelMatch[1].trim()];
+  }).length;
+  if (labeledLineCount < 2) return [];
+
+  const games = [];
+  let current = {};
+  let currentField = "";
+
+  for (const line of lines) {
+    const labelMatch = line.match(/^([^:：]{1,12})\s*[:：]\s*(.*)$/);
+    if (labelMatch) {
+      const field = labelMap[labelMatch[1].trim()];
+      if (field) {
+        if (field === "title" && Object.keys(current).length) {
+          games.push(current);
+          current = {};
+        }
+        current[field] = labelMatch[2].trim();
+        currentField = field;
+        continue;
+      }
+    }
+
+    if (currentField) {
+      current[currentField] = [current[currentField], line].filter(Boolean).join(currentField === "info" ? " " : " ");
+    } else if (!current.title) {
+      current.title = line;
+    } else {
+      current.info = [current.info, line].filter(Boolean).join(" ");
+    }
+  }
+
+  if (Object.keys(current).length) games.push(current);
+
+  return games
+    .filter((game) => game.title || game.date || game.platforms || game.info)
+    .map((game, index) => normalizeLabeledGame(game, index + 1));
+}
+
 export function parseGamesFromText(input) {
+  const labeledGames = parseLabeledGames(input);
+  if (labeledGames.length) return labeledGames;
+
   return splitBlocks(input).map((block, index) => {
     const title = extractTitle(block, index + 1);
     const date = extractDate(block);
