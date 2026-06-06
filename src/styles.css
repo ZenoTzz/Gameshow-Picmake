@@ -486,6 +486,7 @@ textarea:focus {
 
 .event-label {
   margin-bottom: 5px;
+  font-family: var(--header-font, var(--poster-font));
   font-size: clamp(56px, 64px, 74px);
   line-height: 1.04;
   font-weight: 1000;
@@ -495,6 +496,7 @@ textarea:focus {
 
 .headline h2 {
   margin: 0;
+  font-family: var(--header-font, var(--poster-font));
   font-size: 76px;
   line-height: 1.1;
   font-weight: 1000;
@@ -833,6 +835,7 @@ textarea:focus {
 
 .game-copy h3 {
   margin: 0 0 14px;
+  font-family: var(--game-title-font, var(--poster-font));
   color: #ffffff;
   font-size: clamp(34px, 38px, 42px);
   line-height: 1.15;
@@ -846,6 +849,7 @@ textarea:focus {
   align-items: flex-start;
   gap: 10px;
   margin-top: 10px;
+  font-family: var(--metadata-font, var(--poster-font));
   color: #ffffff;
   font-size: 20px;
   line-height: 1.46;
@@ -854,6 +858,7 @@ textarea:focus {
 }
 
 .detail-row {
+  font-family: var(--info-font, var(--poster-font));
   font-size: var(--info-font-size, 20px);
 }
 
@@ -1098,6 +1103,7 @@ textarea:focus {
   display: grid;
   justify-items: center;
   gap: 8px;
+  font-family: var(--credit-font, var(--poster-font));
   color: #ffffff;
   text-shadow: 0 0 14px rgba(0, 0, 0, 0.45);
 }

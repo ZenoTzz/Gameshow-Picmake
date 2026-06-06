@@ -82,11 +82,23 @@ function getPlatformColor(platform) {
   return platformColors[platform] ?? { bg: "#475569", text: "#ffffff" };
 }
 
-function getPosterFontFamily(poster, theme) {
-  const customFont = poster.posterFontFamily?.trim();
-  if (!customFont) return theme.fontFamily;
+function buildFontFamily(fontName, fallback) {
+  const customFont = fontName?.trim();
+  if (!customFont) return fallback;
   if (customFont.includes(",")) return customFont;
-  return `"${customFont.replaceAll('"', "")}", ${theme.fontFamily}`;
+  return `"${customFont.replaceAll('"', "")}", ${fallback}`;
+}
+
+function getPosterFonts(poster, theme) {
+  const posterFont = buildFontFamily(poster.posterFontFamily, theme.fontFamily);
+  return {
+    poster: posterFont,
+    header: buildFontFamily(poster.headerFontFamily, posterFont),
+    gameTitle: buildFontFamily(poster.gameTitleFontFamily, posterFont),
+    metadata: buildFontFamily(poster.metadataFontFamily, posterFont),
+    info: buildFontFamily(poster.infoFontFamily, posterFont),
+    credit: buildFontFamily(poster.creditFontFamily, posterFont),
+  };
 }
 
 function getPageFillSetting(poster, pageIndex) {
@@ -151,6 +163,11 @@ function normalizePosterTemplate(poster) {
     compactFollowupPages: poster.compactFollowupPages ?? false,
     infoFontSize: poster.infoFontSize ?? defaultInfoFontSize,
     posterFontFamily: poster.posterFontFamily ?? "",
+    headerFontFamily: poster.headerFontFamily ?? "",
+    gameTitleFontFamily: poster.gameTitleFontFamily ?? "",
+    metadataFontFamily: poster.metadataFontFamily ?? "",
+    infoFontFamily: poster.infoFontFamily ?? "",
+    creditFontFamily: poster.creditFontFamily ?? "",
   };
 }
 
@@ -183,6 +200,11 @@ function getTemplateFields(poster) {
     footerCreditText: poster.footerCreditText,
     infoFontSize: poster.infoFontSize ?? defaultInfoFontSize,
     posterFontFamily: poster.posterFontFamily ?? "",
+    headerFontFamily: poster.headerFontFamily ?? "",
+    gameTitleFontFamily: poster.gameTitleFontFamily ?? "",
+    metadataFontFamily: poster.metadataFontFamily ?? "",
+    infoFontFamily: poster.infoFontFamily ?? "",
+    creditFontFamily: poster.creditFontFamily ?? "",
     themeText: getAllThemeText(poster),
   };
 }
@@ -330,6 +352,7 @@ function App() {
   const measureRef = useRef(null);
 
   const theme = themes[poster.theme] ?? themes.stateOfPlay;
+  const posterFonts = getPosterFonts(poster, theme);
   const currentThemeText = getThemeText(poster, poster.theme);
   const pages = useMemo(
     () =>
@@ -409,7 +432,17 @@ function App() {
       cancelAnimationFrame(frameId);
       resizeObserver.disconnect();
     };
-  }, [poster.games, poster.theme, poster.infoFontSize, poster.posterFontFamily]);
+  }, [
+    poster.games,
+    poster.theme,
+    poster.infoFontSize,
+    poster.posterFontFamily,
+    poster.headerFontFamily,
+    poster.gameTitleFontFamily,
+    poster.metadataFontFamily,
+    poster.infoFontFamily,
+    poster.creditFontFamily,
+  ]);
 
   useLayoutEffect(() => {
     if (pageIndex > pages.length - 1) {
@@ -708,6 +741,51 @@ function App() {
               onChange={(event) => updatePoster("posterFontFamily", event.target.value)}
             />
           </label>
+          <label>
+            顶部标题字体
+            <input
+              list="poster-fonts"
+              placeholder="留空继承海报字体"
+              value={poster.headerFontFamily ?? ""}
+              onChange={(event) => updatePoster("headerFontFamily", event.target.value)}
+            />
+          </label>
+          <label>
+            游戏名称字体
+            <input
+              list="poster-fonts"
+              placeholder="留空继承海报字体"
+              value={poster.gameTitleFontFamily ?? ""}
+              onChange={(event) => updatePoster("gameTitleFontFamily", event.target.value)}
+            />
+          </label>
+          <label>
+            日期与平台字体
+            <input
+              list="poster-fonts"
+              placeholder="留空继承海报字体"
+              value={poster.metadataFontFamily ?? ""}
+              onChange={(event) => updatePoster("metadataFontFamily", event.target.value)}
+            />
+          </label>
+          <label>
+            关键信息字体
+            <input
+              list="poster-fonts"
+              placeholder="留空继承海报字体"
+              value={poster.infoFontFamily ?? ""}
+              onChange={(event) => updatePoster("infoFontFamily", event.target.value)}
+            />
+          </label>
+          <label>
+            署名文字字体
+            <input
+              list="poster-fonts"
+              placeholder="留空继承海报字体"
+              value={poster.creditFontFamily ?? ""}
+              onChange={(event) => updatePoster("creditFontFamily", event.target.value)}
+            />
+          </label>
           <label className="wide-field">
             GitHub PAT（本机）
             <input
@@ -909,7 +987,7 @@ function App() {
           />
         </div>
         <MeasurementLayer
-          fontFamily={getPosterFontFamily(poster, theme)}
+          fonts={posterFonts}
           games={poster.games}
           infoFontSize={poster.infoFontSize ?? defaultInfoFontSize}
           measureRef={measureRef}
@@ -920,7 +998,7 @@ function App() {
   );
 }
 
-function MeasurementLayer({ fontFamily, games, infoFontSize, measureRef, theme }) {
+function MeasurementLayer({ fonts, games, infoFontSize, measureRef, theme }) {
   return (
     <div
       aria-hidden="true"
@@ -933,7 +1011,12 @@ function MeasurementLayer({ fontFamily, games, infoFontSize, measureRef, theme }
         "--accent": theme.accent,
         "--chip-bg": theme.chipBg,
         "--chip-text": theme.chipText,
-        "--poster-font": fontFamily,
+        "--poster-font": fonts.poster,
+        "--header-font": fonts.header,
+        "--game-title-font": fonts.gameTitle,
+        "--metadata-font": fonts.metadata,
+        "--info-font": fonts.info,
+        "--credit-font": fonts.credit,
       }}
     >
       {games.map((game, index) => (
@@ -956,6 +1039,7 @@ function PosterPage({
 }) {
   const themeText = getThemeText(poster, poster.theme);
   const logoPosition = poster.logoPositions?.[poster.theme] ?? defaultLogoPosition;
+  const fonts = getPosterFonts(poster, theme);
 
   return (
     <div
@@ -971,7 +1055,12 @@ function PosterPage({
         "--chip-bg": theme.chipBg,
         "--chip-text": theme.chipText,
         "--title-shadow": theme.titleShadow,
-        "--poster-font": getPosterFontFamily(poster, theme),
+        "--poster-font": fonts.poster,
+        "--header-font": fonts.header,
+        "--game-title-font": fonts.gameTitle,
+        "--metadata-font": fonts.metadata,
+        "--info-font": fonts.info,
+        "--credit-font": fonts.credit,
       }}
     >
       <PosterDecor decor={theme.decor} />
