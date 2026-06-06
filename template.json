@@ -1,7 +1,10 @@
 {
   "theme": "summerGameFest",
-  "fillEmptySpace": true,
+  "fillEmptySpace": false,
+  "compactFollowupPages": true,
   "pageFillOverrides": {
+    "0": true,
+    "1": false,
     "2": false
   },
   "logoImages": {
