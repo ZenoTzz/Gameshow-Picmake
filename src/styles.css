@@ -1139,6 +1139,13 @@ textarea:focus {
   font-weight: 800;
 }
 
+.poster .info-row.detail-row,
+.measurement-layer .info-row.detail-row {
+  font-family: var(--info-font, var(--poster-font));
+  font-size: var(--info-font-size, 20px);
+  font-weight: var(--info-font-weight, 600);
+}
+
 .measurement-layer {
   position: fixed;
   left: -99999px;
