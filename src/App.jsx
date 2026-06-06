@@ -132,6 +132,7 @@ function normalizePosterTemplate(poster) {
     ...poster,
     themeText,
     logoPositions,
+    compactFollowupPages: poster.compactFollowupPages ?? false,
     infoFontSize: poster.infoFontSize ?? defaultInfoFontSize,
   };
 }
@@ -157,6 +158,7 @@ function getTemplateFields(poster) {
   return {
     theme: poster.theme,
     fillEmptySpace: poster.fillEmptySpace,
+    compactFollowupPages: poster.compactFollowupPages ?? false,
     pageFillOverrides: poster.pageFillOverrides,
     logoImages: poster.logoImages,
     logoPositions: poster.logoPositions,
@@ -311,7 +313,13 @@ function App() {
 
   const theme = themes[poster.theme] ?? themes.stateOfPlay;
   const currentThemeText = getThemeText(poster, poster.theme);
-  const pages = useMemo(() => paginateGames(poster.games, cardHeights), [poster.games, cardHeights]);
+  const pages = useMemo(
+    () =>
+      paginateGames(poster.games, cardHeights, {
+        compactFollowupPages: poster.compactFollowupPages,
+      }),
+    [poster.games, cardHeights, poster.compactFollowupPages],
+  );
   const pageStartOffsets = useMemo(
     () =>
       pages.reduce((offsets, page, index) => {
@@ -322,6 +330,7 @@ function App() {
   );
   const currentPage = Math.min(pageIndex, pages.length - 1);
   const currentPageFill = getPageFillSetting(poster, currentPage);
+  const isFullCardPage = poster.compactFollowupPages && currentPage > 0;
 
   useEffect(() => {
     let ignore = false;
@@ -690,6 +699,17 @@ function App() {
             />
             默认补齐空白
           </label>
+          <label className="toggle-field">
+            <input
+              checked={poster.compactFollowupPages ?? false}
+              type="checkbox"
+              onChange={(event) => {
+                updatePoster("compactFollowupPages", event.target.checked);
+                setPageIndex(0);
+              }}
+            />
+            第二页起纯卡片页
+          </label>
           <label>
             选择内置 Logo
             <select
@@ -846,6 +866,7 @@ function App() {
         <div className="poster-scale-wrap">
           <PosterPage
             infoFontSize={poster.infoFontSize ?? defaultInfoFontSize}
+            isFullCardPage={isFullCardPage}
             pageGames={pages[currentPage]}
             pageOffset={pageStartOffsets[currentPage] ?? 0}
             fillSpace={currentPageFill}
@@ -889,13 +910,23 @@ function MeasurementLayer({ games, infoFontSize, measureRef, theme }) {
   );
 }
 
-function PosterPage({ infoFontSize, poster, pageGames, pageOffset, fillSpace, onLogoPositionChange, posterRef, theme }) {
+function PosterPage({
+  infoFontSize,
+  isFullCardPage,
+  poster,
+  pageGames,
+  pageOffset,
+  fillSpace,
+  onLogoPositionChange,
+  posterRef,
+  theme,
+}) {
   const themeText = getThemeText(poster, poster.theme);
   const logoPosition = poster.logoPositions?.[poster.theme] ?? defaultLogoPosition;
 
   return (
     <div
-      className={`poster theme-${theme.id}`}
+      className={`poster theme-${theme.id} ${isFullCardPage ? "full-card-page" : ""}`}
       ref={posterRef}
       style={{
         "--poster-bg": theme.bg,
@@ -911,26 +942,30 @@ function PosterPage({ infoFontSize, poster, pageGames, pageOffset, fillSpace, on
       }}
     >
       <PosterDecor decor={theme.decor} />
-      <BrandMark
-        logoImage={poster.logoImages?.[poster.theme]}
-        logoPosition={logoPosition}
-        onLogoPositionChange={(position) => onLogoPositionChange(poster.theme, position)}
-        posterRef={posterRef}
-      />
-      <header className="poster-header">
-        <div className="headline">
-          <div className="event-label">{themeText.eventLabel}</div>
-          <h2>{themeText.title}</h2>
-          <div className="poster-credit header-credit">
-            <span>{poster.footerCreditText}</span>
-            {poster.footerLogoImage ? (
-              <img alt="" className="footer-logo" src={resolveLogoSrc(poster.footerLogoImage)} />
-            ) : (
-              <div className="footer-logo-placeholder">上传底部署名图标</div>
-            )}
-          </div>
-        </div>
-      </header>
+      {!isFullCardPage && (
+        <>
+          <BrandMark
+            logoImage={poster.logoImages?.[poster.theme]}
+            logoPosition={logoPosition}
+            onLogoPositionChange={(position) => onLogoPositionChange(poster.theme, position)}
+            posterRef={posterRef}
+          />
+          <header className="poster-header">
+            <div className="headline">
+              <div className="event-label">{themeText.eventLabel}</div>
+              <h2>{themeText.title}</h2>
+              <div className="poster-credit header-credit">
+                <span>{poster.footerCreditText}</span>
+                {poster.footerLogoImage ? (
+                  <img alt="" className="footer-logo" src={resolveLogoSrc(poster.footerLogoImage)} />
+                ) : (
+                  <div className="footer-logo-placeholder">上传底部署名图标</div>
+                )}
+              </div>
+            </div>
+          </header>
+        </>
+      )}
 
       <section className={`poster-list ${fillSpace ? "fill-space" : ""}`}>
         {pageGames.map((game, index) => (

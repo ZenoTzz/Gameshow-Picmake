@@ -743,6 +743,10 @@ textarea:focus {
   padding-bottom: 8px;
 }
 
+.full-card-page .poster-list {
+  height: 1836px;
+}
+
 .poster-list.fill-space {
   display: flex;
   flex-direction: column;
