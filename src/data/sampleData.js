@@ -17,6 +17,7 @@ export const initialPoster = {
   footerLogoImage: "",
   footerCreditText: "信息整理",
   infoFontSize: 20,
+  infoFontWeight: 600,
   posterFontFamily: "",
   headerFontFamily: "",
   gameTitleFontFamily: "",

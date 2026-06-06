@@ -55,6 +55,7 @@ const defaultThemeText = {
 };
 const defaultLogoPosition = { x: 72, y: 72 };
 const defaultInfoFontSize = 20;
+const defaultInfoFontWeight = 600;
 const maxHistoryItems = 12;
 const fontOptions = [
   "Microsoft YaHei",
@@ -162,6 +163,7 @@ function normalizePosterTemplate(poster) {
     logoPositions,
     compactFollowupPages: poster.compactFollowupPages ?? false,
     infoFontSize: poster.infoFontSize ?? defaultInfoFontSize,
+    infoFontWeight: poster.infoFontWeight ?? defaultInfoFontWeight,
     posterFontFamily: poster.posterFontFamily ?? "",
     headerFontFamily: poster.headerFontFamily ?? "",
     gameTitleFontFamily: poster.gameTitleFontFamily ?? "",
@@ -199,6 +201,7 @@ function getTemplateFields(poster) {
     footerLogoImage: poster.footerLogoImage,
     footerCreditText: poster.footerCreditText,
     infoFontSize: poster.infoFontSize ?? defaultInfoFontSize,
+    infoFontWeight: poster.infoFontWeight ?? defaultInfoFontWeight,
     posterFontFamily: poster.posterFontFamily ?? "",
     headerFontFamily: poster.headerFontFamily ?? "",
     gameTitleFontFamily: poster.gameTitleFontFamily ?? "",
@@ -436,6 +439,7 @@ function App() {
     poster.games,
     poster.theme,
     poster.infoFontSize,
+    poster.infoFontWeight,
     poster.posterFontFamily,
     poster.headerFontFamily,
     poster.gameTitleFontFamily,
@@ -732,6 +736,20 @@ function App() {
               }
             />
           </label>
+          <label>
+            关键信息粗细
+            <select
+              value={poster.infoFontWeight ?? defaultInfoFontWeight}
+              onChange={(event) => updatePoster("infoFontWeight", Number(event.target.value))}
+            >
+              <option value="400">常规 400</option>
+              <option value="500">中等 500</option>
+              <option value="600">半粗 600</option>
+              <option value="700">粗体 700</option>
+              <option value="800">特粗 800</option>
+              <option value="900">黑体 900</option>
+            </select>
+          </label>
           <label className="wide-field">
             海报文字字体
             <input
@@ -990,6 +1008,7 @@ function App() {
           fonts={posterFonts}
           games={poster.games}
           infoFontSize={poster.infoFontSize ?? defaultInfoFontSize}
+          infoFontWeight={poster.infoFontWeight ?? defaultInfoFontWeight}
           measureRef={measureRef}
           theme={theme}
         />
@@ -998,7 +1017,7 @@ function App() {
   );
 }
 
-function MeasurementLayer({ fonts, games, infoFontSize, measureRef, theme }) {
+function MeasurementLayer({ fonts, games, infoFontSize, infoFontWeight, measureRef, theme }) {
   return (
     <div
       aria-hidden="true"
@@ -1016,6 +1035,7 @@ function MeasurementLayer({ fonts, games, infoFontSize, measureRef, theme }) {
         "--game-title-font": fonts.gameTitle,
         "--metadata-font": fonts.metadata,
         "--info-font": fonts.info,
+        "--info-font-weight": infoFontWeight,
         "--credit-font": fonts.credit,
       }}
     >
@@ -1060,6 +1080,7 @@ function PosterPage({
         "--game-title-font": fonts.gameTitle,
         "--metadata-font": fonts.metadata,
         "--info-font": fonts.info,
+        "--info-font-weight": poster.infoFontWeight ?? defaultInfoFontWeight,
         "--credit-font": fonts.credit,
       }}
     >
