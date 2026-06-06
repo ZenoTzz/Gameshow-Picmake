@@ -17,6 +17,7 @@ export const initialPoster = {
   footerLogoImage: "",
   footerCreditText: "信息整理",
   infoFontSize: 20,
+  posterFontFamily: "",
   eventLabel: "State of Play",
   title: "发布会重磅大作",
   subtitle: "发售日期 / 登陆平台 / 关键信息速览",

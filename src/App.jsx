@@ -56,6 +56,15 @@ const defaultThemeText = {
 const defaultLogoPosition = { x: 72, y: 72 };
 const defaultInfoFontSize = 20;
 const maxHistoryItems = 12;
+const fontOptions = [
+  "Microsoft YaHei",
+  "SimHei",
+  "SimSun",
+  "KaiTi",
+  "FangSong",
+  "Noto Sans SC",
+  "Arial",
+];
 const platformColors = {
   PS5: { bg: "#1267e8", text: "#ffffff" },
   PS4: { bg: "#1267e8", text: "#ffffff" },
@@ -71,6 +80,13 @@ const platformColors = {
 
 function getPlatformColor(platform) {
   return platformColors[platform] ?? { bg: "#475569", text: "#ffffff" };
+}
+
+function getPosterFontFamily(poster, theme) {
+  const customFont = poster.posterFontFamily?.trim();
+  if (!customFont) return theme.fontFamily;
+  if (customFont.includes(",")) return customFont;
+  return `"${customFont.replaceAll('"', "")}", ${theme.fontFamily}`;
 }
 
 function getPageFillSetting(poster, pageIndex) {
@@ -134,6 +150,7 @@ function normalizePosterTemplate(poster) {
     logoPositions,
     compactFollowupPages: poster.compactFollowupPages ?? false,
     infoFontSize: poster.infoFontSize ?? defaultInfoFontSize,
+    posterFontFamily: poster.posterFontFamily ?? "",
   };
 }
 
@@ -165,6 +182,7 @@ function getTemplateFields(poster) {
     footerLogoImage: poster.footerLogoImage,
     footerCreditText: poster.footerCreditText,
     infoFontSize: poster.infoFontSize ?? defaultInfoFontSize,
+    posterFontFamily: poster.posterFontFamily ?? "",
     themeText: getAllThemeText(poster),
   };
 }
@@ -391,7 +409,7 @@ function App() {
       cancelAnimationFrame(frameId);
       resizeObserver.disconnect();
     };
-  }, [poster.games, poster.theme, poster.infoFontSize]);
+  }, [poster.games, poster.theme, poster.infoFontSize, poster.posterFontFamily]);
 
   useLayoutEffect(() => {
     if (pageIndex > pages.length - 1) {
@@ -682,6 +700,15 @@ function App() {
             />
           </label>
           <label className="wide-field">
+            海报文字字体
+            <input
+              list="poster-fonts"
+              placeholder="留空使用主题默认字体，也可以输入本机字体名"
+              value={poster.posterFontFamily ?? ""}
+              onChange={(event) => updatePoster("posterFontFamily", event.target.value)}
+            />
+          </label>
+          <label className="wide-field">
             GitHub PAT（本机）
             <input
               autoComplete="off"
@@ -855,6 +882,11 @@ function App() {
             <option value={platform} key={platform} />
           ))}
         </datalist>
+        <datalist id="poster-fonts">
+          {fontOptions.map((font) => (
+            <option value={font} key={font} />
+          ))}
+        </datalist>
       </section>
 
       <section className="preview-panel">
@@ -877,6 +909,7 @@ function App() {
           />
         </div>
         <MeasurementLayer
+          fontFamily={getPosterFontFamily(poster, theme)}
           games={poster.games}
           infoFontSize={poster.infoFontSize ?? defaultInfoFontSize}
           measureRef={measureRef}
@@ -887,7 +920,7 @@ function App() {
   );
 }
 
-function MeasurementLayer({ games, infoFontSize, measureRef, theme }) {
+function MeasurementLayer({ fontFamily, games, infoFontSize, measureRef, theme }) {
   return (
     <div
       aria-hidden="true"
@@ -900,7 +933,7 @@ function MeasurementLayer({ games, infoFontSize, measureRef, theme }) {
         "--accent": theme.accent,
         "--chip-bg": theme.chipBg,
         "--chip-text": theme.chipText,
-        "--poster-font": theme.fontFamily,
+        "--poster-font": fontFamily,
       }}
     >
       {games.map((game, index) => (
@@ -938,7 +971,7 @@ function PosterPage({
         "--chip-bg": theme.chipBg,
         "--chip-text": theme.chipText,
         "--title-shadow": theme.titleShadow,
-        "--poster-font": theme.fontFamily,
+        "--poster-font": getPosterFontFamily(poster, theme),
       }}
     >
       <PosterDecor decor={theme.decor} />
