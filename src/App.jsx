@@ -209,6 +209,7 @@ function getTemplateFields(poster) {
     infoFontFamily: poster.infoFontFamily ?? "",
     creditFontFamily: poster.creditFontFamily ?? "",
     themeText: getAllThemeText(poster),
+    games: poster.games.map(cloneGame),
   };
 }
 
@@ -226,10 +227,11 @@ function getInitialTemplateHistory() {
 }
 
 function createHistorySnapshot(poster) {
+  const { games: _games, ...templateFields } = getTemplateFields(poster);
   return {
     id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
     savedAt: new Date().toISOString(),
-    template: getTemplateFields(poster),
+    template: templateFields,
     games: poster.games.map(cloneGame),
   };
 }
@@ -263,10 +265,11 @@ function getInitialPoster() {
   try {
     const savedTemplate = window.localStorage.getItem(templateStorageKey);
     if (!savedTemplate) return normalizePosterTemplate(initialPoster);
+    const parsedTemplate = JSON.parse(savedTemplate);
     return normalizePosterTemplate({
       ...initialPoster,
-      ...JSON.parse(savedTemplate),
-      games: initialPoster.games,
+      ...parsedTemplate,
+      games: (parsedTemplate.games ?? initialPoster.games).map(cloneGame),
     });
   } catch {
     return normalizePosterTemplate(initialPoster);
@@ -329,6 +332,98 @@ async function saveRemoteTemplate(template, token) {
   });
 }
 
+function parseImageDataUrl(dataUrl) {
+  const match = dataUrl.match(/^data:(image\/[^;,]+)(;base64)?,(.*)$/s);
+  if (!match) return null;
+
+  const [, mimeType, isBase64, payload] = match;
+  const bytes = isBase64
+    ? Uint8Array.from(window.atob(payload), (character) => character.charCodeAt(0))
+    : new TextEncoder().encode(decodeURIComponent(payload));
+  return { mimeType: mimeType.toLowerCase(), bytes };
+}
+
+function getImageExtension(mimeType) {
+  const extensions = {
+    "image/gif": "gif",
+    "image/jpeg": "jpg",
+    "image/png": "png",
+    "image/svg+xml": "svg",
+    "image/webp": "webp",
+  };
+  return extensions[mimeType] ?? "png";
+}
+
+function bytesToBase64(bytes) {
+  let binary = "";
+  const chunkSize = 0x8000;
+  for (let offset = 0; offset < bytes.length; offset += chunkSize) {
+    binary += String.fromCharCode(...bytes.subarray(offset, offset + chunkSize));
+  }
+  return window.btoa(binary);
+}
+
+async function hashBytes(bytes) {
+  const digest = await window.crypto.subtle.digest("SHA-256", bytes);
+  return Array.from(new Uint8Array(digest))
+    .map((byte) => byte.toString(16).padStart(2, "0"))
+    .join("");
+}
+
+async function uploadTemplateImage(dataUrl, token) {
+  if (!dataUrl?.startsWith("data:image/")) return dataUrl;
+
+  const image = parseImageDataUrl(dataUrl);
+  if (!image) return dataUrl;
+
+  const hash = await hashBytes(image.bytes);
+  const repositoryPath = `template-assets/${hash}.${getImageExtension(image.mimeType)}`;
+  const apiPath = `/repos/${githubRepo.owner}/${githubRepo.repo}/contents/${repositoryPath}`;
+  const existing = await githubRequest(`${apiPath}?ref=${githubRepo.branch}`, token);
+
+  if (!existing.ok) {
+    await githubRequest(apiPath, token, {
+      method: "PUT",
+      body: JSON.stringify({
+        message: `Upload template image ${hash.slice(0, 12)}`,
+        branch: githubRepo.branch,
+        content: bytesToBase64(image.bytes),
+      }),
+    });
+  }
+
+  return `/${repositoryPath}`;
+}
+
+async function uploadPosterImages(poster, token, onProgress) {
+  const imageSources = [
+    ...Object.values(poster.logoImages ?? {}),
+    poster.footerLogoImage,
+    ...poster.games.map((game) => game.image),
+  ];
+  const dataUrls = [...new Set(imageSources.filter((source) => source?.startsWith("data:image/")))];
+  const uploadedPaths = new Map();
+
+  for (let index = 0; index < dataUrls.length; index += 1) {
+    const dataUrl = dataUrls[index];
+    onProgress?.(index + 1, dataUrls.length);
+    uploadedPaths.set(dataUrl, await uploadTemplateImage(dataUrl, token));
+  }
+
+  const resolveUploadedPath = (source) => uploadedPaths.get(source) ?? source;
+  return {
+    ...poster,
+    logoImages: Object.fromEntries(
+      Object.entries(poster.logoImages ?? {}).map(([themeId, source]) => [themeId, resolveUploadedPath(source)]),
+    ),
+    footerLogoImage: resolveUploadedPath(poster.footerLogoImage),
+    games: poster.games.map((game) => ({
+      ...cloneGame(game),
+      image: resolveUploadedPath(game.image),
+    })),
+  };
+}
+
 function resolveLogoSrc(src) {
   if (!src) return "";
   if (src.startsWith("data:") || src.startsWith("http://") || src.startsWith("https://")) return src;
@@ -389,11 +484,9 @@ function App() {
         const normalizedTemplate = normalizePosterTemplate({
           ...initialPoster,
           ...remoteTemplate,
+          games: (remoteTemplate.games ?? initialPoster.games).map(cloneGame),
         });
-        setPoster((current) => ({
-          ...normalizedTemplate,
-          games: current.games,
-        }));
+        setPoster(normalizedTemplate);
         window.localStorage.setItem(templateStorageKey, JSON.stringify(getTemplateFields(normalizedTemplate)));
         setTemplateMessage("已加载线上模板。");
       } catch {
@@ -605,27 +698,40 @@ function App() {
   }
 
   async function saveTemplate() {
-    const template = getTemplateFields(poster);
     try {
-      window.localStorage.setItem(templateStorageKey, JSON.stringify(template));
       window.localStorage.setItem(githubTokenStorageKey, githubToken);
-      setTemplateHistory(saveTemplateHistory(poster));
     } catch {
-      setTemplateMessage("保存失败，浏览器可能限制了本地存储。");
+      setTemplateMessage("无法保存 PAT，浏览器可能限制了本地存储。");
       return;
     }
 
     if (!githubToken.trim()) {
-      setTemplateMessage("模板已保存在本机；填写 PAT 后可同步到线上。");
+      try {
+        const localTemplate = getTemplateFields(poster);
+        window.localStorage.setItem(templateStorageKey, JSON.stringify(localTemplate));
+        setTemplateHistory(saveTemplateHistory(poster));
+        setTemplateMessage("完整模板已保存在本机；填写 PAT 后可把图片同步到 GitHub。");
+      } catch {
+        setTemplateMessage("本机空间不足，图片较多时请填写 PAT 并保存到 GitHub。");
+      }
       return;
     }
 
-    setTemplateMessage("正在同步线上模板...");
+    setTemplateMessage("正在准备图片...");
     try {
-      await saveRemoteTemplate(template, githubToken.trim());
-      setTemplateMessage("模板已保存到本机，并同步到线上。");
+      const syncedPoster = await uploadPosterImages(poster, githubToken.trim(), (current, total) => {
+        setTemplateMessage(`正在上传图片 ${current}/${total}...`);
+      });
+      const remoteTemplate = getTemplateFields(syncedPoster);
+
+      setTemplateMessage("图片上传完成，正在保存完整模板...");
+      await saveRemoteTemplate(remoteTemplate, githubToken.trim());
+      window.localStorage.setItem(templateStorageKey, JSON.stringify(remoteTemplate));
+      setTemplateHistory(saveTemplateHistory(syncedPoster));
+      setPoster(syncedPoster);
+      setTemplateMessage("完整模板、游戏列表和图片均已同步到 GitHub。");
     } catch (error) {
-      setTemplateMessage(`本机已保存，线上同步失败：${error.message}`);
+      setTemplateMessage(`线上同步失败：${error.message}`);
     }
   }
 
@@ -1239,7 +1345,7 @@ function GameCard({ game, infoFontSize, number }) {
     <article className="game-card" style={{ "--info-font-size": `${infoFontSize}px` }}>
       <div className="card-number">{String(number).padStart(2, "0")}</div>
       <div className="game-image">
-        {game.image ? <img alt="" src={game.image} /> : <span>16:9 图片位</span>}
+        {game.image ? <img alt="" src={resolveLogoSrc(game.image)} /> : <span>16:9 图片位</span>}
       </div>
       <div className="game-copy">
         <h3>{game.title}</h3>
