@@ -213,6 +213,41 @@ function getTemplateFields(poster) {
   };
 }
 
+function isEmbeddedImage(source) {
+  return typeof source === "string" && source.startsWith("data:image/");
+}
+
+function sanitizeTemplateForLocalStorage(template) {
+  return {
+    ...template,
+    logoImages: Object.fromEntries(
+      Object.entries(template.logoImages ?? {}).map(([themeId, source]) => [
+        themeId,
+        isEmbeddedImage(source) ? "" : source,
+      ]),
+    ),
+    footerLogoImage: isEmbeddedImage(template.footerLogoImage) ? "" : template.footerLogoImage,
+    games: (template.games ?? []).map((game) => ({
+      ...cloneGame(game),
+      image: isEmbeddedImage(game.image) ? "" : game.image,
+    })),
+  };
+}
+
+function countEmbeddedImages(poster) {
+  return [
+    ...Object.values(poster.logoImages ?? {}),
+    poster.footerLogoImage,
+    ...poster.games.map((game) => game.image),
+  ].filter(isEmbeddedImage).length;
+}
+
+function persistLocalTemplate(poster) {
+  const localTemplate = sanitizeTemplateForLocalStorage(getTemplateFields(poster));
+  window.localStorage.setItem(templateStorageKey, JSON.stringify(localTemplate));
+  return localTemplate;
+}
+
 function getInitialTemplateHistory() {
   if (typeof window === "undefined") return [];
 
@@ -227,19 +262,32 @@ function getInitialTemplateHistory() {
 }
 
 function createHistorySnapshot(poster) {
-  const { games: _games, ...templateFields } = getTemplateFields(poster);
+  const sanitizedTemplate = sanitizeTemplateForLocalStorage(getTemplateFields(poster));
+  const { games, ...templateFields } = sanitizedTemplate;
   return {
     id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
     savedAt: new Date().toISOString(),
     template: templateFields,
-    games: poster.games.map(cloneGame),
+    games,
   };
 }
 
 function saveTemplateHistory(poster) {
   if (typeof window === "undefined") return [];
 
-  const nextHistory = [createHistorySnapshot(poster), ...getInitialTemplateHistory()].slice(0, maxHistoryItems);
+  const sanitizedHistory = getInitialTemplateHistory().map((historyItem) => {
+    const combinedTemplate = sanitizeTemplateForLocalStorage({
+      ...(historyItem.template ?? historyItem),
+      games: historyItem.games ?? historyItem.template?.games ?? [],
+    });
+    const { games, ...template } = combinedTemplate;
+    return {
+      ...historyItem,
+      template,
+      games,
+    };
+  });
+  const nextHistory = [createHistorySnapshot(poster), ...sanitizedHistory].slice(0, maxHistoryItems);
   window.localStorage.setItem(templateHistoryStorageKey, JSON.stringify(nextHistory));
   return nextHistory;
 }
@@ -487,7 +535,7 @@ function App() {
           games: (remoteTemplate.games ?? initialPoster.games).map(cloneGame),
         });
         setPoster(normalizedTemplate);
-        window.localStorage.setItem(templateStorageKey, JSON.stringify(getTemplateFields(normalizedTemplate)));
+        persistLocalTemplate(normalizedTemplate);
         setTemplateMessage("已加载线上模板。");
       } catch {
         // Missing or unreachable remote templates should not block local editing.
@@ -707,29 +755,52 @@ function App() {
 
     if (!githubToken.trim()) {
       try {
-        const localTemplate = getTemplateFields(poster);
-        window.localStorage.setItem(templateStorageKey, JSON.stringify(localTemplate));
+        const embeddedImageCount = countEmbeddedImages(poster);
+        persistLocalTemplate(poster);
         setTemplateHistory(saveTemplateHistory(poster));
-        setTemplateMessage("完整模板已保存在本机；填写 PAT 后可把图片同步到 GitHub。");
+        setTemplateMessage(
+          embeddedImageCount
+            ? `文字和设置已保存在本机；${embeddedImageCount} 张本地图片需要填写 PAT 后同步到 GitHub。`
+            : "模板已保存在本机。",
+        );
       } catch {
-        setTemplateMessage("本机空间不足，图片较多时请填写 PAT 并保存到 GitHub。");
+        setTemplateMessage("本机存储空间不足，请填写 PAT 后直接保存到 GitHub。");
       }
       return;
     }
 
     setTemplateMessage("正在准备图片...");
     try {
+      const embeddedImageCount = countEmbeddedImages(poster);
       const syncedPoster = await uploadPosterImages(poster, githubToken.trim(), (current, total) => {
         setTemplateMessage(`正在上传图片 ${current}/${total}...`);
       });
+      const remainingEmbeddedImages = countEmbeddedImages(syncedPoster);
+      if (remainingEmbeddedImages) {
+        throw new Error(`仍有 ${remainingEmbeddedImages} 张图片未完成上传`);
+      }
       const remoteTemplate = getTemplateFields(syncedPoster);
 
       setTemplateMessage("图片上传完成，正在保存完整模板...");
       await saveRemoteTemplate(remoteTemplate, githubToken.trim());
-      window.localStorage.setItem(templateStorageKey, JSON.stringify(remoteTemplate));
-      setTemplateHistory(saveTemplateHistory(syncedPoster));
       setPoster(syncedPoster);
-      setTemplateMessage("完整模板、游戏列表和图片均已同步到 GitHub。");
+
+      let localSaveFailed = false;
+      try {
+        persistLocalTemplate(syncedPoster);
+        setTemplateHistory(saveTemplateHistory(syncedPoster));
+      } catch {
+        localSaveFailed = true;
+      }
+
+      const imageMessage = embeddedImageCount
+        ? `已上传 ${embeddedImageCount} 张图片`
+        : "图片已使用现有 GitHub 路径";
+      setTemplateMessage(
+        localSaveFailed
+          ? `${imageMessage}，线上模板保存成功；但浏览器本地历史空间不足。`
+          : `${imageMessage}，完整模板已同步到 GitHub。`,
+      );
     } catch (error) {
       setTemplateMessage(`线上同步失败：${error.message}`);
     }
