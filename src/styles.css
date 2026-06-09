@@ -1041,18 +1041,18 @@ textarea:focus {
 
 .theme-nintendoDirect::before {
   background:
-    radial-gradient(circle at 12% 16%, rgba(255, 255, 255, 0.12) 0 6%, transparent 13%),
-    radial-gradient(circle at 86% 15%, rgba(255, 255, 255, 0.1) 0 4%, transparent 12%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0 28%, rgba(230, 0, 18, 0.035) 28.2% 100%),
-    repeating-linear-gradient(0deg, rgba(255, 107, 119, 0.025) 0 2px, transparent 2px 20px);
-  opacity: 0.72;
+    radial-gradient(circle at 12% 9%, rgba(255, 255, 255, 0.13) 0 5%, transparent 12%),
+    radial-gradient(circle at 86% 8%, rgba(255, 255, 255, 0.1) 0 4%, transparent 11%),
+    linear-gradient(180deg, transparent 0 17%, rgba(230, 0, 18, 0.018) 17.2% 100%),
+    repeating-linear-gradient(0deg, rgba(117, 53, 61, 0.018) 0 2px, transparent 2px 22px);
+  opacity: 0.68;
 }
 
 .theme-nintendoDirect::after {
   inset: 318px 0 auto;
-  height: 8px;
+  height: 6px;
   background: #e60012;
-  box-shadow: 0 10px 0 rgba(230, 0, 18, 0.18);
+  box-shadow: 0 8px 18px rgba(108, 20, 30, 0.16);
 }
 
 .theme-nintendoDirect .poster-header {
@@ -1078,13 +1078,12 @@ textarea:focus {
 }
 
 .theme-nintendoDirect .game-card {
-  border: 3px solid #fff4f5;
-  border-radius: 8px;
+  border: 2px solid #d7b8bc;
+  border-radius: 10px;
   background: var(--card);
   box-shadow:
-    inset 0 0 24px rgba(255, 255, 255, 0.04),
-    0 0 0 1px rgba(105, 0, 8, 0.18),
-    0 12px 28px rgba(105, 0, 8, 0.28);
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 8px 20px rgba(90, 40, 47, 0.12);
 }
 
 .theme-nintendoDirect .card-number {
@@ -1109,13 +1108,13 @@ textarea:focus {
 }
 
 .theme-nintendoDirect .game-copy h3 {
-  color: #ffffff;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.34);
+  color: #291b1d;
+  text-shadow: none;
 }
 
 .theme-nintendoDirect .info-row,
 .theme-nintendoDirect .row-label {
-  color: #f8eef0;
+  color: #4b383b;
   text-shadow: none;
 }
 
@@ -1125,17 +1124,19 @@ textarea:focus {
 }
 
 .theme-nintendoDirect .platforms span {
-  box-shadow: none;
+  background: #e60012;
+  color: #ffffff;
+  box-shadow: 0 3px 8px rgba(126, 0, 10, 0.18);
 }
 
 .theme-nintendoDirect .poster-credit {
-  color: #ffffff;
-  text-shadow: 0 2px 8px rgba(82, 0, 7, 0.42);
+  color: #6b4b50;
+  text-shadow: none;
 }
 
 .theme-nintendoDirect .footer-logo-placeholder {
-  border-color: rgba(255, 255, 255, 0.36);
-  color: rgba(255, 255, 255, 0.72);
+  border-color: rgba(123, 72, 80, 0.34);
+  color: rgba(89, 55, 61, 0.72);
 }
 
 .poster-credit {
