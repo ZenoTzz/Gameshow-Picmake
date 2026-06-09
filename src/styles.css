@@ -1136,7 +1136,7 @@ textarea:focus {
   display: inline-grid;
   justify-self: center;
   padding: 7px 16px 9px;
-  border: 2px solid rgba(35, 30, 31, 0.78);
+  border: 0;
   border-radius: 8px;
   background: rgba(232, 226, 224, 0.94);
   color: #242021;
