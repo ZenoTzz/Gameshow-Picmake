@@ -48,6 +48,26 @@ button {
   gap: 10px;
 }
 
+.export-mode-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 38px;
+  padding: 0 10px;
+  border: 1px solid rgba(125, 211, 252, 0.28);
+  border-radius: 8px;
+  background: #111c31;
+  color: #dff7ff;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.export-mode-toggle input {
+  width: 17px;
+  height: 17px;
+  accent-color: #0ea5e9;
+}
+
 .eyebrow {
   margin: 0 0 4px;
   color: #7dd3fc;
@@ -358,6 +378,23 @@ textarea:focus {
   overflow: hidden;
   pointer-events: none;
   z-index: -1;
+}
+
+.long-export-stage {
+  overflow: hidden;
+}
+
+.long-export-source {
+  position: fixed;
+  left: -20000px;
+  top: 0;
+  width: 1440px;
+  pointer-events: none;
+}
+
+.long-export-source .poster,
+.long-export-stage .poster {
+  transform: none;
 }
 
 .poster-scale-wrap {

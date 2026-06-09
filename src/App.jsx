@@ -496,7 +496,9 @@ function App() {
   const [parseMessage, setParseMessage] = useState("");
   const [templateMessage, setTemplateMessage] = useState("");
   const [templateHistory, setTemplateHistory] = useState(getInitialTemplateHistory);
+  const [stitchPages, setStitchPages] = useState(false);
   const posterRef = useRef(null);
+  const longPosterRef = useRef(null);
   const measureRef = useRef(null);
 
   const theme = themes[poster.theme] ?? themes.stateOfPlay;
@@ -842,6 +844,44 @@ function App() {
     }
   }
 
+  async function exportLongPoster() {
+    if (!longPosterRef.current) return;
+    const stage = document.createElement("div");
+    const clone = longPosterRef.current.cloneNode(true);
+    const exportHeight = Math.max(1, pages.length) * 1920;
+
+    stage.className = "export-stage long-export-stage";
+    stage.style.setProperty("height", `${exportHeight}px`);
+    clone.style.setProperty("position", "relative", "important");
+    clone.style.setProperty("left", "auto", "important");
+    clone.style.setProperty("top", "auto", "important");
+    clone.style.setProperty("width", "1440px", "important");
+    clone.style.setProperty("height", `${exportHeight}px`, "important");
+    stage.appendChild(clone);
+    document.body.appendChild(stage);
+
+    try {
+      await waitForExportAssets(clone);
+      const dataUrl = await toPng(clone, {
+        width: 1440,
+        height: exportHeight,
+        pixelRatio: 1,
+        cacheBust: true,
+        backgroundColor: "#020817",
+      });
+      const link = document.createElement("a");
+      link.download = `${theme.label}-long-${pages.length}-pages.png`;
+      link.href = dataUrl;
+      link.click();
+    } finally {
+      stage.remove();
+    }
+  }
+
+  function exportPoster() {
+    return stitchPages ? exportLongPoster() : exportCurrentPage();
+  }
+
   return (
     <main className="app-shell">
       <section className="editor-panel">
@@ -855,9 +895,17 @@ function App() {
               <Save size={18} />
               保存模板
             </button>
-            <button className="primary-button" type="button" onClick={exportCurrentPage}>
+            <label className="export-mode-toggle">
+              <input
+                checked={stitchPages}
+                type="checkbox"
+                onChange={(event) => setStitchPages(event.target.checked)}
+              />
+              竖向拼接全部页面
+            </label>
+            <button className="primary-button" type="button" onClick={exportPoster}>
               <Download size={18} />
-              导出当前页
+              {stitchPages ? "导出长图" : "导出当前页"}
             </button>
           </div>
         </div>
@@ -1204,6 +1252,22 @@ function App() {
           showGameInfo={poster.showGameInfo ?? true}
           theme={theme}
         />
+        <div aria-hidden="true" className="long-export-source" ref={longPosterRef}>
+          {pages.map((pageGames, index) => (
+            <PosterPage
+              key={`long-page-${index}`}
+              infoFontSize={poster.infoFontSize ?? defaultInfoFontSize}
+              isFullCardPage={poster.compactFollowupPages && index > 0}
+              pageGames={pageGames}
+              pageOffset={pageStartOffsets[index] ?? 0}
+              fillSpace={getPageFillSetting(poster, index)}
+              onLogoPositionChange={() => {}}
+              poster={poster}
+              posterRef={null}
+              theme={theme}
+            />
+          ))}
+        </div>
       </section>
     </main>
   );
