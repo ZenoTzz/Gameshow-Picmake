@@ -1,0 +1,312 @@
+{
+  "theme": "xbox",
+  "fillEmptySpace": false,
+  "compactFollowupPages": true,
+  "pageFillOverrides": {
+    "0": true,
+    "1": true,
+    "2": true,
+    "3": true
+  },
+  "logoImages": {
+    "stateOfPlay": "",
+    "summerGameFest": "",
+    "xbox": "",
+    "nintendoDirect": ""
+  },
+  "logoPositions": {
+    "stateOfPlay": {
+      "x": 72,
+      "y": 72
+    },
+    "summerGameFest": {
+      "x": 72,
+      "y": 72
+    },
+    "xbox": {
+      "x": 72,
+      "y": 72
+    },
+    "nintendoDirect": {
+      "x": 72,
+      "y": 72
+    }
+  },
+  "footerLogoImage": "/template-assets/27690ba03475ca14c1d5209a11dcf3dced919856a8d19799d461363ed346e96f.png",
+  "footerCreditText": "信息整理",
+  "infoFontSize": 25,
+  "infoFontWeight": 400,
+  "posterFontFamily": "",
+  "headerFontFamily": "",
+  "gameTitleFontFamily": "",
+  "metadataFontFamily": "",
+  "infoFontFamily": "",
+  "creditFontFamily": "",
+  "themeText": {
+    "stateOfPlay": {
+      "eventLabel": "State of Play",
+      "title": "发布会重磅大作",
+      "subtitle": "发售日期 / 登陆平台 / 关键信息速览"
+    },
+    "summerGameFest": {
+      "eventLabel": "夏日游戏节",
+      "title": "发布会重点大作",
+      "subtitle": "发售日期 / 登陆平台 / 关键信息速览"
+    },
+    "xbox": {
+      "eventLabel": "Xbox Games Showcase",
+      "title": "发布会重点内容",
+      "subtitle": "发售日期 / 登陆平台 / 关键信息速览"
+    },
+    "nintendoDirect": {
+      "eventLabel": "Nintendo Direct",
+      "title": "发布会重磅直面会",
+      "subtitle": "发售日期 / 登陆平台 / 关键信息速览"
+    }
+  },
+  "games": [
+    {
+      "title": "光环：战役进化",
+      "date": "2026年7月28日",
+      "platforms": [
+        "PS5",
+        "Xbox Series",
+        "PC"
+      ],
+      "info": "《光环：战役进化》是《光环：战斗进化》战役模式的忠实还原且经现代化重塑的版本。玩家将体验具备高清画面、优化控制、最多4人玩家在线合作、3个全新任务，以及扩充武器库、载具与新增敌人的传奇故事。同步加入Game Pass游戏库。",
+      "image": "/template-assets/a3b1c7472ec04cb1afce1553554a5f7ee89567ea7ce39a7c466c79507aece9b8.jpg"
+    },
+    {
+      "title": " Gears of War: E-Day",
+      "date": "2026年10月6日",
+      "platforms": [
+        "Xbox Series",
+        "PC"
+      ],
+      "info": "亲身感受事变日的恐怖与残酷。故事发生在初代《 \nGears of War》的十四年前，兽族部落首次从地底破土而出，点燃了绝望的求生战火，你将与马可斯、多姆一同，踏上这场扣人心弦的起源故事战役。",
+      "image": "/template-assets/95054cb75a5e780fc029002cecfbe4a026782eb8469ed355d2dfc094591f1f85.jpg"
+    },
+    {
+      "title": "女神异闻录6",
+      "date": "未定",
+      "platforms": [
+        "PS5",
+        "Xbox Series",
+        "PC"
+      ],
+      "info": "《女神异闻录》系列作品终于迎来了万众期待的正统新作《女神异闻录6》。本作将在继承长久以来备受玩家喜爱的系列独特世界观与创新游玩体验的同时，在全新的舞台中为玩家们带来全新的故事。同步加入Game Pass游戏库。",
+      "image": "/template-assets/114c4cc1e1887844d1d1fa8240d83e9b3518187f20fe73d04789f9aafea42935.jpg"
+    },
+    {
+      "title": "女神异闻录4 Revival",
+      "date": "2027年2月18日",
+      "platforms": [
+        "PS5",
+        "Xbox Series",
+        "PC"
+      ],
+      "info": "夺目青春×超自然现象×离奇案件。在日本的乡下小镇八十稻羽，开始为期一年的高中生活吧。同步加入Game Pass游戏库。",
+      "image": "/template-assets/f23775e3c094bb4dc9b68e36715ebec4ee97e19cfc595a2ab940c5757ba5af45.jpg"
+    },
+    {
+      "title": "卧龙2：凤火连天",
+      "date": "2027年初",
+      "platforms": [
+        "PS5",
+        "Xbox Series",
+        "Switch 2",
+        "PC"
+      ],
+      "info": "战火蔽日，凤舞长空。时值东汉末年，天下三分，英雄逐鹿。兵连祸结，诸般信念激荡交锋；沙场喋血，异形妖魔横行肆虐——无止境的混沌之下，一位侠士横空出世。同步加入Game Pass游戏库。",
+      "image": "/template-assets/62650f017602f897eb67941096300033966daa4fe78dd07aa9e9b149337868d4.jpg"
+    },
+    {
+      "title": "地铁2039",
+      "date": "2027年2月",
+      "platforms": [
+        "PS5",
+        "Xbox Series",
+        "PC"
+      ],
+      "info": "后末日之下，踏上一场直抵莫斯科黑暗腹地的苦痛之旅，在事关地铁存亡的争斗中寻找出路。",
+      "image": "/template-assets/eda3b85e5baf59f4b7c0006975f094b29276a72c351613ebc930f5219050583e.jpg"
+    },
+    {
+      "title": "我的世界：地下城2",
+      "date": "2026年9月29日",
+      "platforms": [
+        "PS5",
+        "Xbox Series",
+        "Switch 2",
+        "PC"
+      ],
+      "info": "放下镐，拿起剑，奔赴《我的世界：地下城2（MINECRAFT DUNGEONS II）》这场惊心动魄的全新冒险！同步加入Game Pass游戏库。",
+      "image": "/template-assets/41669cacc834fdc546dabf0f41f31979d00d6ac11bca70126de5257ae3cf67ff.jpg"
+    },
+    {
+      "title": "神鬼寓言",
+      "date": "2027年2月23日",
+      "platforms": [
+        "PS5",
+        "Xbox Series",
+        "PC"
+      ],
+      "info": "踏入《神鬼寓言》这款沉浸式开放世界动作角色扮演游戏，成为你想要成为的那种英雄。你的每一次选择都会改变未来的旅程，现已开启预购。",
+      "image": "/template-assets/deed3d3a82b857f3850ee43032fa99bf4c321a6e417867481de7734199279a26.jpg"
+    },
+    {
+      "title": "地狱之刃：塞娜",
+      "date": "2027年",
+      "platforms": [
+        "PS5",
+        "Xbox Series",
+        "PC"
+      ],
+      "info": "一名凯尔特人战士被困在生与死之间，徘徊于炼狱般的破碎幻觉中。在这款《地狱之刃》世界观的动作冒险游戏中，塞娜为了抵达来世，与她失去的珍爱之人重逢，奋力对抗威胁她所有信念的黑暗势力。同步加入Game Pass游戏库。",
+      "image": "/template-assets/c602b4a6f9db4ca27959cfc2f6d51f1807a8b6fe5d1e8a281b84e5bafb525932.jpg"
+    },
+    {
+      "title": "共鸣：瘟疫传说传承",
+      "date": "2026年8月27日",
+      "platforms": [
+        "PS5",
+        "Xbox Series",
+        "PC"
+      ],
+      "info": "故事发生在《瘟疫传说：安魂曲》十五年前，索菲亚年纪尚轻，心狠手辣，四处抢掠，奔走逃亡，同时下定决心查清自己身世的众多秘密。同步加入Game Pass游戏库。",
+      "image": "/template-assets/511c2b7878d75b62588df8bc6acb79605541a8c4ceab26e8e1745ef7102dd690.jpg"
+    },
+    {
+      "title": "恶魔城：贝尔蒙特的诅咒",
+      "date": "2026年10月15日",
+      "platforms": [
+        "PS5",
+        "Xbox Series",
+        "Switch",
+        "PC"
+      ],
+      "info": "1499年法国首都巴黎遭到突如其来的魔物袭击。除掉德古拉的英雄特雷弗‧贝尔蒙特，其女儿Rose‧贝尔蒙特为了查明这场灾厄的元凶，开始在市街讨伐魔物并展开探索。Switch版将于2026年内发售，具体日期待定。",
+      "image": "/template-assets/bb0f0031936b375203310fbcf3081f01ddaa772dd46765a1482bb58b85af53ad.jpg"
+    },
+    {
+      "title": "腐烂国度3",
+      "date": "2027年",
+      "platforms": [
+        "PS5",
+        "Xbox Series",
+        "PC"
+      ],
+      "info": "同舟共济，方得生存。一场丧尸灾变几乎毁灭了人类。距离最初的爆发已经过了数年，你需要在这个血疫肆虐的世界中为自己开辟一条生路。同步加入Game Pass游戏库。",
+      "image": "/template-assets/6c28fd75514d0575ad91d7e7fc8832f055edb822f6a547f313394bfc0d15c88c.jpg"
+    },
+    {
+      "title": "毁灭战士：黑暗时代「Revelations」战役扩展包",
+      "date": "2026年7月7日",
+      "platforms": [
+        "PS5",
+        "Xbox Series",
+        "PC"
+      ],
+      "info": "游戏增添了一个劲爆凶残的新章节。毁灭战士身受重伤，遭到背叛，被迫进入残酷的炼狱，只有面对阴魂不散的真相，而且借助一位古老盟友的帮助，打造全新神兵利器，才能逃离这里。",
+      "image": "/template-assets/d41bcb21fa114ed06dd5614e110f46e604625c96db74f10ec0af2cb262104d55.jpg"
+    },
+    {
+      "title": "疯狂出租车：极速环游",
+      "date": "2027年",
+      "platforms": [
+        "PS5",
+        "Xbox Series",
+        "Switch 2",
+        "PC"
+      ],
+      "info": "《疯狂出租车》疯狂升级！ 驾车纵横在热情洋溢的城市街头，周游世界的疯狂大冒险拉开序幕。支持中文配音。",
+      "image": "/template-assets/b3e8565910432a8bce4a4a6ad696acc8c238a4392d699935dad72d38ec27fd57.jpg"
+    },
+    {
+      "title": "不朽遗志",
+      "date": "2026年9月24日",
+      "platforms": [
+        "PS5",
+        "Xbox Series",
+        "PC"
+      ],
+      "info": "《不朽遗志（Valor Mortis）》是一款第一人称魂类动作游戏，出自《幽灵行者》创作者之手。起死回生，化身成为一名拿破仑军队的前士兵。掌握超自然力量，对战恐怖怪物，并揭露一场威胁全人类安危的惊天阴谋。试玩Demo现已在Steam平台上线。",
+      "image": "/template-assets/0dac2313cb2c73491af4d905187fc1be05f118d16fb1c2d92716de54f63ebedf.jpg"
+    },
+    {
+      "title": "发条革命",
+      "date": "2027年",
+      "platforms": [
+        "Xbox Series",
+        "PC"
+      ],
+      "info": "玩家将穿梭于过去与现在，对抗冷酷无情的铁木夫人。你的每一次互动与抉择，都会在这个厚重的叙事驱动世界中引发蝴蝶效应，以意想不到的方式塑造人物命运与事件走向。同步加入Game Pass游戏库。",
+      "image": "/template-assets/e762138ee1ba4b89b29677d2225d91ef72342e48b52c400846f15c093829c66d.jpg"
+    },
+    {
+      "title": "瓶中永夏",
+      "date": "2027年",
+      "platforms": [
+        "Xbox Series",
+        "PC"
+      ],
+      "info": "在《瓶中永夏（Vivarium）》这款生活模拟冒险游戏中，步入一场永不终结的盛夏。纯手绘的温暖笔触，每一帧都仿佛都让你置身于那些经典永恒的动画电影。同步加入Game Pass游戏库。",
+      "image": "/template-assets/7625cbebc9b70c71dafb70aaf44518489f873044c1370f0b49eb682ef5c362cf.jpg"
+    },
+    {
+      "title": "魔术师：魔鬼的交易",
+      "date": "2027年",
+      "platforms": [
+        "PS5",
+        "Xbox Series",
+        "PC"
+      ],
+      "info": "《魔术师：魔鬼的交易（Magicians: The Devil’s Deal）》是一款叙事型第一人称射击游戏。同步加入Game Pass游戏库。",
+      "image": "/template-assets/8adee9ea90246920a1230f5d702b10f0ce0d682b919de7c8c35103498e608a5f.jpg"
+    },
+    {
+      "title": "帝国时代4「北方劫掠者」DLC",
+      "date": "2026年秋",
+      "platforms": [
+        "PS5",
+        "Xbox Series",
+        "PC"
+      ],
+      "info": "「北方劫掠者」DLC引入了两个完整的文明、更深度的炼狱系统以及更多内容。",
+      "image": "/template-assets/83463a21726cfc8261377365c7fbd840a48093f4fa0ae90b6237054f251e2a4f.jpg"
+    },
+    {
+      "title": "微软飞行模拟2024 世界更新22",
+      "date": "2026年7月4日",
+      "platforms": [
+        "PS5",
+        "Xbox Series",
+        "PC"
+      ],
+      "info": "《微软模拟飞行2024》世界更新22「美国国家公园」将带玩家领略美国的壮丽自然风光，里面涵盖超过三十座国家公园、国家纪念区以及固特异飞艇，更新将于7月4日上线。如果你想体验空中竞速的刺激与冒险，全美航空锦标赛更新可以满足你，更新将于今年秋季推出。",
+      "image": "/template-assets/ec1d8330e7f322fb5f639355d86d5ca282b95e7fd59a40f4fa881bec7af42639.jpg"
+    },
+    {
+      "title": "小龙斯派罗：天外国度",
+      "date": "2027年春",
+      "platforms": [
+        "PS5",
+        "Xbox Series",
+        "Switch 2",
+        "PC"
+      ],
+      "info": "在这片陌生而奇幻的国度中，展开一段全新的飞行旅程。同步加入Game Pass游戏库。",
+      "image": "/template-assets/12322c0853425dd526ae153adb3edbf489293c82fe3376b05657e4b81f735880.jpg"
+    },
+    {
+      "title": "坏喜鹊",
+      "date": "2027年",
+      "platforms": [
+        "Xbox Series",
+        "PC"
+      ],
+      "info": "你是只喜鹊，少了只翅膀，没了同类，还心心念念惦记着一颗落下的星星。偷亮闪闪的小玩意儿，四处闯祸，管一些不需要你管的闲事。同步加入Game Pass游戏库。",
+      "image": "/template-assets/131e8643e7992885e28669fde02bcc6d5ea6ff0dcc19618b75f99221e90da215.jpg"
+    }
+  ]
+}
