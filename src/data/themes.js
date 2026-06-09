@@ -64,13 +64,13 @@ export const themes = {
     logo: "ND",
     fontFamily: "'Noto Sans SC', 'Microsoft YaHei', Arial, sans-serif",
     bg:
-      "radial-gradient(circle at 80% 7%, rgba(255, 161, 168, .18), transparent 24%)," +
-      "linear-gradient(180deg, #c91524 0%, #a90f1c 27.8%, #2b171b 28%, #171214 100%)",
+      "radial-gradient(circle at 80% 7%, rgba(255, 255, 255, .12), transparent 24%)," +
+      "linear-gradient(180deg, #e60012 0%, #b8000e 27.8%, #2b171b 28%, #171214 100%)",
     panel: "rgba(35, 17, 21, .9)",
     card: "linear-gradient(90deg, rgba(64, 24, 31, .96), rgba(31, 20, 23, .97))",
-    line: "#ef4050",
+    line: "#e60012",
     glow: "rgba(230, 0, 18, .34)",
-    accent: "#ffb6bd",
+    accent: "#e60012",
     chipBg: "#e60012",
     chipText: "#ffffff",
     titleShadow: "0 5px 0 rgba(91, 0, 8, .62), 0 0 18px rgba(255, 255, 255, .2)",

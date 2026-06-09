@@ -1078,7 +1078,7 @@ textarea:focus {
 }
 
 .theme-nintendoDirect .game-card {
-  border: 3px solid #ef4050;
+  border: 3px solid #e60012;
   border-radius: 8px;
   background: var(--card);
   box-shadow:
@@ -1097,7 +1097,7 @@ textarea:focus {
 }
 
 .theme-nintendoDirect .game-image {
-  border-color: #ef4050;
+  border-color: #e60012;
   background:
     radial-gradient(circle at 50% 50%, rgba(230, 0, 18, 0.12), transparent 48%),
     linear-gradient(135deg, #2a2022, #100d0e);
@@ -1120,7 +1120,7 @@ textarea:focus {
 }
 
 .theme-nintendoDirect .info-row svg {
-  color: #ff7884;
+  color: #e60012;
   filter: none;
 }
 
