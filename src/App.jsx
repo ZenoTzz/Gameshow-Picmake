@@ -52,6 +52,11 @@ const defaultThemeText = {
     title: "发布会重磅直面会",
     subtitle: defaultSubtitle,
   },
+  nintendoDirectWarm: {
+    eventLabel: "Nintendo Direct",
+    title: "发布会重磅直面会",
+    subtitle: defaultSubtitle,
+  },
 };
 const defaultLogoPosition = { x: 72, y: 72 };
 const defaultInfoFontSize = 20;

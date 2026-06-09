@@ -1151,6 +1151,112 @@ textarea:focus {
   color: rgba(255, 255, 255, 0.76);
 }
 
+.theme-nintendoDirectWarm::before {
+  background:
+    radial-gradient(circle at 12% 9%, rgba(255, 255, 255, 0.12) 0 5%, transparent 12%),
+    radial-gradient(circle at 86% 8%, rgba(255, 255, 255, 0.09) 0 4%, transparent 11%),
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.018) 0 2px, transparent 2px 22px);
+  opacity: 0.7;
+}
+
+.theme-nintendoDirectWarm::after {
+  display: none;
+}
+
+.theme-nintendoDirectWarm .poster-header {
+  min-height: 286px;
+}
+
+.theme-nintendoDirectWarm .logo-slot,
+.theme-nintendoDirectWarm .event-label,
+.theme-nintendoDirectWarm .headline h2 {
+  color: #ffffff;
+}
+
+.theme-nintendoDirectWarm .event-label,
+.theme-nintendoDirectWarm .headline h2 {
+  text-shadow: 0 4px 0 rgba(103, 0, 10, 0.48);
+}
+
+.theme-nintendoDirectWarm .light-line {
+  opacity: 0.18;
+  background: linear-gradient(90deg, transparent, #ffffff, transparent);
+  box-shadow: none;
+}
+
+.theme-nintendoDirectWarm .game-card {
+  border: 2px solid #8f000b;
+  border-left: 10px solid #8f000b;
+  border-radius: 10px;
+  background: var(--card);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.48),
+    0 9px 20px rgba(24, 20, 21, 0.18);
+}
+
+.theme-nintendoDirectWarm .card-number {
+  border-color: #f4dedf;
+  border-radius: 7px;
+  background: #e60012;
+  color: #ffffff;
+  box-shadow: 0 0 0 5px rgba(230, 0, 18, 0.12);
+  text-shadow: none;
+}
+
+.theme-nintendoDirectWarm .game-image {
+  border-color: #8f000b;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(230, 0, 18, 0.12), transparent 48%),
+    linear-gradient(135deg, #2a2022, #100d0e);
+  box-shadow: inset 0 0 24px rgba(255, 255, 255, 0.03);
+}
+
+.theme-nintendoDirectWarm .game-image span {
+  color: rgba(255, 182, 189, 0.42);
+}
+
+.theme-nintendoDirectWarm .game-copy h3 {
+  color: #181516;
+  text-shadow: none;
+}
+
+.theme-nintendoDirectWarm .info-row,
+.theme-nintendoDirectWarm .row-label {
+  color: #332d2e;
+  text-shadow: none;
+}
+
+.theme-nintendoDirectWarm .info-row svg {
+  color: #e60012;
+  filter: none;
+}
+
+.theme-nintendoDirectWarm .platforms span {
+  background: var(--platform-bg, #242122);
+  color: var(--platform-text, #ffffff);
+  box-shadow: 0 2px 5px rgba(24, 20, 21, 0.16);
+}
+
+.theme-nintendoDirectWarm .poster-credit {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #ffffff;
+  box-shadow: none;
+  text-shadow: 0 2px 6px rgba(82, 0, 8, 0.34);
+}
+
+.theme-nintendoDirectWarm .footer-logo {
+  min-width: 0;
+  filter: none;
+}
+
+.theme-nintendoDirectWarm .footer-logo-placeholder {
+  border-color: rgba(255, 255, 255, 0.42);
+  color: rgba(255, 255, 255, 0.76);
+}
+
 .poster-credit {
   display: grid;
   justify-items: center;
