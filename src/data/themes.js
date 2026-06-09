@@ -64,16 +64,16 @@ export const themes = {
     logo: "ND",
     fontFamily: "'Noto Sans SC', 'Microsoft YaHei', Arial, sans-serif",
     bg:
-      "radial-gradient(circle at 82% 8%, rgba(255, 255, 255, .24), transparent 22%)," +
-      "linear-gradient(180deg, #e60012 0%, #e60012 28%, #ffffff 28.2%, #f5f5f5 100%)",
-    panel: "rgba(255, 255, 255, .86)",
-    card: "linear-gradient(90deg, rgba(255, 255, 255, .98), rgba(255, 246, 246, .96))",
-    line: "#e60012",
-    glow: "rgba(230, 0, 18, .42)",
-    accent: "#ffffff",
+      "radial-gradient(circle at 80% 7%, rgba(255, 161, 168, .18), transparent 24%)," +
+      "linear-gradient(180deg, #c91524 0%, #a90f1c 27.8%, #2b171b 28%, #171214 100%)",
+    panel: "rgba(35, 17, 21, .9)",
+    card: "linear-gradient(90deg, rgba(64, 24, 31, .96), rgba(31, 20, 23, .97))",
+    line: "#ef4050",
+    glow: "rgba(230, 0, 18, .34)",
+    accent: "#ffb6bd",
     chipBg: "#e60012",
     chipText: "#ffffff",
-    titleShadow: "0 5px 0 rgba(139, 0, 10, .72), 0 0 20px rgba(255, 255, 255, .44)",
-    decor: "nintendoSwitchLogo",
+    titleShadow: "0 5px 0 rgba(91, 0, 8, .62), 0 0 18px rgba(255, 255, 255, .2)",
+    decor: "none",
   },
 };
