@@ -1041,9 +1041,9 @@ textarea:focus {
 
 .theme-nintendoDirect::before {
   background:
-    radial-gradient(circle at 12% 9%, rgba(255, 255, 255, 0.13) 0 5%, transparent 12%),
-    radial-gradient(circle at 86% 8%, rgba(255, 255, 255, 0.1) 0 4%, transparent 11%),
-    linear-gradient(180deg, transparent 0 17%, rgba(22, 18, 19, 0.025) 17.2% 100%),
+    radial-gradient(circle at 12% 9%, rgba(255, 255, 255, 0.18) 0 5%, transparent 12%),
+    radial-gradient(circle at 86% 8%, rgba(255, 255, 255, 0.14) 0 4%, transparent 11%),
+    linear-gradient(180deg, rgba(230, 0, 18, 0.025), transparent 24%),
     repeating-linear-gradient(0deg, rgba(34, 29, 30, 0.022) 0 2px, transparent 2px 22px);
   opacity: 0.68;
 }
@@ -1060,20 +1060,22 @@ textarea:focus {
 }
 
 .theme-nintendoDirect .logo-slot {
-  color: #ffffff;
+  color: #e60012;
 }
 
 .theme-nintendoDirect .event-label {
-  color: #ffffff;
+  color: #e60012;
+  text-shadow: 0 3px 0 rgba(255, 255, 255, 0.62);
 }
 
 .theme-nintendoDirect .headline h2 {
-  color: #ffffff;
+  color: #e60012;
+  text-shadow: 0 3px 0 rgba(255, 255, 255, 0.62);
 }
 
 .theme-nintendoDirect .light-line {
-  opacity: 0.22;
-  background: linear-gradient(90deg, transparent, #ffffff, transparent);
+  opacity: 0.16;
+  background: linear-gradient(90deg, transparent, #e60012, transparent);
   box-shadow: none;
 }
 
@@ -1088,9 +1090,9 @@ textarea:focus {
 }
 
 .theme-nintendoDirect .card-number {
-  border-color: #242122;
+  border-color: #e60012;
   border-radius: 7px;
-  background: #242122;
+  background: #e60012;
   color: #ffffff;
   box-shadow: 0 0 0 5px rgba(230, 0, 18, 0.12);
   text-shadow: none;
@@ -1125,9 +1127,9 @@ textarea:focus {
 }
 
 .theme-nintendoDirect .platforms span {
-  background: #242122;
-  color: #ffffff;
-  box-shadow: none;
+  background: var(--platform-bg, #242122);
+  color: var(--platform-text, #ffffff);
+  box-shadow: 0 2px 5px rgba(24, 20, 21, 0.16);
 }
 
 .theme-nintendoDirect .poster-credit {

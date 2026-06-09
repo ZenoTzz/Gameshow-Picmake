@@ -63,7 +63,7 @@ export const themes = {
     label: "Nintendo Direct",
     logo: "ND",
     fontFamily: "'Noto Sans SC', 'Microsoft YaHei', Arial, sans-serif",
-    bg: "linear-gradient(180deg, #e60012 0 17%, #e7e1df 17.2% 100%)",
+    bg: "#e7e1df",
     panel: "rgba(34, 30, 31, .94)",
     card: "linear-gradient(100deg, #f3efed, #e8e1df)",
     line: "#2b2728",
