@@ -162,6 +162,7 @@ function normalizePosterTemplate(poster) {
     themeText,
     logoPositions,
     compactFollowupPages: poster.compactFollowupPages ?? false,
+    showGameInfo: poster.showGameInfo ?? true,
     infoFontSize: poster.infoFontSize ?? defaultInfoFontSize,
     infoFontWeight: poster.infoFontWeight ?? defaultInfoFontWeight,
     posterFontFamily: poster.posterFontFamily ?? "",
@@ -195,6 +196,7 @@ function getTemplateFields(poster) {
     theme: poster.theme,
     fillEmptySpace: poster.fillEmptySpace,
     compactFollowupPages: poster.compactFollowupPages ?? false,
+    showGameInfo: poster.showGameInfo ?? true,
     pageFillOverrides: poster.pageFillOverrides,
     logoImages: poster.logoImages,
     logoPositions: poster.logoPositions,
@@ -579,6 +581,7 @@ function App() {
   }, [
     poster.games,
     poster.theme,
+    poster.showGameInfo,
     poster.infoFontSize,
     poster.infoFontWeight,
     poster.posterFontFamily,
@@ -927,6 +930,17 @@ function App() {
               <option value="900">黑体 900</option>
             </select>
           </label>
+          <label className="toggle-field">
+            <input
+              checked={poster.showGameInfo ?? true}
+              type="checkbox"
+              onChange={(event) => {
+                updatePoster("showGameInfo", event.target.checked);
+                setPageIndex(0);
+              }}
+            />
+            显示关键信息
+          </label>
           <label className="wide-field">
             海报文字字体
             <input
@@ -1187,6 +1201,7 @@ function App() {
           infoFontSize={poster.infoFontSize ?? defaultInfoFontSize}
           infoFontWeight={poster.infoFontWeight ?? defaultInfoFontWeight}
           measureRef={measureRef}
+          showGameInfo={poster.showGameInfo ?? true}
           theme={theme}
         />
       </section>
@@ -1194,7 +1209,7 @@ function App() {
   );
 }
 
-function MeasurementLayer({ fonts, games, infoFontSize, infoFontWeight, measureRef, theme }) {
+function MeasurementLayer({ fonts, games, infoFontSize, infoFontWeight, measureRef, showGameInfo, theme }) {
   return (
     <div
       aria-hidden="true"
@@ -1217,7 +1232,13 @@ function MeasurementLayer({ fonts, games, infoFontSize, infoFontWeight, measureR
       }}
     >
       {games.map((game, index) => (
-        <GameCard key={`measure-${index}-${game.title}`} game={game} infoFontSize={infoFontSize} number={index + 1} />
+        <GameCard
+          key={`measure-${index}-${game.title}`}
+          game={game}
+          infoFontSize={infoFontSize}
+          number={index + 1}
+          showGameInfo={showGameInfo}
+        />
       ))}
     </div>
   );
@@ -1294,6 +1315,7 @@ function PosterPage({
             game={game}
             infoFontSize={infoFontSize}
             number={pageOffset + index + 1}
+            showGameInfo={poster.showGameInfo ?? true}
           />
         ))}
       </section>
@@ -1411,7 +1433,7 @@ function PosterDecor({ decor }) {
   );
 }
 
-function GameCard({ game, infoFontSize, number }) {
+function GameCard({ game, infoFontSize, number, showGameInfo }) {
   return (
     <article className="game-card" style={{ "--info-font-size": `${infoFontSize}px` }}>
       <div className="card-number">{String(number).padStart(2, "0")}</div>
@@ -1438,7 +1460,7 @@ function GameCard({ game, infoFontSize, number }) {
             ))}
           </div>
         </div>
-        <InfoRow className="detail-row" icon={<Info />} label="" value={game.info} />
+        {showGameInfo && <InfoRow className="detail-row" icon={<Info />} label="" value={game.info} />}
       </div>
     </article>
   );

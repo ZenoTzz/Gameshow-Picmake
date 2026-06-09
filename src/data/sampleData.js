@@ -2,6 +2,7 @@ export const initialPoster = {
   theme: "stateOfPlay",
   fillEmptySpace: true,
   compactFollowupPages: false,
+  showGameInfo: true,
   logoImages: {
     stateOfPlay: "",
     summerGameFest: "",
