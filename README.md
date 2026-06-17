@@ -19,7 +19,7 @@ http://127.0.0.1:5173
 
 可开启“自动补齐当前页空白”，让当前画布里的卡片平均填满剩余高度。也可以上传左上角 Logo，每个主题会保存自己的 Logo。
 
-点击“保存模板”会保存当前主题、标题、Logo、注释、补齐开关等模板设置。下次用同一个浏览器打开线上页面时会自动恢复；游戏列表不会被保存为模板内容。
+点击“保存模板”会保存当前主题、标题、Logo、注释、补齐开关和游戏列表等模板内容。下次用同一个浏览器打开线上页面时会自动恢复；填写 GitHub PAT 后也可以同步为线上模板。
 
 ## 批量粘贴解析
 
@@ -41,6 +41,8 @@ http://127.0.0.1:5173
 - State of Play
 - Summer Game Fest
 - Xbox Showcase
+- Nintendo Direct
+- Nintendo Direct 暖白卡片
 
 主题配置在 `src/data/themes.js`，默认示例内容在 `src/data/sampleData.js`。
 
@@ -56,7 +58,7 @@ http://127.0.0.1:5173
 
 ## GitHub Pages
 
-仓库推送到 `main` 分支后，GitHub Actions 会自动构建并部署到 GitHub Pages。
+仓库推送到 `main` 分支后，GitHub Actions 会自动构建并部署到 GitHub Pages。部署时会保留 `gh-pages` 分支上的 `template.json` 和 `template-assets/`。
 
 ## 排版规则
 

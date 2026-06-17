@@ -485,10 +485,36 @@ function resolveLogoSrc(src) {
   return `${baseUrl}${src}`.replace(/\/{2,}/g, "/");
 }
 
+function normalizeGamePlatforms(platforms) {
+  if (Array.isArray(platforms)) {
+    const normalizedPlatforms = platforms.map((platform) => String(platform).trim()).filter(Boolean);
+    return normalizedPlatforms.length ? normalizedPlatforms : [...blankGame.platforms];
+  }
+
+  if (typeof platforms === "string") {
+    const normalizedPlatforms = platforms
+      .split(/[，,/\n]/)
+      .map((platform) => platform.trim())
+      .filter(Boolean);
+    return normalizedPlatforms.length ? normalizedPlatforms : [...blankGame.platforms];
+  }
+
+  return [...blankGame.platforms];
+}
+
 function cloneGame(game = blankGame) {
+  const normalizedGame = {
+    ...blankGame,
+    ...(game ?? {}),
+  };
+
   return {
-    ...game,
-    platforms: [...game.platforms],
+    ...normalizedGame,
+    title: normalizedGame.title ?? blankGame.title,
+    date: normalizedGame.date ?? blankGame.date,
+    info: normalizedGame.info ?? blankGame.info,
+    image: normalizedGame.image ?? blankGame.image,
+    platforms: normalizeGamePlatforms(normalizedGame.platforms),
   };
 }
 
