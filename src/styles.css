@@ -1335,3 +1335,18 @@ textarea:focus {
     transform: scale(0.4);
   }
 }
+
+.auto-save-indicator { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500; color: #94a3b8; transition: opacity 0.3s; }
+.auto-save-indicator .dot { width: 6px; height: 6px; border-radius: 50%; background: #94a3b8; }
+.auto-save-indicator.saving .dot { background: #94a3b8; animation: pulse 1.5s infinite; }
+.auto-save-indicator.saved .dot { background: #10b981; }
+.auto-save-indicator.saved { color: #10b981; }
+.auto-save-indicator.error .dot { background: #ef4444; }
+.auto-save-indicator.error { color: #ef4444; }
+.header-actions-row { display: flex; align-items: center; gap: 8px; justify-content: flex-end; }
+
+.crop-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 9999; display: flex; align-items: center; justify-content: center; }
+.crop-modal { width: 100%; max-width: 800px; background: #0f172a; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; }
+.theme-editor-panel .section-title { margin-bottom: 12px; border-bottom: 1px solid #334155; padding-bottom: 8px; justify-content: space-between; display: flex; }
+.theme-editor-panel input[type='color'] { padding: 0; cursor: pointer; height: 38px; }
+

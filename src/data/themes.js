@@ -1,4 +1,4 @@
-export const themes = {
+const defaultThemes = {
   stateOfPlay: {
     id: "stateOfPlay",
     label: "State of Play",
@@ -91,3 +91,38 @@ export const themes = {
     decor: "none",
   },
 };
+
+export let themes = { ...defaultThemes };
+
+const customThemesKey = "gameshow-pic-custom-themes-v1";
+try {
+  const saved = localStorage.getItem(customThemesKey);
+  if (saved) {
+    const customThemes = JSON.parse(saved);
+    themes = { ...defaultThemes, ...customThemes };
+  }
+} catch {}
+
+export function addCustomTheme(theme) {
+  themes = { ...themes, [theme.id]: theme };
+  saveCustomThemes();
+}
+
+export function removeCustomTheme(id) {
+  const newThemes = { ...themes };
+  delete newThemes[id];
+  themes = newThemes;
+  saveCustomThemes();
+}
+
+function saveCustomThemes() {
+  const customThemes = Object.keys(themes)
+    .filter((id) => id.startsWith("custom_"))
+    .reduce((acc, id) => {
+      acc[id] = themes[id];
+      return acc;
+    }, {});
+  try {
+    localStorage.setItem(customThemesKey, JSON.stringify(customThemes));
+  } catch {}
+}

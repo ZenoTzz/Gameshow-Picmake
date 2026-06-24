@@ -11,6 +11,9 @@ import {
   Plus,
   Save,
   Trash2,
+  Undo2,
+  Redo2,
+  GripVertical
 } from "lucide-react";
 import { blankGame, initialPoster } from "./data/sampleData";
 import { logoLibrary } from "./data/logoLibrary";
@@ -21,6 +24,13 @@ import { parseGamesFromText } from "./utils/parseGames";
 
 import * as Core from "./utils/coreUtils";
 import { MeasurementLayer, PosterPage } from "./components/PosterComponents";
+import { useAutoSave } from "./hooks/useAutoSave";
+import { useUndoRedo } from "./hooks/useUndoRedo";
+import { SortableGameList, SortableGameCard } from "./components/SortableGameList";
+import { arrayMove } from "@dnd-kit/sortable";
+import { ThemeEditor } from "./components/ThemeEditor";
+import { ImageCropper } from "./components/ImageCropper";
+import { removeCustomTheme, addCustomTheme } from "./data/themes";
 
 const { 
   getInitialPoster, getInitialGithubToken, getThemeText, getPosterFonts, 
@@ -33,7 +43,8 @@ const {
 } = Core;
 
 function App() {
-  const [poster, setPoster] = useState(getInitialPoster);
+  const { state: poster, setState: setPoster, undo, redo, canUndo, canRedo } = useUndoRedo(getInitialPoster());
+  const saveStatus = useAutoSave(poster);
   const [githubToken, setGithubToken] = useState(getInitialGithubToken);
   const [pageIndex, setPageIndex] = useState(0);
   const [cardHeights, setCardHeights] = useState([]);
@@ -42,6 +53,8 @@ function App() {
   const [templateMessage, setTemplateMessage] = useState("");
   const [templateHistory, setTemplateHistory] = useState(getInitialTemplateHistory);
   const [stitchPages, setStitchPages] = useState(false);
+  const [showThemeEditor, setShowThemeEditor] = useState(false);
+  const [cropState, setCropState] = useState(null);
   const posterRef = useRef(null);
   const longPosterRef = useRef(null);
   const measureRef = useRef(null);
@@ -71,6 +84,14 @@ function App() {
   useEffect(() => {
     let ignore = false;
 
+    const handleKeyDown = (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === "z") {
+        e.preventDefault();
+        e.shiftKey ? redo() : undo();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+
     async function loadRemoteTemplate() {
       try {
         const response = await fetch(`${remoteTemplateUrl}?v=${Date.now()}`, { cache: "no-store" });
@@ -94,8 +115,9 @@ function App() {
     loadRemoteTemplate();
     return () => {
       ignore = true;
+      window.removeEventListener("keydown", handleKeyDown);
     };
-  }, []);
+  }, [undo, redo]);
 
   useLayoutEffect(() => {
     if (!measureRef.current) return undefined;
@@ -231,6 +253,21 @@ function App() {
     });
   }
 
+  function handleDragEnd(event) {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+
+    setPoster((current) => {
+      const oldIndex = current.games.findIndex((g) => g.title === active.id);
+      const newIndex = current.games.findIndex((g) => g.title === over.id);
+      if (oldIndex === -1 || newIndex === -1) return current;
+      return {
+        ...current,
+        games: arrayMove(current.games, oldIndex, newIndex),
+      };
+    });
+  }
+
   function restoreHistory(historyItem) {
     const restoredPoster = normalizePosterTemplate({
       ...initialPoster,
@@ -245,8 +282,15 @@ function App() {
   function handleImage(index, file) {
     if (!file) return;
     const reader = new FileReader();
-    reader.onload = () => updateGame(index, "image", reader.result);
+    reader.onload = () => setCropState({ index, imageSrc: reader.result });
     reader.readAsDataURL(file);
+  }
+
+  function handleCropComplete(dataUrl) {
+    if (cropState) {
+      updateGame(cropState.index, "image", dataUrl);
+      setCropState(null);
+    }
   }
 
   function handleLogoImage(file) {
@@ -427,6 +471,48 @@ function App() {
     return stitchPages ? exportLongPoster() : exportCurrentPage();
   }
 
+  async function exportAllPages() {
+    if (!longPosterRef.current) return;
+    const JSZip = (await import("jszip")).default;
+    const { saveAs } = await import("file-saver");
+    const zip = new JSZip();
+
+    const pageNodes = Array.from(longPosterRef.current.children);
+    
+    for (let i = 0; i < pageNodes.length; i++) {
+      const stage = document.createElement("div");
+      const clone = pageNodes[i].cloneNode(true);
+      stage.className = "export-stage";
+      clone.style.setProperty("transform", "none", "important");
+      clone.style.setProperty("position", "relative", "important");
+      clone.style.setProperty("left", "auto", "important");
+      clone.style.setProperty("top", "auto", "important");
+      clone.style.setProperty("width", "1440px", "important");
+      clone.style.setProperty("height", "1920px", "important");
+      stage.appendChild(clone);
+      document.body.appendChild(stage);
+
+      try {
+        await waitForExportAssets(clone);
+        const dataUrl = await toPng(clone, {
+          width: 1440,
+          height: 1920,
+          pixelRatio: 1,
+          cacheBust: true,
+          backgroundColor: theme.bg,
+        });
+        const res = await fetch(dataUrl);
+        const blob = await res.blob();
+        zip.file(`${theme.label}-page-${i + 1}.png`, blob);
+      } finally {
+        stage.remove();
+      }
+    }
+
+    const zipBlob = await zip.generateAsync({ type: "blob" });
+    saveAs(zipBlob, `${theme.label}-全部${pages.length}页.zip`);
+  }
+
   return (
     <main className="app-shell">
       <section className="editor-panel">
@@ -436,22 +522,39 @@ function App() {
             <h1>发布会一图流模板</h1>
           </div>
           <div className="header-actions">
-            <button className="secondary-button" type="button" onClick={saveTemplate}>
-              <Save size={18} />
-              保存模板
-            </button>
-            <label className="export-mode-toggle">
-              <input
-                checked={stitchPages}
-                type="checkbox"
-                onChange={(event) => setStitchPages(event.target.checked)}
-              />
-              竖向拼接全部页面
-            </label>
-            <button className="primary-button" type="button" onClick={exportPoster}>
-              <Download size={18} />
-              {stitchPages ? "导出长图" : "导出当前页"}
-            </button>
+            <div className="header-actions-row">
+              <button className="icon-button" disabled={!canUndo} onClick={undo} title="撤销 (Ctrl+Z)" type="button" style={{ padding: "0 8px", background: "transparent", color: canUndo ? "#7dd3fc" : "#475569", border: "1px solid rgba(125,211,252,0.2)" }}>
+                <Undo2 size={18} />
+              </button>
+              <button className="icon-button" disabled={!canRedo} onClick={redo} title="重做 (Ctrl+Shift+Z)" type="button" style={{ padding: "0 8px", background: "transparent", color: canRedo ? "#7dd3fc" : "#475569", border: "1px solid rgba(125,211,252,0.2)" }}>
+                <Redo2 size={18} />
+              </button>
+              <button className="secondary-button" type="button" onClick={saveTemplate}>
+                <Save size={18} />
+                保存模板
+              </button>
+              {saveStatus === "saving" && <span className="auto-save-indicator saving"><span className="dot"></span>保存中…</span>}
+              {saveStatus === "saved" && <span className="auto-save-indicator saved"><span className="dot"></span>已自动保存</span>}
+              {saveStatus === "error" && <span className="auto-save-indicator error"><span className="dot"></span>自动保存失败</span>}
+            </div>
+            <div className="header-actions-row">
+              <label className="export-mode-toggle">
+                <input
+                  checked={stitchPages}
+                  type="checkbox"
+                  onChange={(event) => setStitchPages(event.target.checked)}
+                />
+                竖向拼接全部页面
+              </label>
+              <button className="primary-button" type="button" onClick={exportPoster}>
+                <Download size={18} />
+                {stitchPages ? "导出长图" : "导出当前页"}
+              </button>
+              <button className="secondary-button" type="button" onClick={exportAllPages} title="打包下载所有页面的独立图片">
+                <Download size={18} />
+                导出全部页面 (ZIP)
+              </button>
+            </div>
           </div>
         </div>
         {templateMessage && <p className="template-message">{templateMessage}</p>}
@@ -477,14 +580,31 @@ function App() {
         <div className="field-grid">
           <label>
             展会主题
-            <select value={poster.theme} onChange={(event) => updatePoster("theme", event.target.value)}>
-              {Object.values(themes).map((item) => (
-                <option key={item.id} value={item.id}>
-                  {item.label}
-                </option>
-              ))}
-            </select>
+            <div style={{display: 'flex', gap: '8px', alignItems: 'center'}}>
+              <select value={poster.theme} onChange={(event) => updatePoster("theme", event.target.value)} style={{flex: 1}}>
+                {Object.values(themes).map((item) => (
+                  <option key={item.id} value={item.id}>
+                    {item.label}
+                  </option>
+                ))}
+              </select>
+              <button className="secondary-button" onClick={() => setShowThemeEditor(true)} style={{padding: '0 8px', minHeight: '38px'}} title="新建自定义主题"><Plus size={16}/></button>
+              {poster.theme.startsWith("custom_") && (
+                <button className="secondary-button" onClick={() => { removeCustomTheme(poster.theme); updatePoster("theme", "stateOfPlay"); }} style={{padding: '0 8px', minHeight: '38px'}} title="删除此自定义主题">
+                  <Trash2 size={16} color="#ef4444" />
+                </button>
+              )}
+            </div>
           </label>
+          {showThemeEditor && (
+            <div style={{ gridColumn: "1 / -1", background: "#1e293b", padding: "16px", borderRadius: "8px", border: "1px solid #334155" }}>
+              <ThemeEditor
+                initialTheme={{}}
+                onSave={(t) => { addCustomTheme(t); updatePoster("theme", t.id); setShowThemeEditor(false); }}
+                onCancel={() => setShowThemeEditor(false)}
+              />
+            </div>
+          )}
           <label>
             顶部英文/标识
             <input value={currentThemeText.eventLabel} onChange={(event) => updateThemeText("eventLabel", event.target.value)} />
@@ -695,66 +815,75 @@ function App() {
             </button>
           </div>
 
-          {poster.games.map((game, index) => (
-            <article className="game-editor-card" key={`${index}-${game.title}`}>
-              <div className="game-editor-top">
-                <strong>{String(index + 1).padStart(2, "0")}</strong>
-                <div className="game-editor-actions">
-                  <button
-                    aria-label="上移游戏"
-                    className="icon-button order-button"
-                    disabled={index === 0}
-                    type="button"
-                    onClick={() => moveGame(index, -1)}
-                  >
-                    <ChevronUp size={16} />
-                  </button>
-                  <button
-                    aria-label="下移游戏"
-                    className="icon-button order-button"
-                    disabled={index === poster.games.length - 1}
-                    type="button"
-                    onClick={() => moveGame(index, 1)}
-                  >
-                    <ChevronDown size={16} />
-                  </button>
-                  <button
-                    aria-label="删除游戏"
-                    className="icon-button"
-                    type="button"
-                    onClick={() => removeGame(index)}
-                  >
-                    <Trash2 size={16} />
-                  </button>
-                </div>
-              </div>
-              <label>
-                游戏名
-                <input value={game.title} onChange={(event) => updateGame(index, "title", event.target.value)} />
-              </label>
-              <label>
-                发售日期
-                <input value={game.date} onChange={(event) => updateGame(index, "date", event.target.value)} />
-              </label>
-              <label>
-                平台，用逗号或斜杠分隔
-                <input
-                  list="platforms"
-                  value={game.platforms.join(", ")}
-                  onChange={(event) => updatePlatforms(index, event.target.value)}
-                />
-              </label>
-              <label>
-                关键信息
-                <textarea value={game.info} onChange={(event) => updateGame(index, "info", event.target.value)} />
-              </label>
-              <label className="file-field">
-                <ImagePlus size={16} />
-                上传 16:9 图片
-                <input accept="image/*" type="file" onChange={(event) => handleImage(index, event.target.files[0])} />
-              </label>
-            </article>
-          ))}
+          <SortableGameList items={poster.games.map(g => g.title)} onDragEnd={handleDragEnd}>
+            {poster.games.map((game, index) => (
+              <SortableGameCard id={game.title} key={`${index}-${game.title}`}>
+                <article className="game-editor-card">
+                  <div className="game-editor-top">
+                    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                      <button className="icon-button drag-handle" type="button" style={{ cursor: "grab", padding: 0 }}>
+                        <GripVertical size={16} color="#64748b" />
+                      </button>
+                      <strong>{String(index + 1).padStart(2, "0")}</strong>
+                    </div>
+                    <div className="game-editor-actions">
+                      <button
+                        aria-label="上移游戏"
+                        className="icon-button order-button"
+                        disabled={index === 0}
+                        type="button"
+                        onClick={() => moveGame(index, -1)}
+                      >
+                        <ChevronUp size={16} />
+                      </button>
+                      <button
+                        aria-label="下移游戏"
+                        className="icon-button order-button"
+                        disabled={index === poster.games.length - 1}
+                        type="button"
+                        onClick={() => moveGame(index, 1)}
+                      >
+                        <ChevronDown size={16} />
+                      </button>
+                      <button
+                        aria-label="删除游戏"
+                        className="icon-button"
+                        type="button"
+                        onClick={() => removeGame(index)}
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    </div>
+                  </div>
+                  <label>
+                    游戏名
+                    <input value={game.title} onChange={(event) => updateGame(index, "title", event.target.value)} />
+                  </label>
+                  <label>
+                    发售日期
+                    <input value={game.date} onChange={(event) => updateGame(index, "date", event.target.value)} />
+                  </label>
+                  <label>
+                    平台，用逗号或斜杠分隔
+                    <input
+                      list="platforms"
+                      value={game.platforms.join(", ")}
+                      onChange={(event) => updatePlatforms(index, event.target.value)}
+                    />
+                  </label>
+                  <label>
+                    关键信息
+                    <textarea value={game.info} onChange={(event) => updateGame(index, "info", event.target.value)} />
+                  </label>
+                  <label className="file-field">
+                    <ImagePlus size={16} />
+                    上传 16:9 图片
+                    <input accept="image/*" type="file" onChange={(event) => handleImage(index, event.target.files[0])} />
+                  </label>
+                </article>
+              </SortableGameCard>
+            ))}
+          </SortableGameList>
         </div>
 
         <datalist id="platforms">
@@ -814,6 +943,14 @@ function App() {
           ))}
         </div>
       </section>
+      
+      {cropState && (
+        <ImageCropper
+          imageSrc={cropState.imageSrc}
+          onCropComplete={handleCropComplete}
+          onCancel={() => setCropState(null)}
+        />
+      )}
     </main>
   );
 }
