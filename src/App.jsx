@@ -28,7 +28,8 @@ const {
   uploadPosterImages, saveRemoteTemplate, persistLocalTemplate, saveTemplateHistory, 
   getTemplateFields, formatHistoryTime, defaultInfoFontSize, defaultInfoFontWeight,
   githubTokenStorageKey, normalizePosterTemplate, maxHistoryItems, defaultLogoPosition,
-  defaultThemeText
+  defaultThemeText, getInitialTemplateHistory, waitForExportAssets, remoteTemplateUrl,
+  fontOptions, platformOptions
 } = Core;
 
 function App() {
