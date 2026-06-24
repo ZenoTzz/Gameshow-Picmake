@@ -377,7 +377,7 @@ function App() {
         height: 1920,
         pixelRatio: 1,
         cacheBust: true,
-        backgroundColor: "#020817",
+        backgroundColor: theme.bg,
       });
       const link = document.createElement("a");
       link.download = `${theme.label}-page-${currentPage + 1}.png`;
@@ -411,7 +411,7 @@ function App() {
         height: exportHeight,
         pixelRatio: 1,
         cacheBust: true,
-        backgroundColor: "#020817",
+        backgroundColor: theme.bg,
       });
       const link = document.createElement("a");
       link.download = `${theme.label}-long-${pages.length}-pages.png`;
