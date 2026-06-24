@@ -412,6 +412,11 @@ textarea:focus {
   isolation: isolate;
 }
 
+.export-stage .poster,
+.long-export-source .poster {
+  transform: none !important;
+}
+
 .poster::before {
   content: "";
   position: absolute;

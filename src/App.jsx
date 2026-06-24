@@ -960,7 +960,7 @@ function App() {
             </div>
           ) : (
             pages.map((pageGames, index) => (
-              <div key={`preview-page-${index}`} className="poster-scale-wrap" style={{ boxShadow: currentPage === index ? "0 0 0 16px #3b82f6" : "none", transition: "box-shadow 0.2s", borderRadius: "8px" }}>
+              <div key={`preview-page-${index}`} className="poster-scale-wrap">
                 <PosterPage
                   infoFontSize={poster.infoFontSize ?? defaultInfoFontSize}
                   isFullCardPage={poster.compactFollowupPages && index > 0}
