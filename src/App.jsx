@@ -183,7 +183,7 @@ function App() {
       observer.disconnect();
       window.removeEventListener("resize", onResize);
     };
-  }, [stitchPages, poster, fontsLoaded]);
+  }, [stitchPages, poster]);
 
   useLayoutEffect(() => {
     if (pageIndex > pages.length - 1) {
