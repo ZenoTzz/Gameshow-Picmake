@@ -1,8 +1,19 @@
-import React from "react";
+import React, { createContext, useContext } from "react";
 import { DndContext, closestCenter, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
 import { SortableContext, verticalListSortingStrategy, useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
+
+const DragHandleContext = createContext(null);
+
+export function DragHandle(props) {
+  const listeners = useContext(DragHandleContext);
+  return (
+    <div {...listeners} {...props} style={{ cursor: "grab", ...props.style }}>
+      {props.children}
+    </div>
+  );
+}
 
 export function SortableGameCard({ id, children }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id });
@@ -16,10 +27,11 @@ export function SortableGameCard({ id, children }) {
   };
 
   return (
-    <div ref={setNodeRef} style={style} {...attributes}>
-      {/* We pass listeners to children so they can attach a drag handle if needed, or we attach it to the root if the whole card is draggable */}
-      {React.cloneElement(children, { dragListeners: listeners })}
-    </div>
+    <DragHandleContext.Provider value={listeners}>
+      <div ref={setNodeRef} style={style} {...attributes}>
+        {children}
+      </div>
+    </DragHandleContext.Provider>
   );
 }
 

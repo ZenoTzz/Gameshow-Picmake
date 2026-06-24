@@ -26,7 +26,7 @@ import * as Core from "./utils/coreUtils";
 import { MeasurementLayer, PosterPage } from "./components/PosterComponents";
 import { useAutoSave } from "./hooks/useAutoSave";
 import { useUndoRedo } from "./hooks/useUndoRedo";
-import { SortableGameList, SortableGameCard } from "./components/SortableGameList";
+import { SortableGameList, SortableGameCard, DragHandle } from "./components/SortableGameList";
 import { arrayMove } from "@dnd-kit/sortable";
 import { ThemeEditor } from "./components/ThemeEditor";
 import { ImageCropper } from "./components/ImageCropper";
@@ -821,9 +821,9 @@ function App() {
                 <article className="game-editor-card">
                   <div className="game-editor-top">
                     <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                      <button className="icon-button drag-handle" type="button" style={{ cursor: "grab", padding: 0 }}>
+                      <DragHandle className="icon-button drag-handle" style={{ padding: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
                         <GripVertical size={16} color="#64748b" />
-                      </button>
+                      </DragHandle>
                       <strong>{String(index + 1).padStart(2, "0")}</strong>
                     </div>
                     <div className="game-editor-actions">
