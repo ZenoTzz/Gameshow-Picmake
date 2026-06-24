@@ -56,6 +56,7 @@ function App() {
   const [stitchPages, setStitchPages] = useState(false);
   const [showThemeEditor, setShowThemeEditor] = useState(false);
   const [cropState, setCropState] = useState(null);
+  const [longPosterHeight, setLongPosterHeight] = useState("auto");
   const posterRef = useRef(null);
   const longPosterRef = useRef(null);
   const allPagesRef = useRef(null);
@@ -162,6 +163,27 @@ function App() {
     poster.infoFontFamily,
     poster.creditFontFamily,
   ]);
+
+  useLayoutEffect(() => {
+    if (!stitchPages || !posterRef.current) return;
+    const observer = new ResizeObserver(() => {
+      if (posterRef.current) {
+        setLongPosterHeight(`${posterRef.current.getBoundingClientRect().height}px`);
+      }
+    });
+    observer.observe(posterRef.current);
+    
+    const onResize = () => {
+      if (posterRef.current) setLongPosterHeight(`${posterRef.current.getBoundingClientRect().height}px`);
+    };
+    window.addEventListener("resize", onResize);
+    onResize();
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", onResize);
+    };
+  }, [stitchPages, poster, fontsLoaded]);
 
   useLayoutEffect(() => {
     if (pageIndex > pages.length - 1) {
@@ -922,7 +944,7 @@ function App() {
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: "64px", alignItems: "center", paddingBottom: "64px", width: "100%" }}>
           {stitchPages ? (
-            <div className="long-poster-preview">
+            <div className="long-poster-preview" style={{ height: longPosterHeight }}>
               <PosterPage
                 infoFontSize={poster.infoFontSize ?? defaultInfoFontSize}
                 isFullCardPage={false}
