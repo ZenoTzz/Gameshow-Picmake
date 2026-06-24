@@ -474,6 +474,9 @@ function App() {
       await waitForExportAssets(clone);
       
       const childPage = clone.querySelector('.poster');
+      if (childPage) {
+        childPage.style.setProperty("transform", "none", "important");
+      }
       const exportHeight = childPage ? childPage.scrollHeight : 1920;
       
       stage.style.setProperty("height", `${exportHeight}px`);

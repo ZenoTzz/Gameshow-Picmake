@@ -1356,6 +1356,11 @@ textarea:focus {
   min-height: 1920px !important; 
 }
 
+.poster.long-poster .poster-list {
+  height: max-content;
+  overflow: visible;
+}
+
 .long-poster-preview {
   width: 720px;
   height: auto;
