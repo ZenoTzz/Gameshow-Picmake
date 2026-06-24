@@ -392,15 +392,11 @@ textarea:focus {
   pointer-events: none;
 }
 
-.long-export-source .poster,
-.long-export-stage .poster {
-  transform: none;
-}
-
 .poster-scale-wrap {
-  width: 720px;
-  height: 960px;
+  width: 1440px;
+  height: 1920px;
   margin: 0 auto;
+  zoom: 0.5;
 }
 
 .poster {
@@ -408,8 +404,6 @@ textarea:focus {
   width: 1440px;
   height: 1920px;
   overflow: hidden;
-  transform: scale(0.5);
-  transform-origin: top left;
   padding: 42px 29px 42px;
   background: var(--poster-bg);
   color: #f8fbff;
@@ -1327,12 +1321,9 @@ textarea:focus {
   }
 
   .poster-scale-wrap {
-    width: 576px;
-    height: 768px;
-  }
-
-  .poster {
-    transform: scale(0.4);
+    width: 1440px;
+    height: 1920px;
+    zoom: 0.4;
   }
 }
 
@@ -1351,16 +1342,21 @@ textarea:focus {
 .theme-editor-panel input[type='color'] { padding: 0; cursor: pointer; height: 38px; }
 
 
-.long-export-source .poster-page { height: max-content !important; min-height: 1920px !important; }
-
-
-.long-poster-preview {
-  width: 720px;
-  height: auto;
-  margin: 0 auto;
-}
-.long-poster-preview .poster { 
+.poster.long-poster {
   height: max-content !important; 
   min-height: 1920px !important; 
+}
+
+.long-poster-preview {
+  width: 1440px;
+  height: auto;
+  margin: 0 auto;
+  zoom: 0.5;
+}
+
+@media (max-width: 1280px) {
+  .long-poster-preview {
+    zoom: 0.4;
+  }
 }
 

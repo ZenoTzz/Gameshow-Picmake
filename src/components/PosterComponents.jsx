@@ -50,6 +50,7 @@ function PosterPage({
   onLogoPositionChange,
   posterRef,
   theme,
+  isLongPoster,
 }) {
   const themeText = getThemeText(poster, poster.theme);
   const logoPosition = poster.logoPositions?.[poster.theme] ?? defaultLogoPosition;
@@ -57,7 +58,7 @@ function PosterPage({
 
   return (
     <div
-      className={`poster theme-${theme.id} ${isFullCardPage ? "full-card-page" : ""}`}
+      className={`poster theme-${theme.id} ${isFullCardPage ? "full-card-page" : ""} ${isLongPoster ? "long-poster" : ""}`}
       ref={posterRef}
       style={{
         "--poster-bg": theme.bg,

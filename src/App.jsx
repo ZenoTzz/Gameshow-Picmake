@@ -58,6 +58,7 @@ function App() {
   const [cropState, setCropState] = useState(null);
   const posterRef = useRef(null);
   const longPosterRef = useRef(null);
+  const allPagesRef = useRef(null);
   const measureRef = useRef(null);
 
   const theme = themes[poster.theme] ?? themes.stateOfPlay;
@@ -450,7 +451,7 @@ function App() {
     try {
       await waitForExportAssets(clone);
       
-      const childPage = clone.querySelector('.poster-page');
+      const childPage = clone.querySelector('.poster');
       const exportHeight = childPage ? childPage.scrollHeight : 1920;
       
       stage.style.setProperty("height", `${exportHeight}px`);
@@ -477,12 +478,12 @@ function App() {
   }
 
   async function exportAllPages() {
-    if (!longPosterRef.current) return;
+    if (!allPagesRef.current) return;
     const JSZip = (await import("jszip")).default;
     const { saveAs } = await import("file-saver");
     const zip = new JSZip();
 
-    const pageNodes = Array.from(longPosterRef.current.children);
+    const pageNodes = Array.from(allPagesRef.current.children);
     
     for (let i = 0; i < pageNodes.length; i++) {
       const stage = document.createElement("div");
@@ -932,6 +933,7 @@ function App() {
                 poster={poster}
                 posterRef={posterRef}
                 theme={theme}
+                isLongPoster={true}
               />
             </div>
           ) : (
@@ -972,7 +974,25 @@ function App() {
             poster={poster}
             posterRef={null}
             theme={theme}
+            isLongPoster={true}
           />
+        </div>
+        <div aria-hidden="true" className="long-export-source" ref={allPagesRef}>
+          {pages.map((pageGames, index) => (
+            <div key={`export-page-${index}`}>
+              <PosterPage
+                infoFontSize={poster.infoFontSize ?? defaultInfoFontSize}
+                isFullCardPage={poster.compactFollowupPages && index > 0}
+                pageGames={pageGames}
+                pageOffset={pageStartOffsets[index] ?? 0}
+                fillSpace={getPageFillSetting(poster, index)}
+                onLogoPositionChange={() => {}}
+                poster={poster}
+                posterRef={null}
+                theme={theme}
+              />
+            </div>
+          ))}
         </div>
       </section>
       
