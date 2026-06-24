@@ -1353,3 +1353,6 @@ textarea:focus {
 
 .long-export-source .poster-page { height: max-content !important; min-height: 1920px !important; }
 
+
+.long-poster-preview .poster-page { height: max-content !important; min-height: 1920px !important; }
+
