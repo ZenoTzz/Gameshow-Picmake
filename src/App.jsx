@@ -919,7 +919,7 @@ function App() {
             {stitchPages ? `无缝长图 · 1440 × 自动高度` : `画布 ${currentPage + 1}/${pages.length} · 1440 × 1920 (共 ${pages.length} 页)`}
           </span>
         </div>
-        <div className="poster-scale-wrap">
+        <div style={{ display: "flex", flexDirection: "column", gap: "64px", alignItems: "center", paddingBottom: "64px", width: "100%" }}>
           {stitchPages ? (
             <div className="long-poster-preview">
               <PosterPage
@@ -935,23 +935,21 @@ function App() {
               />
             </div>
           ) : (
-            <div style={{ display: "flex", flexDirection: "column", gap: "64px" }}>
-              {pages.map((pageGames, index) => (
-                <div key={`preview-page-${index}`} style={{ boxShadow: currentPage === index ? "0 0 0 16px #3b82f6" : "none", transition: "box-shadow 0.2s" }}>
-                  <PosterPage
-                    infoFontSize={poster.infoFontSize ?? defaultInfoFontSize}
-                    isFullCardPage={poster.compactFollowupPages && index > 0}
-                    pageGames={pageGames}
-                    pageOffset={pageStartOffsets[index] ?? 0}
-                    fillSpace={getPageFillSetting(poster, index)}
-                    onLogoPositionChange={index === currentPage ? updateLogoPosition : () => {}}
-                    poster={poster}
-                    posterRef={index === currentPage ? posterRef : null}
-                    theme={theme}
-                  />
-                </div>
-              ))}
-            </div>
+            pages.map((pageGames, index) => (
+              <div key={`preview-page-${index}`} className="poster-scale-wrap" style={{ boxShadow: currentPage === index ? "0 0 0 16px #3b82f6" : "none", transition: "box-shadow 0.2s", borderRadius: "8px" }}>
+                <PosterPage
+                  infoFontSize={poster.infoFontSize ?? defaultInfoFontSize}
+                  isFullCardPage={poster.compactFollowupPages && index > 0}
+                  pageGames={pageGames}
+                  pageOffset={pageStartOffsets[index] ?? 0}
+                  fillSpace={getPageFillSetting(poster, index)}
+                  onLogoPositionChange={index === currentPage ? updateLogoPosition : () => {}}
+                  poster={poster}
+                  posterRef={index === currentPage ? posterRef : null}
+                  theme={theme}
+                />
+              </div>
+            ))
           )}
         </div>
         <MeasurementLayer

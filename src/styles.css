@@ -1354,5 +1354,13 @@ textarea:focus {
 .long-export-source .poster-page { height: max-content !important; min-height: 1920px !important; }
 
 
-.long-poster-preview .poster-page { height: max-content !important; min-height: 1920px !important; }
+.long-poster-preview {
+  width: 720px;
+  height: auto;
+  margin: 0 auto;
+}
+.long-poster-preview .poster { 
+  height: max-content !important; 
+  min-height: 1920px !important; 
+}
 
