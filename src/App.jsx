@@ -441,6 +441,8 @@ function App() {
 
     stage.className = "export-stage long-export-stage";
     clone.style.setProperty("position", "relative", "important");
+    clone.style.setProperty("left", "auto", "important");
+    clone.style.setProperty("top", "auto", "important");
     clone.style.setProperty("width", "1440px", "important");
     stage.appendChild(clone);
     document.body.appendChild(stage);
@@ -450,6 +452,9 @@ function App() {
       
       const childPage = clone.querySelector('.poster-page');
       const exportHeight = childPage ? childPage.scrollHeight : 1920;
+      
+      stage.style.setProperty("height", `${exportHeight}px`);
+      clone.style.setProperty("height", `${exportHeight}px`, "important");
 
       const dataUrl = await toPng(clone, {
         width: 1440,
