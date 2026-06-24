@@ -1350,3 +1350,6 @@ textarea:focus {
 .theme-editor-panel .section-title { margin-bottom: 12px; border-bottom: 1px solid #334155; padding-bottom: 8px; justify-content: space-between; display: flex; }
 .theme-editor-panel input[type='color'] { padding: 0; cursor: pointer; height: 38px; }
 
+
+.long-export-source .poster-page { height: max-content !important; min-height: 1920px !important; }
+

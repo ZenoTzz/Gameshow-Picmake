@@ -47,6 +47,7 @@ function App() {
   const saveStatus = useAutoSave(poster);
   const [githubToken, setGithubToken] = useState(getInitialGithubToken);
   const [pageIndex, setPageIndex] = useState(0);
+  const [allCollapsed, setAllCollapsed] = useState(false);
   const [cardHeights, setCardHeights] = useState([]);
   const [bulkText, setBulkText] = useState("");
   const [parseMessage, setParseMessage] = useState("");
@@ -437,20 +438,19 @@ function App() {
     if (!longPosterRef.current) return;
     const stage = document.createElement("div");
     const clone = longPosterRef.current.cloneNode(true);
-    const exportHeight = Math.max(1, pages.length) * 1920;
 
     stage.className = "export-stage long-export-stage";
-    stage.style.setProperty("height", `${exportHeight}px`);
     clone.style.setProperty("position", "relative", "important");
-    clone.style.setProperty("left", "auto", "important");
-    clone.style.setProperty("top", "auto", "important");
     clone.style.setProperty("width", "1440px", "important");
-    clone.style.setProperty("height", `${exportHeight}px`, "important");
     stage.appendChild(clone);
     document.body.appendChild(stage);
 
     try {
       await waitForExportAssets(clone);
+      
+      const childPage = clone.querySelector('.poster-page');
+      const exportHeight = childPage ? childPage.scrollHeight : 1920;
+
       const dataUrl = await toPng(clone, {
         width: 1440,
         height: exportHeight,
@@ -459,7 +459,7 @@ function App() {
         backgroundColor: theme.bg,
       });
       const link = document.createElement("a");
-      link.download = `${theme.label}-long-${pages.length}-pages.png`;
+      link.download = `${theme.label}-long-${poster.games.length}-games.png`;
       link.href = dataUrl;
       link.click();
     } finally {
@@ -809,10 +809,15 @@ function App() {
         <div className="games-editor">
           <div className="section-title">
             <span>游戏列表</span>
-            <button type="button" onClick={addGame}>
-              <Plus size={16} />
-              添加游戏
-            </button>
+            <div style={{ display: "flex", gap: "8px" }}>
+              <button type="button" onClick={() => setAllCollapsed(!allCollapsed)} className="secondary-button" style={{ padding: "0 8px", minHeight: "28px" }}>
+                {allCollapsed ? "全部展开" : "全部折叠"}
+              </button>
+              <button type="button" onClick={addGame}>
+                <Plus size={16} />
+                添加游戏
+              </button>
+            </div>
           </div>
 
           <SortableGameList items={poster.games.map(g => g.title)} onDragEnd={handleDragEnd}>
@@ -820,11 +825,12 @@ function App() {
               <SortableGameCard id={game.title} key={`${index}-${game.title}`}>
                 <article className="game-editor-card">
                   <div className="game-editor-top">
-                    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "8px", flex: 1 }}>
                       <DragHandle className="icon-button drag-handle" style={{ padding: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
                         <GripVertical size={16} color="#64748b" />
                       </DragHandle>
                       <strong>{String(index + 1).padStart(2, "0")}</strong>
+                      {allCollapsed && <span style={{ marginLeft: "8px", color: "#e2e8f0", fontSize: "14px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxWidth: "200px" }}>{game.title || "未命名游戏"}</span>}
                     </div>
                     <div className="game-editor-actions">
                       <button
@@ -855,31 +861,35 @@ function App() {
                       </button>
                     </div>
                   </div>
-                  <label>
-                    游戏名
-                    <input value={game.title} onChange={(event) => updateGame(index, "title", event.target.value)} />
-                  </label>
-                  <label>
-                    发售日期
-                    <input value={game.date} onChange={(event) => updateGame(index, "date", event.target.value)} />
-                  </label>
-                  <label>
-                    平台，用逗号或斜杠分隔
-                    <input
-                      list="platforms"
-                      value={game.platforms.join(", ")}
-                      onChange={(event) => updatePlatforms(index, event.target.value)}
-                    />
-                  </label>
-                  <label>
-                    关键信息
-                    <textarea value={game.info} onChange={(event) => updateGame(index, "info", event.target.value)} />
-                  </label>
-                  <label className="file-field">
-                    <ImagePlus size={16} />
-                    上传 16:9 图片
-                    <input accept="image/*" type="file" onChange={(event) => handleImage(index, event.target.files[0])} />
-                  </label>
+                  {!allCollapsed && (
+                    <>
+                      <label>
+                        游戏名
+                        <input value={game.title} onChange={(event) => updateGame(index, "title", event.target.value)} />
+                      </label>
+                      <label>
+                        发售日期
+                        <input value={game.date} onChange={(event) => updateGame(index, "date", event.target.value)} />
+                      </label>
+                      <label>
+                        平台，用逗号或斜杠分隔
+                        <input
+                          list="platforms"
+                          value={game.platforms.join(", ")}
+                          onChange={(event) => updatePlatforms(index, event.target.value)}
+                        />
+                      </label>
+                      <label>
+                        关键信息
+                        <textarea value={game.info} onChange={(event) => updateGame(index, "info", event.target.value)} />
+                      </label>
+                      <label className="file-field">
+                        <ImagePlus size={16} />
+                        上传 16:9 图片
+                        <input accept="image/*" type="file" onChange={(event) => handleImage(index, event.target.files[0])} />
+                      </label>
+                    </>
+                  )}
                 </article>
               </SortableGameCard>
             ))}
@@ -927,20 +937,17 @@ function App() {
           theme={theme}
         />
         <div aria-hidden="true" className="long-export-source" ref={longPosterRef}>
-          {pages.map((pageGames, index) => (
-            <PosterPage
-              key={`long-page-${index}`}
-              infoFontSize={poster.infoFontSize ?? defaultInfoFontSize}
-              isFullCardPage={poster.compactFollowupPages && index > 0}
-              pageGames={pageGames}
-              pageOffset={pageStartOffsets[index] ?? 0}
-              fillSpace={getPageFillSetting(poster, index)}
-              onLogoPositionChange={() => {}}
-              poster={poster}
-              posterRef={null}
-              theme={theme}
-            />
-          ))}
+          <PosterPage
+            infoFontSize={poster.infoFontSize ?? defaultInfoFontSize}
+            isFullCardPage={false}
+            pageGames={poster.games}
+            pageOffset={0}
+            fillSpace={false}
+            onLogoPositionChange={() => {}}
+            poster={poster}
+            posterRef={null}
+            theme={theme}
+          />
         </div>
       </section>
       
