@@ -35,7 +35,7 @@ export function SortableGameCard({ id, children }) {
   );
 }
 
-export function SortableGameList({ items, onDragEnd, children }) {
+export function SortableGameList({ items, onDragEnd, onDragStart, children }) {
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
@@ -48,6 +48,7 @@ export function SortableGameList({ items, onDragEnd, children }) {
     <DndContext 
       sensors={sensors}
       collisionDetection={closestCenter}
+      onDragStart={onDragStart}
       onDragEnd={onDragEnd}
       modifiers={[restrictToVerticalAxis]}
     >

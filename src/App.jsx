@@ -57,6 +57,8 @@ function App() {
   const [showThemeEditor, setShowThemeEditor] = useState(false);
   const [cropState, setCropState] = useState(null);
   const [longPosterHeight, setLongPosterHeight] = useState("auto");
+  const [isDragging, setIsDragging] = useState(false);
+  const [isExporting, setIsExporting] = useState(false);
   const posterRef = useRef(null);
   const longPosterRef = useRef(null);
   const allPagesRef = useRef(null);
@@ -282,8 +284,8 @@ function App() {
     if (!over || active.id === over.id) return;
 
     setPoster((current) => {
-      const oldIndex = current.games.findIndex((g) => g.title === active.id);
-      const newIndex = current.games.findIndex((g) => g.title === over.id);
+      const oldIndex = current.games.findIndex((g) => g.id === active.id);
+      const newIndex = current.games.findIndex((g) => g.id === over.id);
       if (oldIndex === -1 || newIndex === -1) return current;
       return {
         ...current,
@@ -498,12 +500,20 @@ function App() {
     }
   }
 
-  function exportPoster() {
-    return stitchPages ? exportLongPoster() : exportCurrentPage();
+  async function exportPoster() {
+    if (isExporting) return;
+    setIsExporting(true);
+    try {
+      await (stitchPages ? exportLongPoster() : exportCurrentPage());
+    } finally {
+      setIsExporting(false);
+    }
   }
 
   async function exportAllPages() {
-    if (!allPagesRef.current) return;
+    if (!allPagesRef.current || isExporting) return;
+    setIsExporting(true);
+    try {
     const JSZip = (await import("jszip")).default;
     const { saveAs } = await import("file-saver");
     const zip = new JSZip();
@@ -542,6 +552,9 @@ function App() {
 
     const zipBlob = await zip.generateAsync({ type: "blob" });
     saveAs(zipBlob, `${theme.label}-全部${pages.length}页.zip`);
+    } finally {
+      setIsExporting(false);
+    }
   }
 
   return (
@@ -577,13 +590,13 @@ function App() {
                 />
                 竖向拼接全部页面
               </label>
-              <button className="primary-button" type="button" onClick={exportPoster}>
+              <button className="primary-button" type="button" onClick={exportPoster} disabled={isExporting}>
                 <Download size={18} />
-                {stitchPages ? "导出长图" : "导出当前页"}
+                {isExporting ? "导出中..." : (stitchPages ? "导出长图" : "导出当前页")}
               </button>
-              <button className="secondary-button" type="button" onClick={exportAllPages} title="打包下载所有页面的独立图片">
+              <button className="secondary-button" type="button" onClick={exportAllPages} title="打包下载所有页面的独立图片" disabled={isExporting}>
                 <Download size={18} />
-                导出全部页面 (ZIP)
+                {isExporting ? "导出中..." : "导出全部页面 (ZIP)"}
               </button>
             </div>
           </div>
@@ -851,9 +864,13 @@ function App() {
             </div>
           </div>
 
-          <SortableGameList items={poster.games.map(g => g.title)} onDragEnd={handleDragEnd}>
+          <SortableGameList 
+            items={poster.games.map(g => g.id)} 
+            onDragStart={() => setIsDragging(true)}
+            onDragEnd={(event) => { setIsDragging(false); handleDragEnd(event); }}
+          >
             {poster.games.map((game, index) => (
-              <SortableGameCard id={game.title} key={`${index}-${game.title}`}>
+              <SortableGameCard id={game.id} key={game.id}>
                 <article className="game-editor-card">
                   <div className="game-editor-top">
                     <div style={{ display: "flex", alignItems: "center", gap: "8px", flex: 1 }}>
@@ -892,7 +909,7 @@ function App() {
                       </button>
                     </div>
                   </div>
-                  {!allCollapsed && (
+                  {!allCollapsed && !isDragging && (
                     <>
                       <label>
                         游戏名

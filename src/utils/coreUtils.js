@@ -493,6 +493,7 @@ export function cloneGame(game = blankGame) {
 
   return {
     ...normalizedGame,
+    id: normalizedGame.id || crypto.randomUUID(),
     title: normalizedGame.title ?? blankGame.title,
     date: normalizedGame.date ?? blankGame.date,
     info: normalizedGame.info ?? blankGame.info,
