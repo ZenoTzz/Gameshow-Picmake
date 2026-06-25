@@ -878,7 +878,7 @@ function App() {
                         <GripVertical size={16} color="#64748b" />
                       </DragHandle>
                       <strong>{String(index + 1).padStart(2, "0")}</strong>
-                      {allCollapsed && <span style={{ marginLeft: "8px", color: "#e2e8f0", fontSize: "14px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxWidth: "200px" }}>{game.title || "未命名游戏"}</span>}
+                      {(allCollapsed || isDragging) && <span style={{ marginLeft: "8px", color: "#e2e8f0", fontSize: "14px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxWidth: "200px" }}>{game.title || "未命名游戏"}</span>}
                     </div>
                     <div className="game-editor-actions">
                       <button
