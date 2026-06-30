@@ -205,6 +205,7 @@ export function ThemeEditor({ initialTheme, onSave, onCancel, onPreview }) {
     cardOverlay: 0,
     cardBorder: "#ffffff",
     cardBorderWidth: 2,
+    cardNumberBg: initialTheme.chipBg || "#0ea5e9",
     ...initialTheme,
   });
 
@@ -281,6 +282,7 @@ export function ThemeEditor({ initialTheme, onSave, onCancel, onPreview }) {
         <label>卡片标题色<input type="color" value={theme.cardTitle && theme.cardTitle.length === 7 ? theme.cardTitle : "#ffffff"} onChange={(e) => handleChange("cardTitle", e.target.value)} /></label>
         <label>卡片正文色<input type="color" value={theme.cardText && theme.cardText.length === 7 ? theme.cardText : "#ffffff"} onChange={(e) => handleChange("cardText", e.target.value)} /></label>
         <label>卡片边框色<input type="color" value={theme.cardBorder && theme.cardBorder.length === 7 ? theme.cardBorder : "#ffffff"} onChange={(e) => handleChange("cardBorder", e.target.value)} /></label>
+        <label>序号背景色<input type="color" value={theme.cardNumberBg && theme.cardNumberBg.length === 7 ? theme.cardNumberBg : theme.chipBg || "#ffffff"} onChange={(e) => handleChange("cardNumberBg", e.target.value)} /></label>
         <label>装饰元素
           <select value={theme.decor} onChange={(e) => handleChange("decor", e.target.value)}>
             <option value="none">无</option>

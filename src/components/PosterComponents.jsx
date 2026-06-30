@@ -74,6 +74,7 @@ function PosterPage({
         "--card-overlay": theme.cardOverlay ?? 0,
         "--card-border": theme.cardBorder || theme.line || "#ffffff",
         "--card-border-width": theme.cardBorderWidth !== undefined ? theme.cardBorderWidth + "px" : "2px",
+        "--card-number-bg": theme.cardNumberBg || `linear-gradient(180deg, color-mix(in srgb, ${theme.chipBg}, #ffffff 8%), color-mix(in srgb, ${theme.chipBg}, #001b4d 28%))`,
         "--title-shadow": theme.titleShadow,
         "--poster-font": fonts.poster,
         "--header-font": fonts.header,

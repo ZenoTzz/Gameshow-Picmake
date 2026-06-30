@@ -823,7 +823,7 @@ textarea:focus {
   margin-top: 14px;
   border: var(--card-border-width, 2px) solid color-mix(in srgb, var(--card-border, var(--line)), #ffffff 12%);
   border-radius: 4px;
-  background: linear-gradient(180deg, color-mix(in srgb, var(--chip-bg), #ffffff 8%), color-mix(in srgb, var(--chip-bg), #001b4d 28%));
+  background: var(--card-number-bg);
   box-shadow: 0 0 18px color-mix(in srgb, var(--glow), transparent 35%);
   color: #ffffff;
   font-size: 48px;
