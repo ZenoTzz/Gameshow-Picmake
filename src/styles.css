@@ -779,7 +779,9 @@ textarea:focus {
   align-content: start;
   height: 1540px;
   overflow: hidden;
-  padding-bottom: 8px;
+  padding: 16px 0 8px;
+  background: var(--panel);
+  border-radius: 12px;
 }
 
 .full-card-page .poster-list {
