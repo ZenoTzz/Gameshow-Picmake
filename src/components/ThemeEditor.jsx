@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Check, X, Palette, Trash2 } from "lucide-react";
 import { addCustomTheme } from "../data/themes";
 
-export function ThemeEditor({ initialTheme, onSave, onCancel }) {
+export function ThemeEditor({ initialTheme, onSave, onCancel, onPreview }) {
   const [theme, setTheme] = useState({
     id: `custom_${Date.now()}`,
     label: "自定义主题",
@@ -21,7 +21,17 @@ export function ThemeEditor({ initialTheme, onSave, onCancel }) {
     ...initialTheme,
   });
 
-  const handleChange = (key, value) => setTheme((c) => ({ ...c, [key]: value }));
+  useEffect(() => {
+    if (onPreview) onPreview(theme);
+  }, []); // eslint-disable-next-line react-hooks/exhaustive-deps
+
+  const handleChange = (key, value) => {
+    setTheme((c) => {
+      const updated = { ...c, [key]: value };
+      if (onPreview) onPreview(updated);
+      return updated;
+    });
+  };
 
   return (
     <div className="theme-editor-panel">

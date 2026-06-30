@@ -13,7 +13,8 @@ import {
   Trash2,
   Undo2,
   Redo2,
-  GripVertical
+  GripVertical,
+  Palette
 } from "lucide-react";
 import { blankGame, initialPoster } from "./data/sampleData";
 import { logoLibrary } from "./data/logoLibrary";
@@ -59,12 +60,13 @@ function App() {
   const [longPosterHeight, setLongPosterHeight] = useState("auto");
   const [isDragging, setIsDragging] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
+  const [previewTheme, setPreviewTheme] = useState(null);
   const posterRef = useRef(null);
   const longPosterRef = useRef(null);
   const allPagesRef = useRef(null);
   const measureRef = useRef(null);
 
-  const theme = themes[poster.theme] ?? themes.stateOfPlay;
+  const theme = previewTheme || themes[poster.theme] || themes.stateOfPlay;
   const posterFonts = getPosterFonts(poster, theme);
   const currentThemeText = getThemeText(poster, poster.theme);
   const pages = useMemo(
@@ -634,18 +636,37 @@ function App() {
               </select>
               <button className="secondary-button" onClick={() => setShowThemeEditor(true)} style={{padding: '0 8px', minHeight: '38px'}} title="新建自定义主题"><Plus size={16}/></button>
               {poster.theme.startsWith("custom_") && (
-                <button className="secondary-button" onClick={() => { removeCustomTheme(poster.theme); updatePoster("theme", "stateOfPlay"); }} style={{padding: '0 8px', minHeight: '38px'}} title="删除此自定义主题">
-                  <Trash2 size={16} color="#ef4444" />
-                </button>
+                <>
+                  <button 
+                    className="secondary-button" 
+                    onClick={() => setShowThemeEditor(true)} 
+                    style={{padding: '0 8px', minHeight: '38px'}} 
+                    title="编辑此自定义主题"
+                  >
+                    <Palette size={16} />
+                  </button>
+                  <button className="secondary-button" onClick={() => { removeCustomTheme(poster.theme); updatePoster("theme", "stateOfPlay"); }} style={{padding: '0 8px', minHeight: '38px'}} title="删除此自定义主题">
+                    <Trash2 size={16} color="#ef4444" />
+                  </button>
+                </>
               )}
             </div>
           </label>
           {showThemeEditor && (
             <div style={{ gridColumn: "1 / -1", background: "#1e293b", padding: "16px", borderRadius: "8px", border: "1px solid #334155" }}>
               <ThemeEditor
-                initialTheme={{}}
-                onSave={(t) => { addCustomTheme(t); updatePoster("theme", t.id); setShowThemeEditor(false); }}
-                onCancel={() => setShowThemeEditor(false)}
+                initialTheme={poster.theme.startsWith("custom_") ? themes[poster.theme] : {}}
+                onPreview={(t) => setPreviewTheme(t)}
+                onSave={(t) => { 
+                  addCustomTheme(t); 
+                  updatePoster("theme", t.id); 
+                  setPreviewTheme(null); 
+                  setShowThemeEditor(false); 
+                }}
+                onCancel={() => { 
+                  setPreviewTheme(null); 
+                  setShowThemeEditor(false); 
+                }}
               />
             </div>
           )}
