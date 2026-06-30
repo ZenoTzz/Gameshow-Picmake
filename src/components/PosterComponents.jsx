@@ -72,6 +72,8 @@ function PosterPage({
         "--card-title": theme.cardTitle || "#ffffff",
         "--card-text": theme.cardText || "#ffffff",
         "--card-overlay": theme.cardOverlay ?? 0,
+        "--card-border": theme.cardBorder || theme.line || "#ffffff",
+        "--card-border-width": theme.cardBorderWidth !== undefined ? theme.cardBorderWidth + "px" : "2px",
         "--title-shadow": theme.titleShadow,
         "--poster-font": fonts.poster,
         "--header-font": fonts.header,

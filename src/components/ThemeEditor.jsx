@@ -203,6 +203,8 @@ export function ThemeEditor({ initialTheme, onSave, onCancel, onPreview }) {
     cardTitle: "#ffffff",
     cardText: "#ffffff",
     cardOverlay: 0,
+    cardBorder: "#ffffff",
+    cardBorderWidth: 2,
     ...initialTheme,
   });
 
@@ -254,6 +256,23 @@ export function ThemeEditor({ initialTheme, onSave, onCancel, onPreview }) {
           />
         </div>
 
+        {/* 卡片边框粗细 */}
+        <div style={{ gridColumn: "1 / -1" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", fontSize: "13px", color: "#94a3b8", marginBottom: "6px" }}>
+            <span>卡片边框粗细</span>
+            <span>{theme.cardBorderWidth ?? 2}px</span>
+          </div>
+          <input
+            type="range"
+            min="0"
+            max="6"
+            step="1"
+            value={theme.cardBorderWidth ?? 2}
+            onChange={(e) => handleChange("cardBorderWidth", parseInt(e.target.value))}
+            className="theme-editor-range"
+          />
+        </div>
+
         {/* 原有的纯色选择器 */}
         <label>高亮线条色<input type="color" value={theme.line.length === 7 ? theme.line : "#ffffff"} onChange={(e) => handleChange("line", e.target.value)} /></label>
         <label>点缀强调色<input type="color" value={theme.accent.length === 7 ? theme.accent : "#ffffff"} onChange={(e) => handleChange("accent", e.target.value)} /></label>
@@ -261,6 +280,7 @@ export function ThemeEditor({ initialTheme, onSave, onCancel, onPreview }) {
         <label>标签文字色<input type="color" value={theme.chipText.length === 7 ? theme.chipText : "#ffffff"} onChange={(e) => handleChange("chipText", e.target.value)} /></label>
         <label>卡片标题色<input type="color" value={theme.cardTitle && theme.cardTitle.length === 7 ? theme.cardTitle : "#ffffff"} onChange={(e) => handleChange("cardTitle", e.target.value)} /></label>
         <label>卡片正文色<input type="color" value={theme.cardText && theme.cardText.length === 7 ? theme.cardText : "#ffffff"} onChange={(e) => handleChange("cardText", e.target.value)} /></label>
+        <label>卡片边框色<input type="color" value={theme.cardBorder && theme.cardBorder.length === 7 ? theme.cardBorder : "#ffffff"} onChange={(e) => handleChange("cardBorder", e.target.value)} /></label>
         <label>装饰元素
           <select value={theme.decor} onChange={(e) => handleChange("decor", e.target.value)}>
             <option value="none">无</option>

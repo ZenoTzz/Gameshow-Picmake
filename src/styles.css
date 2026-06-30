@@ -805,7 +805,7 @@ textarea:focus {
   min-height: 232px;
   height: auto;
   padding: 11px 20px 11px 20px;
-  border: 2px solid var(--line);
+  border: var(--card-border-width, 2px) solid var(--card-border, var(--line));
   border-radius: 15px;
   background: 
     linear-gradient(rgba(0, 0, 0, var(--card-overlay, 0)), rgba(0, 0, 0, var(--card-overlay, 0))),
@@ -821,7 +821,7 @@ textarea:focus {
   width: 82px;
   height: 68px;
   margin-top: 14px;
-  border: 2px solid color-mix(in srgb, var(--line), #ffffff 12%);
+  border: var(--card-border-width, 2px) solid color-mix(in srgb, var(--card-border, var(--line)), #ffffff 12%);
   border-radius: 4px;
   background: linear-gradient(180deg, color-mix(in srgb, var(--chip-bg), #ffffff 8%), color-mix(in srgb, var(--chip-bg), #001b4d 28%));
   box-shadow: 0 0 18px color-mix(in srgb, var(--glow), transparent 35%);
@@ -838,7 +838,7 @@ textarea:focus {
   aspect-ratio: 16 / 9;
   width: 368px;
   overflow: hidden;
-  border: 2px solid color-mix(in srgb, var(--line), #ffffff 18%);
+  border: var(--card-border-width, 2px) solid color-mix(in srgb, var(--card-border, var(--line)), #ffffff 18%);
   border-radius: 7px;
   background:
     radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.08), transparent 45%),
