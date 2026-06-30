@@ -71,6 +71,7 @@ function PosterPage({
         "--chip-text": theme.chipText,
         "--card-title": theme.cardTitle || "#ffffff",
         "--card-text": theme.cardText || "#ffffff",
+        "--card-overlay": theme.cardOverlay ?? 0,
         "--title-shadow": theme.titleShadow,
         "--poster-font": fonts.poster,
         "--header-font": fonts.header,

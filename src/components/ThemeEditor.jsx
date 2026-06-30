@@ -202,6 +202,7 @@ export function ThemeEditor({ initialTheme, onSave, onCancel, onPreview }) {
     decor: "none",
     cardTitle: "#ffffff",
     cardText: "#ffffff",
+    cardOverlay: 0,
     ...initialTheme,
   });
 
@@ -235,6 +236,23 @@ export function ThemeEditor({ initialTheme, onSave, onCancel, onPreview }) {
         <RgbaField label="面板底色（颜色 + 透明度）" value={theme.panel} onChange={(v) => handleChange("panel", v)} />
         <GradientField label="卡片渐变（起始色 → 结束色）" value={theme.card} onChange={(v) => handleChange("card", v)} />
         <RgbaField label="光晕颜色（颜色 + 透明度）" value={theme.glow} onChange={(v) => handleChange("glow", v)} />
+
+        {/* 卡片黑色遮罩 */}
+        <div style={{ gridColumn: "1 / -1" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", fontSize: "13px", color: "#94a3b8", marginBottom: "6px" }}>
+            <span>卡片透黑遮罩（暗化以增强区分度）</span>
+            <span>{Math.round((theme.cardOverlay ?? 0) * 100)}%</span>
+          </div>
+          <input
+            type="range"
+            min="0"
+            max="0.9"
+            step="0.05"
+            value={theme.cardOverlay ?? 0}
+            onChange={(e) => handleChange("cardOverlay", parseFloat(e.target.value))}
+            className="theme-editor-range"
+          />
+        </div>
 
         {/* 原有的纯色选择器 */}
         <label>高亮线条色<input type="color" value={theme.line.length === 7 ? theme.line : "#ffffff"} onChange={(e) => handleChange("line", e.target.value)} /></label>

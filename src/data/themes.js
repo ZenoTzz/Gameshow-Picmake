@@ -19,6 +19,7 @@ const defaultThemes = {
     decor: "symbols",
     cardTitle: "#ffffff",
     cardText: "#ffffff",
+    cardOverlay: 0,
   },
   summerGameFest: {
     id: "summerGameFest",
@@ -43,6 +44,7 @@ const defaultThemes = {
     decor: "bubbles",
     cardTitle: "#ffffff",
     cardText: "#ffffff",
+    cardOverlay: 0,
   },
   xbox: {
     id: "xbox",
@@ -63,6 +65,7 @@ const defaultThemes = {
     decor: "none",
     cardTitle: "#ffffff",
     cardText: "#ffffff",
+    cardOverlay: 0,
   },
   nintendoDirect: {
     id: "nintendoDirect",
@@ -81,6 +84,7 @@ const defaultThemes = {
     decor: "none",
     cardTitle: "#ffffff",
     cardText: "#ffffff",
+    cardOverlay: 0,
   },
   nintendoDirectWarm: {
     id: "nintendoDirectWarm",
@@ -99,6 +103,7 @@ const defaultThemes = {
     decor: "none",
     cardTitle: "#181516",
     cardText: "#332d2e",
+    cardOverlay: 0,
   },
 };
 
