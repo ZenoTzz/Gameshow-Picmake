@@ -634,12 +634,12 @@ function App() {
                   </option>
                 ))}
               </select>
-              <button className="secondary-button" onClick={() => setShowThemeEditor(true)} style={{padding: '0 8px', minHeight: '38px'}} title="新建自定义主题"><Plus size={16}/></button>
+              <button className="secondary-button" onClick={() => setShowThemeEditor("create")} style={{padding: '0 8px', minHeight: '38px'}} title="新建自定义主题"><Plus size={16}/></button>
               {poster.theme.startsWith("custom_") && (
                 <>
                   <button 
                     className="secondary-button" 
-                    onClick={() => setShowThemeEditor(true)} 
+                    onClick={() => setShowThemeEditor("edit")} 
                     style={{padding: '0 8px', minHeight: '38px'}} 
                     title="编辑此自定义主题"
                   >
@@ -655,7 +655,7 @@ function App() {
           {showThemeEditor && (
             <div style={{ gridColumn: "1 / -1", background: "#1e293b", padding: "16px", borderRadius: "8px", border: "1px solid #334155" }}>
               <ThemeEditor
-                initialTheme={poster.theme.startsWith("custom_") ? themes[poster.theme] : {}}
+                initialTheme={showThemeEditor === "edit" && poster.theme.startsWith("custom_") ? themes[poster.theme] : {}}
                 onPreview={(t) => setPreviewTheme(t)}
                 onSave={(t) => { 
                   addCustomTheme(t); 
