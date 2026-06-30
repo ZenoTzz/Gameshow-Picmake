@@ -13,7 +13,8 @@
     "stateOfPlay": "",
     "summerGameFest": "",
     "xbox": "",
-    "nintendoDirect": ""
+    "nintendoDirect": "",
+    "custom_1782789419948": ""
   },
   "logoPositions": {
     "stateOfPlay": {
@@ -45,7 +46,7 @@
       "y": 72
     }
   },
-  "footerLogoImage": "/template-assets/27690ba03475ca14c1d5209a11dcf3dced919856a8d19799d461363ed346e96f.png",
+  "footerLogoImage": "/template-assets/4f4b6636cb82cda4860a7ea7ebe3b351aba1f51338236d073f0e8066cf6aee9f.png",
   "footerCreditText": "信息整理",
   "infoFontSize": 25,
   "infoFontWeight": 400,
@@ -82,8 +83,8 @@
       "subtitle": "发售日期 / 登陆平台 / 关键信息速览"
     },
     "custom_1782789419948": {
-      "eventLabel": "2026年",
-      "title": "7月新作速览",
+      "eventLabel": "",
+      "title": "7月重磅游戏发售信息",
       "subtitle": "发售日期 / 登陆平台 / 关键信息速览"
     },
     "custom_1782794419020": {
