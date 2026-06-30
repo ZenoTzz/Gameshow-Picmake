@@ -1350,6 +1350,38 @@ textarea:focus {
 .theme-editor-panel .section-title { margin-bottom: 12px; border-bottom: 1px solid #334155; padding-bottom: 8px; justify-content: space-between; display: flex; }
 .theme-editor-panel input[type='color'] { padding: 0; cursor: pointer; height: 38px; }
 
+/* 主题编辑器透明度滑条 */
+.theme-editor-range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, #1e293b, #38bdf8);
+  outline: none;
+  cursor: pointer;
+}
+.theme-editor-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #e2e8f0;
+  border: 2px solid #0ea5e9;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+.theme-editor-range::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #e2e8f0;
+  border: 2px solid #0ea5e9;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+
 
 .poster.long-poster {
   height: max-content !important; 
