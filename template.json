@@ -1,8 +1,8 @@
 {
-  "theme": "nintendoDirect",
+  "theme": "custom_1782789419948",
   "fillEmptySpace": false,
   "compactFollowupPages": true,
-  "showGameInfo": false,
+  "showGameInfo": true,
   "pageFillOverrides": {
     "0": true,
     "1": true,
@@ -33,6 +33,14 @@
       "y": 72
     },
     "nintendoDirectWarm": {
+      "x": 72,
+      "y": 72
+    },
+    "custom_1782789419948": {
+      "x": 72,
+      "y": 72
+    },
+    "custom_1782794419020": {
       "x": 72,
       "y": 72
     }
@@ -72,10 +80,21 @@
       "eventLabel": "Nintendo Direct",
       "title": "发布会重磅直面会",
       "subtitle": "发售日期 / 登陆平台 / 关键信息速览"
+    },
+    "custom_1782789419948": {
+      "eventLabel": "2026年",
+      "title": "7月新作速览",
+      "subtitle": "发售日期 / 登陆平台 / 关键信息速览"
+    },
+    "custom_1782794419020": {
+      "eventLabel": "State of Play",
+      "title": "发布会重磅大作",
+      "subtitle": "发售日期 / 登陆平台 / 关键信息速览"
     }
   },
   "games": [
     {
+      "id": "ecaf75ec-425b-4e32-a3b7-06900b1a9804",
       "title": "塞尔达传说 时之笛 重制版",
       "date": "2026年",
       "platforms": [
@@ -85,6 +104,7 @@
       "image": "/template-assets/580c83782826000d44c518407c530691e8af74aee841d3a090433793a6f78925.png"
     },
     {
+      "id": "3969526e-5c28-4d59-b3da-5b314d40a8ad",
       "title": "黄昏之血（The Duskbloods）",
       "date": "2026年夏进行封闭网络测试，正式版发售日期未定",
       "platforms": [
@@ -94,6 +114,7 @@
       "image": "/template-assets/9793c492a25e9293e0d11b6178950741070c04ad5bee730016fafa7e328868d8.jpg"
     },
     {
+      "id": "2fc2ffcc-4e0a-4663-84dd-988c7ee76495",
       "title": "火焰纹章 万缕千丝",
       "date": "2026年9月17日",
       "platforms": [
@@ -103,6 +124,7 @@
       "image": "/template-assets/c1ba758fffee9aeec4fbf322dd8255b4f373ead5692d848d5bde2d56186f4c1c.png"
     },
     {
+      "id": "b44b24cf-efa4-447e-961a-9c2f4dc78405",
       "title": "王国之心4",
       "date": "未定",
       "platforms": [
@@ -115,6 +137,7 @@
       "image": "/template-assets/8ec81a9113b97e623abd3cdf68c2cd0c4596a4b6c12916d24acebf6805ee39cf.png"
     },
     {
+      "id": "dea11862-5111-4e52-99c6-a77466486fd4",
       "title": "异度神剑 GENESIS",
       "date": "2027年",
       "platforms": [
@@ -124,6 +147,7 @@
       "image": "/template-assets/31f46dc9bfa98f2ced7860775fc2c32668b6c50239285476d7ef592cd508a202.png"
     },
     {
+      "id": "e507a295-fdb8-4d84-85a1-99ef70624326",
       "title": "宝可梦pokopia扩充票",
       "date": "2026年6月9日开放购买，第一弹今年夏季更新",
       "platforms": [
@@ -133,6 +157,7 @@
       "image": "/template-assets/2ad4b51aa1d18455b4449f138a658045c71b4889faed7dd4c76bce61e8f12756.png"
     },
     {
+      "id": "e2049f23-3bc2-4215-b2b5-e125c41bc82c",
       "title": "DELTARUNE 第五章",
       "date": "2026年6月24日",
       "platforms": [
@@ -143,6 +168,7 @@
       "image": "/template-assets/733598892e8b16642a50a0cd7693063b7076e05ce3949a4b8d74871f52d2003f.png"
     },
     {
+      "id": "eee9a1ae-8859-47bc-b6a5-f951a790d1bb",
       "title": "剑星",
       "date": "2026年",
       "platforms": [
@@ -152,6 +178,7 @@
       "image": "/template-assets/25f26e5071b1c646e8f4e203d208359f9d408db0a917b3b95bcaa89dd168204a.png"
     },
     {
+      "id": "d19fe278-a599-452d-b4e6-43e9618c37c3",
       "title": "Switch 2版异度神剑123",
       "date": "一代6月9日升级，二代7月30日升级，三代12月3日升级",
       "platforms": [
@@ -161,6 +188,7 @@
       "image": "/template-assets/78e067347806013f0b811e62477b91a3f8a9b0ba1b35f7b7af441bd9ab4b05c3.jpg"
     },
     {
+      "id": "1eab5bbb-6fe1-48a5-b109-f3c8848bc187",
       "title": "斯普拉遁涂击队",
       "date": "2026年6月30日 专场直面会",
       "platforms": [
@@ -170,6 +198,7 @@
       "image": "/template-assets/543782be40796dfcf4b1f4c8857fb6a7140b3837d39977dd92e7668980518110.png"
     },
     {
+      "id": "c290f370-7101-4996-9a69-157c485fb500",
       "title": "斯普拉遁3 新祭典活动",
       "date": "2026年7月10日~2026年7月12日",
       "platforms": [
@@ -180,6 +209,7 @@
       "image": "/template-assets/8c534ba9647ad8199eff303cce9572649bb964d47bb7f797b445cc8a88631515.png"
     },
     {
+      "id": "4d0da2b1-ff26-4011-8d4d-77085ea9a65a",
       "title": "星际火狐（试玩版今日上线）",
       "date": "2026年6月25日",
       "platforms": [
@@ -189,6 +219,7 @@
       "image": "/template-assets/6f4f104726b9ae2fb2320ed31af91aadb72dbec62b42657dd047f560457f16f5.jpg"
     },
     {
+      "id": "c9995f46-5655-4c27-bcd5-04a1f9957b7b",
       "title": "Nintendo Sport Resort",
       "date": "2026年10月22日",
       "platforms": [
@@ -198,6 +229,7 @@
       "image": "/template-assets/4dc6f4df56a6e3fbb3b5730483fc94fc7f1ff31791f7019a505b2f003fe20185.png"
     },
     {
+      "id": "a6e1a7e5-cea5-45d2-88d5-65d9b8f01e55",
       "title": "Joy-Con 2手柄新配色",
       "date": "2026年7月23日",
       "platforms": [
@@ -207,6 +239,7 @@
       "image": "/template-assets/44a7ff1a9903f42486f1bccec3ba86babc0591d565f78b4ea16894c438959b26.png"
     },
     {
+      "id": "5cac3cda-8cd6-486a-a229-56c6ab77302c",
       "title": "鬼武者 Way of the Sword",
       "date": "2026年9月25日",
       "platforms": [
@@ -219,6 +252,7 @@
       "image": "/template-assets/8d0dcbba62641ef28fbb4bf5b2f6e67b283e803c2e71c7c6dc229645129b5d79.png"
     },
     {
+      "id": "d467a4d3-73cb-4425-ae5b-3814bc0048f9",
       "title": "龙之信条2：Dark Arisen",
       "date": "2026年10月9日",
       "platforms": [
@@ -228,6 +262,7 @@
       "image": "/template-assets/2142011f3ffc2bb0fa9a642958b93ed700796959ebd35a1eb237040434f16ccd.jpg"
     },
     {
+      "id": "86de7030-6c7d-4ba0-94c7-306402a0b336",
       "title": "堕落之主2",
       "date": "2026年秋",
       "platforms": [
@@ -240,6 +275,7 @@
       "image": "/template-assets/13ce782b90ca23631cc6cca2c8f02d910ae22bd2bdc6d37a903e8e7be2b08b1d.png"
     },
     {
+      "id": "3b0b08e3-7149-48d3-9e38-61489390f171",
       "title": "匹诺曹的谎言：完全版",
       "date": "2026年8月6日（数字版），2026年10月2日（实体版）",
       "platforms": [
@@ -249,6 +285,7 @@
       "image": "/template-assets/826ceffc59cd392d0c944779cfc98ddd5ff902a781ed20d22c0898582d3253da.jpg"
     },
     {
+      "id": "3a91bbc4-1fa8-4768-98fb-962bb94d1b59",
       "title": "鬼泣5：Devil Hunter版",
       "date": "2026年6月23日",
       "platforms": [
@@ -258,6 +295,7 @@
       "image": "/template-assets/98b724aee7b5b95aca430772acbc82613547f4508fd49c1aea468adfb2146c3c.png"
     },
     {
+      "id": "335eed33-ecff-4b47-9e01-fed6700f1c34",
       "title": "暗喻幻想：ReFantazio",
       "date": "2026年11月12日",
       "platforms": [
