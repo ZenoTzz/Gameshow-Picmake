@@ -69,6 +69,8 @@ function PosterPage({
         "--accent": theme.accent,
         "--chip-bg": theme.chipBg,
         "--chip-text": theme.chipText,
+        "--card-title": theme.cardTitle || "#ffffff",
+        "--card-text": theme.cardText || "#ffffff",
         "--title-shadow": theme.titleShadow,
         "--poster-font": fonts.poster,
         "--header-font": fonts.header,

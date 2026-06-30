@@ -200,6 +200,8 @@ export function ThemeEditor({ initialTheme, onSave, onCancel, onPreview }) {
     chipText: "#ffffff",
     titleShadow: "0 4px 12px rgba(0,0,0,0.5)",
     decor: "none",
+    cardTitle: "#ffffff",
+    cardText: "#ffffff",
     ...initialTheme,
   });
 
@@ -239,6 +241,8 @@ export function ThemeEditor({ initialTheme, onSave, onCancel, onPreview }) {
         <label>点缀强调色<input type="color" value={theme.accent.length === 7 ? theme.accent : "#ffffff"} onChange={(e) => handleChange("accent", e.target.value)} /></label>
         <label>标签背景色<input type="color" value={theme.chipBg.length === 7 ? theme.chipBg : "#ffffff"} onChange={(e) => handleChange("chipBg", e.target.value)} /></label>
         <label>标签文字色<input type="color" value={theme.chipText.length === 7 ? theme.chipText : "#ffffff"} onChange={(e) => handleChange("chipText", e.target.value)} /></label>
+        <label>卡片标题色<input type="color" value={theme.cardTitle && theme.cardTitle.length === 7 ? theme.cardTitle : "#ffffff"} onChange={(e) => handleChange("cardTitle", e.target.value)} /></label>
+        <label>卡片正文色<input type="color" value={theme.cardText && theme.cardText.length === 7 ? theme.cardText : "#ffffff"} onChange={(e) => handleChange("cardText", e.target.value)} /></label>
         <label>装饰元素
           <select value={theme.decor} onChange={(e) => handleChange("decor", e.target.value)}>
             <option value="none">无</option>

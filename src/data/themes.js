@@ -17,6 +17,8 @@ const defaultThemes = {
     chipText: "#ffffff",
     titleShadow: "0 5px 0 rgba(0, 34, 89, .85), 0 0 24px rgba(76, 170, 255, .5)",
     decor: "symbols",
+    cardTitle: "#ffffff",
+    cardText: "#ffffff",
   },
   summerGameFest: {
     id: "summerGameFest",
@@ -39,6 +41,8 @@ const defaultThemes = {
     chipText: "#b12ed5",
     titleShadow: "6px 7px 0 rgba(63, 238, 239, .76), 0 0 34px rgba(255, 255, 255, .48)",
     decor: "bubbles",
+    cardTitle: "#ffffff",
+    cardText: "#ffffff",
   },
   xbox: {
     id: "xbox",
@@ -57,6 +61,8 @@ const defaultThemes = {
     chipText: "#05130a",
     titleShadow: "0 5px 0 rgba(6, 54, 16, .85), 0 0 24px rgba(78, 255, 101, .42)",
     decor: "none",
+    cardTitle: "#ffffff",
+    cardText: "#ffffff",
   },
   nintendoDirect: {
     id: "nintendoDirect",
@@ -73,6 +79,8 @@ const defaultThemes = {
     chipText: "#ffffff",
     titleShadow: "0 5px 0 rgba(91, 0, 8, .62), 0 0 18px rgba(255, 255, 255, .2)",
     decor: "none",
+    cardTitle: "#ffffff",
+    cardText: "#ffffff",
   },
   nintendoDirectWarm: {
     id: "nintendoDirectWarm",
@@ -89,6 +97,8 @@ const defaultThemes = {
     chipText: "#ffffff",
     titleShadow: "0 5px 0 rgba(91, 0, 8, .62), 0 0 18px rgba(255, 255, 255, .2)",
     decor: "none",
+    cardTitle: "#181516",
+    cardText: "#332d2e",
   },
 };
 
