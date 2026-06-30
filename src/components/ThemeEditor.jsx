@@ -185,28 +185,33 @@ function BgField({ label, value, onChange }) {
 /* ── 主编辑器组件 ── */
 
 export function ThemeEditor({ initialTheme, onSave, onCancel, onPreview }) {
-  const [theme, setTheme] = useState({
-    id: `custom_${Date.now()}`,
-    label: "自定义主题",
-    logo: "CUSTOM",
-    fontFamily: "'Noto Sans SC', 'Microsoft YaHei', Arial, sans-serif",
-    bg: "#0f172a",
-    panel: "rgba(15, 23, 42, 0.8)",
-    card: "linear-gradient(90deg, #1e293b, #0f172a)",
-    line: "#38bdf8",
-    glow: "rgba(56, 189, 248, 0.5)",
-    accent: "#7dd3fc",
-    chipBg: "#0ea5e9",
-    chipText: "#ffffff",
-    titleShadow: "0 4px 12px rgba(0,0,0,0.5)",
-    decor: "none",
-    cardTitle: "#ffffff",
-    cardText: "#ffffff",
-    cardOverlay: 0,
-    cardBorder: "#ffffff",
-    cardBorderWidth: 2,
-    cardNumberBg: initialTheme.chipBg || "#0ea5e9",
-    ...initialTheme,
+  const [theme, setTheme] = useState(() => {
+    const isEditingCustom = initialTheme && initialTheme.id && initialTheme.id.startsWith("custom_");
+    const newId = isEditingCustom ? initialTheme.id : `custom_${Date.now()}`;
+    const newLabel = isEditingCustom ? (initialTheme.label || "自定义主题") : `自定义_${initialTheme.label || "主题"}`;
+    return {
+      logo: "CUSTOM",
+      fontFamily: "'Noto Sans SC', 'Microsoft YaHei', Arial, sans-serif",
+      bg: "#0f172a",
+      panel: "rgba(15, 23, 42, 0.8)",
+      card: "linear-gradient(90deg, #1e293b, #0f172a)",
+      line: "#38bdf8",
+      glow: "rgba(56, 189, 248, 0.5)",
+      accent: "#7dd3fc",
+      chipBg: "#0ea5e9",
+      chipText: "#ffffff",
+      titleShadow: "0 4px 12px rgba(0,0,0,0.5)",
+      decor: "none",
+      cardTitle: "#ffffff",
+      cardText: "#ffffff",
+      cardOverlay: 0,
+      cardBorder: "#ffffff",
+      cardBorderWidth: 2,
+      cardNumberBg: (initialTheme && initialTheme.chipBg) || "#0ea5e9",
+      ...initialTheme,
+      id: newId,
+      label: newLabel,
+    };
   });
 
   useEffect(() => {
