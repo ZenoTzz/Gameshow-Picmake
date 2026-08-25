@@ -69,6 +69,7 @@ function App() {
   const theme = previewTheme || themes[poster.theme] || themes.stateOfPlay;
   const posterFonts = getPosterFonts(poster, theme);
   const currentThemeText = getThemeText(poster, poster.theme);
+  const currentLogoScale = poster.logoScales?.[poster.theme] ?? Core.defaultLogoScale;
   const pages = useMemo(
     () =>
       paginateGames(poster.games, cardHeights, {
@@ -221,6 +222,16 @@ function App() {
       logoPositions: {
         ...(current.logoPositions ?? {}),
         [themeId]: position,
+      },
+    }));
+  }
+
+  function updateLogoScale(themeId, scale) {
+    setPoster((current) => ({
+      ...current,
+      logoScales: {
+        ...(current.logoScales ?? {}),
+        [themeId]: Math.min(Core.maxLogoScale, Math.max(Core.minLogoScale, Number(scale))),
       },
     }));
   }
@@ -820,6 +831,34 @@ function App() {
             上传当前主题 Logo
             <input accept="image/*" type="file" onChange={(event) => handleLogoImage(event.target.files[0])} />
           </label>
+          <div className="logo-size-field wide-field">
+            <div className="logo-size-heading">
+              <label htmlFor="logo-size">Logo 大小</label>
+              <strong>{currentLogoScale}%</strong>
+            </div>
+            <div className="logo-size-controls">
+              <input
+                id="logo-size"
+                aria-label="Logo 大小"
+                className="logo-size-range"
+                min={Core.minLogoScale}
+                max={Core.maxLogoScale}
+                step="5"
+                type="range"
+                value={currentLogoScale}
+                onInput={(event) => updateLogoScale(poster.theme, event.currentTarget.value)}
+              />
+              <button
+                className="secondary-button logo-size-reset"
+                type="button"
+                disabled={currentLogoScale === Core.defaultLogoScale}
+                onClick={() => updateLogoScale(poster.theme, Core.defaultLogoScale)}
+              >
+                恢复默认
+              </button>
+            </div>
+            <span className="field-hint">仅调整当前主题，保持图片比例；放大后仍可拖动定位。</span>
+          </div>
           <label className="file-field logo-upload">
             <ImagePlus size={16} />
             上传底部署名图标

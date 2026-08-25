@@ -54,6 +54,7 @@ function PosterPage({
 }) {
   const themeText = getThemeText(poster, poster.theme);
   const logoPosition = poster.logoPositions?.[poster.theme] ?? defaultLogoPosition;
+  const logoScale = poster.logoScales?.[poster.theme] ?? Core.defaultLogoScale;
   const fonts = getPosterFonts(poster, theme);
 
   return (
@@ -91,6 +92,7 @@ function PosterPage({
           <BrandMark
             logoImage={poster.logoImages?.[poster.theme]}
             logoPosition={logoPosition}
+            logoScale={logoScale}
             onLogoPositionChange={(position) => onLogoPositionChange(poster.theme, position)}
             posterRef={posterRef}
           />
@@ -126,7 +128,7 @@ function PosterPage({
   );
 }
 
-function BrandMark({ logoImage, logoPosition, onLogoPositionChange, posterRef }) {
+function BrandMark({ logoImage, logoPosition, logoScale, onLogoPositionChange, posterRef }) {
   const markRef = useRef(null);
   const dragRef = useRef(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -200,6 +202,8 @@ function BrandMark({ logoImage, logoPosition, onLogoPositionChange, posterRef })
       style={{
         left: `${logoPosition.x}px`,
         top: `${logoPosition.y}px`,
+        width: `${108 * (logoScale / 100)}px`,
+        height: `${78 * (logoScale / 100)}px`,
       }}
       tabIndex={0}
       onPointerCancel={finishDrag}

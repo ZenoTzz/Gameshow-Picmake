@@ -323,6 +323,56 @@ textarea:focus {
   min-height: 42px;
 }
 
+.logo-size-field {
+  display: grid;
+  gap: 9px;
+  padding: 12px;
+  border: 1px solid rgba(125, 211, 252, 0.24);
+  border-radius: 8px;
+  background: rgba(14, 165, 233, 0.06);
+}
+
+.logo-size-heading,
+.logo-size-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo-size-heading {
+  justify-content: space-between;
+}
+
+.logo-size-heading strong {
+  color: #7dd3fc;
+  font-size: 13px;
+}
+
+.logo-size-range {
+  flex: 1;
+  min-width: 0;
+  padding: 0;
+  accent-color: #0ea5e9;
+}
+
+.logo-size-reset {
+  flex: 0 0 auto;
+  min-height: 34px;
+  padding: 0 10px;
+  font-size: 12px;
+}
+
+.logo-size-reset:disabled {
+  cursor: default;
+  opacity: 0.45;
+}
+
+.field-hint {
+  color: #7f91aa;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
 .file-field input {
   display: none;
 }
@@ -500,6 +550,7 @@ textarea:focus {
   user-select: none;
   z-index: 12;
   text-shadow: none;
+  overflow: visible;
 }
 
 .logo-slot:hover,
@@ -516,8 +567,8 @@ textarea:focus {
 
 .logo-slot img {
   display: block;
-  max-width: 108px;
-  max-height: 78px;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
 }
 
@@ -1119,8 +1170,8 @@ textarea:focus {
 .theme-gamescom2026 .card-number {
   border-color: #66d5ff;
   border-radius: 7px;
-  color: #000000;
-  text-shadow: none;
+  color: #ffffff;
+  text-shadow: 0 2px 0 rgba(0, 64, 86, 0.72);
   box-shadow: 0 0 18px rgba(0, 185, 255, 0.32);
 }
 

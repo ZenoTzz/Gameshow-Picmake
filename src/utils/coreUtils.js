@@ -42,6 +42,9 @@ export const defaultThemeText = {
   },
 };
 export const defaultLogoPosition = { x: 72, y: 72 };
+export const defaultLogoScale = 100;
+export const minLogoScale = 50;
+export const maxLogoScale = 250;
 export const defaultInfoFontSize = 20;
 export const defaultInfoFontWeight = 600;
 export const maxHistoryItems = 12;
@@ -124,6 +127,13 @@ export function getDefaultLogoPositions() {
   }, {});
 }
 
+export function getDefaultLogoScales() {
+  return Object.keys(themes).reduce((scales, themeId) => {
+    scales[themeId] = defaultLogoScale;
+    return scales;
+  }, {});
+}
+
 export function normalizePosterTemplate(poster) {
   const themeText = {
     ...getDefaultThemeText(),
@@ -133,6 +143,15 @@ export function normalizePosterTemplate(poster) {
     ...getDefaultLogoPositions(),
     ...(poster.logoPositions ?? {}),
   };
+  const logoScales = Object.fromEntries(
+    Object.entries({
+      ...getDefaultLogoScales(),
+      ...(poster.logoScales ?? {}),
+    }).map(([themeId, scale]) => [
+      themeId,
+      Math.min(maxLogoScale, Math.max(minLogoScale, Number(scale) || defaultLogoScale)),
+    ]),
+  );
 
   if (!poster.themeText && (poster.eventLabel || poster.title || poster.subtitle)) {
     const themeId = poster.theme ?? initialPoster.theme;
@@ -149,6 +168,7 @@ export function normalizePosterTemplate(poster) {
     ...poster,
     themeText,
     logoPositions,
+    logoScales,
     compactFollowupPages: poster.compactFollowupPages ?? false,
     showGameInfo: poster.showGameInfo ?? true,
     infoFontSize: poster.infoFontSize ?? defaultInfoFontSize,
@@ -188,6 +208,7 @@ export function getTemplateFields(poster) {
     pageFillOverrides: poster.pageFillOverrides,
     logoImages: poster.logoImages,
     logoPositions: poster.logoPositions,
+    logoScales: poster.logoScales,
     footerLogoImage: poster.footerLogoImage,
     footerCreditText: poster.footerCreditText,
     infoFontSize: poster.infoFontSize ?? defaultInfoFontSize,
