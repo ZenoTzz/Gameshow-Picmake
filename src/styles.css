@@ -738,8 +738,8 @@ textarea:focus {
   border: 0;
   border-top: 18px solid transparent;
   border-bottom: 18px solid transparent;
-  border-left: 30px solid #7800ff;
-  filter: drop-shadow(0 0 12px rgba(120, 0, 255, 0.52));
+  border-left: 30px solid var(--line);
+  filter: drop-shadow(0 0 12px var(--glow));
 }
 
 .decor-gamescomFragments span:nth-child(1) {
@@ -752,7 +752,6 @@ textarea:focus {
   top: 88px;
   right: 106px;
   transform: rotate(-20deg) scale(0.72);
-  border-left-color: #00b9ff;
 }
 
 .decor-gamescomFragments span:nth-child(3) {
@@ -765,7 +764,6 @@ textarea:focus {
   top: 205px;
   right: 82px;
   transform: rotate(12deg) scale(0.38);
-  border-left-color: #66d5ff;
 }
 
 .decor-switch {
