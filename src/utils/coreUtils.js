@@ -25,6 +25,11 @@ export const defaultThemeText = {
     title: "发布会重磅大作",
     subtitle: defaultSubtitle,
   },
+  gamescom2026: {
+    eventLabel: "gamescom 2026",
+    title: "ONL 重磅大作",
+    subtitle: defaultSubtitle,
+  },
   xbox: {
     eventLabel: "Xbox Showcase",
     title: "发布会重磅首曝",
@@ -144,6 +149,17 @@ export function normalizePosterTemplate(poster) {
     ...getDefaultThemeText(),
     ...(poster.themeText ?? {}),
   };
+  const storedGamescomText = poster.themeText?.gamescom2026;
+  if (
+    storedGamescomText?.eventLabel === defaultThemeText.stateOfPlay.eventLabel &&
+    storedGamescomText?.title === defaultThemeText.stateOfPlay.title
+  ) {
+    themeText.gamescom2026 = {
+      ...storedGamescomText,
+      eventLabel: defaultThemeText.gamescom2026.eventLabel,
+      title: defaultThemeText.gamescom2026.title,
+    };
+  }
   const logoPositions = {
     ...getDefaultLogoPositions(),
     ...(poster.logoPositions ?? {}),

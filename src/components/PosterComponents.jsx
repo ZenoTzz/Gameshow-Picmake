@@ -56,6 +56,7 @@ function PosterPage({
   const logoPosition = poster.logoPositions?.[poster.theme] ?? defaultLogoPosition;
   const logoScale = poster.logoScales?.[poster.theme] ?? Core.defaultLogoScale;
   const fonts = getPosterFonts(poster, theme);
+  const footerLogoImage = poster.footerLogoImage || theme.defaultFooterLogo;
 
   return (
     <div
@@ -102,8 +103,8 @@ function PosterPage({
               <h2>{themeText.title}</h2>
               <div className="poster-credit header-credit">
                 <span>{poster.footerCreditText}</span>
-                {poster.footerLogoImage ? (
-                  <img alt="" className="footer-logo" src={resolveLogoSrc(poster.footerLogoImage)} />
+                {footerLogoImage ? (
+                  <img alt="" className="footer-logo" src={resolveLogoSrc(footerLogoImage)} />
                 ) : (
                   <div className="footer-logo-placeholder">上传底部署名图标</div>
                 )}

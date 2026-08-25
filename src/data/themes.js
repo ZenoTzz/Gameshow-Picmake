@@ -56,24 +56,25 @@ const defaultThemes = {
     logo: "GC",
     fontFamily: "'Noto Sans SC', 'Microsoft YaHei', Arial, sans-serif",
     bg:
-      "radial-gradient(circle at 86% 4%, rgba(80, 55, 255, .22), transparent 23%)," +
-      "radial-gradient(circle at 10% 7%, rgba(157, 45, 232, .18), transparent 26%)," +
-      "linear-gradient(145deg, #050508 0%, #0b0910 52%, #09060f 100%)",
-    panel: "rgba(7, 6, 10, .82)",
+      "radial-gradient(circle at 86% 4%, rgba(80, 56, 248, .32), transparent 25%)," +
+      "radial-gradient(circle at 10% 7%, rgba(144, 56, 232, .28), transparent 28%)," +
+      "linear-gradient(145deg, #08040f 0%, #130928 52%, #1c0b3b 100%)",
+    panel: "rgba(12, 7, 22, .82)",
     card: "linear-gradient(100deg, rgba(17, 14, 23, .98), rgba(6, 6, 9, .96))",
-    line: "#7436f5",
-    glow: "rgba(116, 54, 245, .58)",
-    accent: "#a985ff",
-    chipBg: "#7436f5",
+    line: "#8038f0",
+    glow: "rgba(112, 56, 240, .72)",
+    accent: "#c8b4ff",
+    chipBg: "#7038f0",
     chipText: "#ffffff",
-    titleShadow: "0 5px 0 rgba(63, 24, 151, .92), 0 0 24px rgba(143, 91, 255, .44)",
+    titleShadow: "0 5px 0 rgba(65, 22, 156, .86), 0 0 28px rgba(166, 107, 255, .58)",
     decor: "gamescomFragments",
+    defaultFooterLogo: "logos/IGN中国logo彩色（白）.png",
     cardTitle: "#ffffff",
     cardText: "#ffffff",
     cardOverlay: 0,
-    cardBorder: "#8f5bff",
+    cardBorder: "#9858ff",
     cardBorderWidth: 2,
-    cardNumberBg: "linear-gradient(180deg, #9768ff, #7436f5)",
+    cardNumberBg: "linear-gradient(180deg, #a66bff, #6038f0)",
   },
   xbox: {
     id: "xbox",
