@@ -823,7 +823,6 @@ textarea:focus {
   height: 1540px;
   overflow: hidden;
   padding: 16px 0 8px;
-  background: var(--panel);
   border-radius: 12px;
 }
 
