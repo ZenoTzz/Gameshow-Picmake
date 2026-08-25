@@ -49,7 +49,7 @@ export const initialPoster = {
     {
       title: "控制：共振",
       date: "2026年9月24日",
-      platforms: ["PS5", "Xbox Series", "Mac", "PC"],
+      platforms: ["PS5", "XBOX Series", "Mac", "PC"],
       info: "现已开始预购，PlayStation港区商店价格428港币（约合370元人民币），Steam国区商店价格268元",
       image: "",
     },
@@ -63,7 +63,7 @@ export const initialPoster = {
     {
       title: "鬼武者 Way of the Sword",
       date: "2026年9月25日",
-      platforms: ["PS5", "Xbox Series", "PC"],
+      platforms: ["PS5", "XBOX Series", "PC"],
       info: "现已开始预购，PlayStation港区商店价格518港币（约合447元人民币），Steam国区商店价格298元，试玩demo现已上线",
       image: "",
     },

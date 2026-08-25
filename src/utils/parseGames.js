@@ -1,5 +1,5 @@
 const platformAliases = [
-  ["Xbox Series", /\bXbox\s*(Series|Series X\|S|Series X|Series S|XSX|XSS)\b/i],
+  ["XBOX Series", /\bXbox\s*(Series|Series X\|S|Series X|Series S|XSX|XSS)\b/i],
   ["Switch 2", /\b(Switch\s*2|Nintendo\s*Switch\s*2)\b/i],
   ["Switch", /\b(Nintendo\s*)?Switch\b/i],
   ["PS5", /\b(PS5|PlayStation\s*5)\b/i],

@@ -1,7 +1,7 @@
 import { blankGame, initialPoster } from "../data/sampleData";
 import { themes } from "../data/themes";
 
-export const platformOptions = ["PS5", "Xbox Series", "Switch", "Switch 2", "PC", "Mac", "iOS", "Android"];
+export const platformOptions = ["PS5", "XBOX Series", "Switch", "Switch 2", "PC", "Mac", "iOS", "Android"];
 export const baseUrl = import.meta.env.BASE_URL ?? "/";
 export const templateStorageKey = "gameshow-pic-template-v1";
 export const templateHistoryStorageKey = "gameshow-pic-template-history-v1";
@@ -60,6 +60,7 @@ export const fontOptions = [
 export const platformColors = {
   PS5: { bg: "#1267e8", text: "#ffffff" },
   PS4: { bg: "#1267e8", text: "#ffffff" },
+  "XBOX Series": { bg: "#107c10", text: "#ffffff" },
   "Xbox Series": { bg: "#107c10", text: "#ffffff" },
   Xbox: { bg: "#107c10", text: "#ffffff" },
   Switch: { bg: "#e60012", text: "#ffffff" },
@@ -71,7 +72,11 @@ export const platformColors = {
 };
 
 export function getPlatformColor(platform) {
-  return platformColors[platform] ?? { bg: "#475569", text: "#ffffff" };
+  const normalizedPlatform = String(platform ?? "").trim().toLocaleLowerCase("en-US");
+  const matchedPlatform = Object.keys(platformColors).find(
+    (option) => option.toLocaleLowerCase("en-US") === normalizedPlatform,
+  );
+  return platformColors[matchedPlatform] ?? { bg: "#475569", text: "#ffffff" };
 }
 
 export function buildFontFamily(fontName, fallback) {
@@ -490,15 +495,20 @@ export function resolveLogoSrc(src) {
 }
 
 export function normalizeGamePlatforms(platforms) {
+  const normalizePlatformName = (platform) => {
+    const normalizedPlatform = String(platform).trim();
+    return /^xbox\s+series$/i.test(normalizedPlatform) ? "XBOX Series" : normalizedPlatform;
+  };
+
   if (Array.isArray(platforms)) {
-    const normalizedPlatforms = platforms.map((platform) => String(platform).trim()).filter(Boolean);
+    const normalizedPlatforms = [...new Set(platforms.map(normalizePlatformName).filter(Boolean))];
     return normalizedPlatforms.length ? normalizedPlatforms : [...blankGame.platforms];
   }
 
   if (typeof platforms === "string") {
     const normalizedPlatforms = platforms
       .split(/[，,/\n]/)
-      .map((platform) => platform.trim())
+      .map(normalizePlatformName)
       .filter(Boolean);
     return normalizedPlatforms.length ? normalizedPlatforms : [...blankGame.platforms];
   }

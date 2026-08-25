@@ -1138,53 +1138,56 @@ textarea:focus {
 
 .theme-gamescom2026::before {
   background:
-    radial-gradient(circle at 78% 10%, rgba(120, 0, 255, 0.16) 0 2px, transparent 3px) 0 0 / 38px 38px,
-    linear-gradient(132deg, transparent 0 18%, rgba(0, 185, 255, 0.07) 18.2% 19.2%, transparent 19.4% 100%),
-    linear-gradient(148deg, transparent 0 72%, rgba(120, 0, 255, 0.1) 72.2% 75%, transparent 75.2% 100%),
+    radial-gradient(circle at 78% 10%, rgba(185, 148, 255, 0.2) 0 2px, transparent 3px) 0 0 / 38px 38px,
+    linear-gradient(132deg, transparent 0 18%, rgba(151, 104, 255, 0.16) 18.2% 20.5%, transparent 20.7% 100%),
+    linear-gradient(148deg, transparent 0 68%, rgba(116, 54, 245, 0.22) 68.2% 76%, transparent 76.2% 100%),
     repeating-linear-gradient(90deg, transparent 0 118px, rgba(255, 255, 255, 0.018) 118px 120px);
-  opacity: 0.9;
+  opacity: 0.94;
 }
 
 .theme-gamescom2026::after {
-  background: linear-gradient(90deg, transparent 2%, #00b9ff 22%, #7800ff 78%, transparent 98%);
-  box-shadow: 0 0 18px rgba(0, 185, 255, 0.42);
+  background: linear-gradient(90deg, transparent 2%, #9f79ff 22%, #7436f5 78%, transparent 98%);
+  box-shadow: 0 0 18px rgba(116, 54, 245, 0.52);
 }
 
 .theme-gamescom2026 .poster-header {
   min-height: 286px;
+  background:
+    linear-gradient(164deg, transparent 0 34%, rgba(157, 45, 232, 0.32) 34.2% 58%, transparent 58.2%),
+    linear-gradient(196deg, transparent 0 61%, rgba(80, 55, 255, 0.3) 61.2% 100%);
 }
 
 .theme-gamescom2026 .game-card {
-  border: 2px solid rgba(0, 185, 255, 0.9);
-  border-left: 10px solid rgba(0, 185, 255, 0.9);
+  border: 2px solid transparent;
+  border-left-width: 10px;
   border-radius: 10px;
-  border-color: rgba(0, 185, 255, 0.9);
   background:
-    linear-gradient(rgba(0, 0, 0, var(--card-overlay, 0)), rgba(0, 0, 0, var(--card-overlay, 0))),
-    var(--card);
+    linear-gradient(rgba(0, 0, 0, var(--card-overlay, 0)), rgba(0, 0, 0, var(--card-overlay, 0))) padding-box,
+    var(--card) padding-box,
+    linear-gradient(112deg, #9d2de8 0%, #7436f5 52%, #5037ff 100%) border-box;
   box-shadow:
-    inset 0 0 26px rgba(0, 185, 255, 0.045),
-    0 0 14px rgba(0, 185, 255, 0.14);
+    inset 0 0 26px rgba(116, 54, 245, 0.07),
+    0 0 14px rgba(80, 55, 255, 0.2);
 }
 
 .theme-gamescom2026 .card-number {
-  border-color: #66d5ff;
+  border-color: #bba4ff;
   border-radius: 7px;
   color: #ffffff;
-  text-shadow: 0 2px 0 rgba(0, 64, 86, 0.72);
-  box-shadow: 0 0 18px rgba(0, 185, 255, 0.32);
+  text-shadow: 0 2px 0 rgba(48, 16, 118, 0.82);
+  box-shadow: 0 0 18px rgba(116, 54, 245, 0.4);
 }
 
 .theme-gamescom2026 .game-image {
-  border-color: #00b9ff;
+  border-color: #7436f5;
   box-shadow:
-    inset 0 0 24px rgba(0, 185, 255, 0.06),
-    0 3px 0 rgba(120, 0, 255, 0.72);
+    inset 0 0 24px rgba(116, 54, 245, 0.08),
+    0 3px 0 rgba(80, 55, 255, 0.86);
 }
 
 .theme-gamescom2026 .info-row svg {
-  color: #00b9ff;
-  filter: drop-shadow(0 0 7px rgba(0, 185, 255, 0.42));
+  color: #a985ff;
+  filter: drop-shadow(0 0 7px rgba(116, 54, 245, 0.52));
 }
 
 .theme-nintendoDirect::before {

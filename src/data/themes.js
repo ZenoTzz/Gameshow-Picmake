@@ -56,24 +56,24 @@ const defaultThemes = {
     logo: "GC",
     fontFamily: "'Noto Sans SC', 'Microsoft YaHei', Arial, sans-serif",
     bg:
-      "radial-gradient(circle at 86% 8%, rgba(120, 0, 255, .2), transparent 22%)," +
-      "radial-gradient(circle at 12% 5%, rgba(0, 185, 255, .16), transparent 24%)," +
-      "linear-gradient(145deg, #000000 0%, #0e0e0e 48%, #000000 100%)",
-    panel: "rgba(0, 0, 0, .78)",
-    card: "linear-gradient(100deg, rgba(14, 14, 14, .96), rgba(0, 0, 0, .92))",
-    line: "#00b9ff",
-    glow: "rgba(0, 185, 255, .46)",
-    accent: "#00b9ff",
-    chipBg: "#00b9ff",
-    chipText: "#000000",
-    titleShadow: "0 5px 0 rgba(0, 142, 196, .62), 0 0 22px rgba(0, 185, 255, .34)",
+      "radial-gradient(circle at 86% 4%, rgba(80, 55, 255, .22), transparent 23%)," +
+      "radial-gradient(circle at 10% 7%, rgba(157, 45, 232, .18), transparent 26%)," +
+      "linear-gradient(145deg, #050508 0%, #0b0910 52%, #09060f 100%)",
+    panel: "rgba(7, 6, 10, .82)",
+    card: "linear-gradient(100deg, rgba(17, 14, 23, .98), rgba(6, 6, 9, .96))",
+    line: "#7436f5",
+    glow: "rgba(116, 54, 245, .58)",
+    accent: "#a985ff",
+    chipBg: "#7436f5",
+    chipText: "#ffffff",
+    titleShadow: "0 5px 0 rgba(63, 24, 151, .92), 0 0 24px rgba(143, 91, 255, .44)",
     decor: "gamescomFragments",
     cardTitle: "#ffffff",
     cardText: "#ffffff",
     cardOverlay: 0,
-    cardBorder: "#00b9ff",
+    cardBorder: "#8f5bff",
     cardBorderWidth: 2,
-    cardNumberBg: "linear-gradient(180deg, #66d5ff, #00b9ff)",
+    cardNumberBg: "linear-gradient(180deg, #9768ff, #7436f5)",
   },
   xbox: {
     id: "xbox",
