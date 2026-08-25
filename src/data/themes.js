@@ -50,6 +50,31 @@ const defaultThemes = {
     cardBorder: "#ffffff",
     cardBorderWidth: 2,
   },
+  gamescom2026: {
+    id: "gamescom2026",
+    label: "Gamescom 2026",
+    logo: "GC",
+    fontFamily: "'Noto Sans SC', 'Microsoft YaHei', Arial, sans-serif",
+    bg:
+      "radial-gradient(circle at 86% 8%, rgba(120, 0, 255, .2), transparent 22%)," +
+      "radial-gradient(circle at 12% 5%, rgba(0, 185, 255, .16), transparent 24%)," +
+      "linear-gradient(145deg, #000000 0%, #0e0e0e 48%, #000000 100%)",
+    panel: "rgba(0, 0, 0, .78)",
+    card: "linear-gradient(100deg, rgba(14, 14, 14, .96), rgba(0, 0, 0, .92))",
+    line: "#00b9ff",
+    glow: "rgba(0, 185, 255, .46)",
+    accent: "#00b9ff",
+    chipBg: "#00b9ff",
+    chipText: "#000000",
+    titleShadow: "0 5px 0 rgba(0, 142, 196, .62), 0 0 22px rgba(0, 185, 255, .34)",
+    decor: "gamescomFragments",
+    cardTitle: "#ffffff",
+    cardText: "#ffffff",
+    cardOverlay: 0,
+    cardBorder: "#00b9ff",
+    cardBorderWidth: 2,
+    cardNumberBg: "linear-gradient(180deg, #66d5ff, #00b9ff)",
+  },
   xbox: {
     id: "xbox",
     label: "Xbox Showcase",

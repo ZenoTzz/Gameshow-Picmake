@@ -674,6 +674,49 @@ textarea:focus {
   height: 38px;
 }
 
+.decor-gamescomFragments {
+  inset: 22px 26px auto auto;
+  width: 260px;
+  height: 270px;
+  opacity: 0.82;
+}
+
+.decor-gamescomFragments span {
+  width: 0;
+  height: 0;
+  border: 0;
+  border-top: 18px solid transparent;
+  border-bottom: 18px solid transparent;
+  border-left: 30px solid #7800ff;
+  filter: drop-shadow(0 0 12px rgba(120, 0, 255, 0.52));
+}
+
+.decor-gamescomFragments span:nth-child(1) {
+  top: 18px;
+  right: 30px;
+  transform: rotate(45deg);
+}
+
+.decor-gamescomFragments span:nth-child(2) {
+  top: 88px;
+  right: 106px;
+  transform: rotate(-20deg) scale(0.72);
+  border-left-color: #00b9ff;
+}
+
+.decor-gamescomFragments span:nth-child(3) {
+  top: 148px;
+  right: 18px;
+  transform: rotate(70deg) scale(0.54);
+}
+
+.decor-gamescomFragments span:nth-child(4) {
+  top: 205px;
+  right: 82px;
+  transform: rotate(12deg) scale(0.38);
+  border-left-color: #66d5ff;
+}
+
 .decor-switch {
   inset: 46px 48px auto auto;
   width: 250px;
@@ -1041,6 +1084,57 @@ textarea:focus {
   color: var(--platform-text, #8a1dc4);
   text-shadow: none;
   box-shadow: 0 3px 0 rgba(24, 10, 72, 0.62), 0 0 8px rgba(255, 255, 255, 0.22);
+}
+
+.theme-gamescom2026::before {
+  background:
+    radial-gradient(circle at 78% 10%, rgba(120, 0, 255, 0.16) 0 2px, transparent 3px) 0 0 / 38px 38px,
+    linear-gradient(132deg, transparent 0 18%, rgba(0, 185, 255, 0.07) 18.2% 19.2%, transparent 19.4% 100%),
+    linear-gradient(148deg, transparent 0 72%, rgba(120, 0, 255, 0.1) 72.2% 75%, transparent 75.2% 100%),
+    repeating-linear-gradient(90deg, transparent 0 118px, rgba(255, 255, 255, 0.018) 118px 120px);
+  opacity: 0.9;
+}
+
+.theme-gamescom2026::after {
+  background: linear-gradient(90deg, transparent 2%, #00b9ff 22%, #7800ff 78%, transparent 98%);
+  box-shadow: 0 0 18px rgba(0, 185, 255, 0.42);
+}
+
+.theme-gamescom2026 .poster-header {
+  min-height: 286px;
+}
+
+.theme-gamescom2026 .game-card {
+  border: 2px solid rgba(0, 185, 255, 0.9);
+  border-left: 10px solid rgba(0, 185, 255, 0.9);
+  border-radius: 10px;
+  border-color: rgba(0, 185, 255, 0.9);
+  background:
+    linear-gradient(rgba(0, 0, 0, var(--card-overlay, 0)), rgba(0, 0, 0, var(--card-overlay, 0))),
+    var(--card);
+  box-shadow:
+    inset 0 0 26px rgba(0, 185, 255, 0.045),
+    0 0 14px rgba(0, 185, 255, 0.14);
+}
+
+.theme-gamescom2026 .card-number {
+  border-color: #66d5ff;
+  border-radius: 7px;
+  color: #000000;
+  text-shadow: none;
+  box-shadow: 0 0 18px rgba(0, 185, 255, 0.32);
+}
+
+.theme-gamescom2026 .game-image {
+  border-color: #00b9ff;
+  box-shadow:
+    inset 0 0 24px rgba(0, 185, 255, 0.06),
+    0 3px 0 rgba(120, 0, 255, 0.72);
+}
+
+.theme-gamescom2026 .info-row svg {
+  color: #00b9ff;
+  filter: drop-shadow(0 0 7px rgba(0, 185, 255, 0.42));
 }
 
 .theme-nintendoDirect::before {
