@@ -607,40 +607,28 @@ textarea:focus {
   filter: drop-shadow(0 0 15px var(--glow));
 }
 
-.decor-symbols span:nth-child(1) {
-  top: 0;
-  right: 40px;
-  width: 105px;
-  height: 105px;
-  transform: rotate(45deg);
-  border-bottom-color: transparent;
-  border-left-color: transparent;
+.decor-symbols {
+  inset: 28px 34px auto auto;
+  width: 260px;
+  height: 240px;
+  color: var(--line);
 }
 
-.decor-symbols span:nth-child(2) {
-  top: 98px;
-  right: 0;
-  width: 70px;
-  height: 70px;
-  border-radius: 50%;
+.decor-symbols svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: drop-shadow(0 0 15px var(--glow));
 }
 
-.decor-symbols span:nth-child(3),
-.decor-symbols span:nth-child(4) {
-  top: 156px;
-  right: 120px;
-  width: 110px;
-  height: 8px;
-  border: 0;
-  background: var(--line);
-}
-
-.decor-symbols span:nth-child(3) {
-  transform: rotate(45deg);
-}
-
-.decor-symbols span:nth-child(4) {
-  transform: rotate(-45deg);
+.decor-symbols .ps-symbol {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
 }
 
 .decor-stage span:nth-child(1) {

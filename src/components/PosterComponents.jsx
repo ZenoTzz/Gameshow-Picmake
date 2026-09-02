@@ -217,6 +217,22 @@ function BrandMark({ logoImage, logoPosition, logoScale, onLogoPositionChange, p
   );
 }
 
+function PlayStationSymbolsDecor() {
+  return (
+    <div aria-hidden="true" className="decor-field decor-symbols">
+      <svg viewBox="0 0 260 240">
+        <rect className="ps-symbol" height="72" rx="3" width="72" x="10" y="84" />
+        <polygon className="ps-symbol" points="130,10 86,84 174,84" />
+        <circle className="ps-symbol" cx="210" cy="120" r="36" />
+        <g className="ps-symbol">
+          <line x1="101" x2="159" y1="170" y2="228" />
+          <line x1="159" x2="101" y1="170" y2="228" />
+        </g>
+      </svg>
+    </div>
+  );
+}
+
 function PosterDecor({ decor }) {
   return (
     <>
@@ -225,15 +241,14 @@ function PosterDecor({ decor }) {
           <img alt="" src={resolveLogoSrc("/logos/Nintendo_Switch_2_logo.svg")} />
         </div>
       ) : null}
-      {decor === "none" ? null : (
-        decor === "nintendoSwitchLogo" ? null : (
-          <div className={`decor-field decor-${decor}`}>
-            <span />
-            <span />
-            <span />
-            <span />
-          </div>
-        )
+      {decor === "symbols" ? <PlayStationSymbolsDecor /> : null}
+      {decor === "none" || decor === "nintendoSwitchLogo" || decor === "symbols" ? null : (
+        <div className={`decor-field decor-${decor}`}>
+          <span />
+          <span />
+          <span />
+          <span />
+        </div>
       )}
       <div className="light-line light-line-a" />
       <div className="light-line light-line-b" />
