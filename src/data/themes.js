@@ -16,7 +16,7 @@ const defaultThemes = {
     chipBg: "#1267e8",
     chipText: "#ffffff",
     titleShadow: "0 5px 0 rgba(0, 34, 89, .85), 0 0 24px rgba(76, 170, 255, .5)",
-    decor: "symbols",
+    decor: "none",
     cardTitle: "#ffffff",
     cardText: "#ffffff",
     cardOverlay: 0,
