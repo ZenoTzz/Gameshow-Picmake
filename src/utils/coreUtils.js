@@ -72,7 +72,7 @@ export const platformColors = {
   "Switch 2": { bg: "#e60012", text: "#ffffff" },
   PC: { bg: "#27272a", text: "#ffffff" },
   Mac: { bg: "#f5f5f7", text: "#111827" },
-  移动端: { bg: "#ff9f1c", text: "#211200" },
+  移动端: { bg: "#ff9f1c", text: "#ffffff" },
   iOS: { bg: "#f5f5f7", text: "#111827" },
   Android: { bg: "#3ddc84", text: "#052e16" },
 };
