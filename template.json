@@ -25,6 +25,10 @@
       "x": 72,
       "y": 72
     },
+    "gamescom2026": {
+      "x": 72,
+      "y": 72
+    },
     "xbox": {
       "x": 72,
       "y": 72
@@ -45,6 +49,14 @@
       "x": 72,
       "y": 72
     }
+  },
+  "logoScales": {
+    "stateOfPlay": 100,
+    "summerGameFest": 100,
+    "gamescom2026": 100,
+    "xbox": 100,
+    "nintendoDirect": 100,
+    "nintendoDirectWarm": 100
   },
   "footerLogoImage": "/template-assets/4f4b6636cb82cda4860a7ea7ebe3b351aba1f51338236d073f0e8066cf6aee9f.png",
   "footerCreditText": "信息整理",
@@ -67,6 +79,11 @@
       "title": "发布会重点大作",
       "subtitle": "发售日期 / 登陆平台 / 关键信息速览"
     },
+    "gamescom2026": {
+      "eventLabel": "gamescom 2026",
+      "title": "ONL 重磅大作",
+      "subtitle": "发售日期 / 登陆平台 / 关键信息速览"
+    },
     "xbox": {
       "eventLabel": "Xbox Games Showcase",
       "title": "发布会重点内容",
@@ -81,229 +98,190 @@
       "eventLabel": "Nintendo Direct",
       "title": "发布会重磅直面会",
       "subtitle": "发售日期 / 登陆平台 / 关键信息速览"
-    },
-    "custom_1782789419948": {
-      "eventLabel": "7月重磅游戏",
-      "title": "发售信息一览",
-      "subtitle": "发售日期 / 登陆平台 / 关键信息速览"
-    },
-    "custom_1782794419020": {
-      "eventLabel": "State of Play",
-      "title": "发布会重磅大作",
-      "subtitle": "发售日期 / 登陆平台 / 关键信息速览"
     }
   },
   "games": [
     {
-      "id": "ecaf75ec-425b-4e32-a3b7-06900b1a9804",
-      "title": "塞尔达传说 时之笛 重制版",
-      "date": "2026年",
+      "id": "f22879c0-4cd6-4423-abc6-dbf994f0cbc3",
+      "title": "最终幻想7 Revelation",
+      "date": "2027年4月8日",
       "platforms": [
-        "Switch 2"
+        "PS5",
+        "XBOX Series",
+        "Switch 2",
+        "PC"
       ],
-      "info": "在这里补充预购、价格、试玩、发售窗口或其他关键信息。",
-      "image": "/template-assets/580c83782826000d44c518407c530691e8af74aee841d3a090433793a6f78925.png"
+      "info": "足以毁灭星球的陨石带来威胁，巨大的星球守护者兵器即将觉醒，战火也愈发激烈。在迈向终焉的世界中，克劳德与伙伴们将挺身而出，为了拯救星球，也为了替这场漫长的战斗画下句点。",
+      "image": "/template-assets/0b87e2aabad37c72c6522525bcc61de65ef1af57e84ce78eca36ab01efbb3ef4.jpg"
     },
     {
-      "id": "3969526e-5c28-4d59-b3da-5b314d40a8ad",
-      "title": "黄昏之血（The Duskbloods）",
-      "date": "2026年夏进行封闭网络测试，正式版发售日期未定",
+      "id": "f88a9999-2052-4923-9e83-5792351416c1",
+      "title": "羊蹄山之魂 完整版",
+      "date": "2026年10月1日",
       "platforms": [
-        "Switch 2"
+        "PS5"
       ],
-      "info": "在这里补充预购、价格、试玩、发售窗口或其他关键信息。",
-      "image": "/template-assets/9793c492a25e9293e0d11b6178950741070c04ad5bee730016fafa7e328868d8.jpg"
+      "info": "《羊蹄山之魂 完整版》包含全新剧情扩展内容「弦续关原」、战斗生存模式「无尽追缉」、北极星护身符、蛇之铠甲、天照大神护身符等内容，售价为568港币。拥有原版游戏的玩家可购买升级包将游戏升级至完整版，升级包售价为108港币。",
+      "image": "/template-assets/b846b0f670fbbec3d9241a55508cb258b7a6322ef98638ae0768fe22d64768b7.jpg"
     },
     {
-      "id": "2fc2ffcc-4e0a-4663-84dd-988c7ee76495",
-      "title": "火焰纹章 万缕千丝",
-      "date": "2026年9月17日",
+      "id": "cd8e2bc5-8d72-4d54-980d-36e61698a165",
+      "title": "怪物猎人 荒野：凌越",
+      "date": "2027年",
       "platforms": [
-        "Switch 2"
+        "PS5",
+        "XBOX Series",
+        "PC"
       ],
-      "info": "在这里补充预购、价格、试玩、发售窗口或其他关键信息。",
-      "image": "/template-assets/c1ba758fffee9aeec4fbf322dd8255b4f373ead5692d848d5bde2d56186f4c1c.png"
+      "info": "《凌越》将会延续《怪物猎人 荒野》主线剧情，追加全新故事、新的原野和怪物、猎人动作，以及新增「大师等级」任务等级等各种内容。",
+      "image": "/template-assets/a08cd22c3f298e609459a6f7816e983c7ed825d1ab46956ba3025e30296f1e38.jpg"
     },
     {
-      "id": "b44b24cf-efa4-447e-961a-9c2f4dc78405",
-      "title": "王国之心4",
+      "id": "2b0d2a74-300b-4d72-9753-436eaf6da25a",
+      "title": "GTA6 限定款DualSense",
+      "date": "2026年11月19日",
+      "platforms": [
+        "PS5"
+      ],
+      "info": "受《GTA 6》启发，这两款限量版DualSense无线手柄完美复刻了罪恶城的风格与奢华。手柄采用闪耀的涂层，饰有纹理化的棕榈叶图案，并印有《GTA》Logo，向现代罪恶城致以大胆致敬。",
+      "image": "/template-assets/fb30e52f06bfddf3b85abfdd03d15249c1635efac2a6705f93742e1b3e1c7906.jpg"
+    },
+    {
+      "id": "95970815-cb2b-4455-9619-65a15e6f29bc",
+      "title": "沙罗周期 「Zenith」内容更新",
+      "date": "未定",
+      "platforms": [
+        "PS5"
+      ],
+      "info": "「Zenith」是《沙罗周期》即将推出的免费内容更新，它不仅加入了可重复游玩的游戏模式，还新增了多种视觉与操控选项，旨在让更多玩家能够体验游戏。",
+      "image": "/template-assets/9cdac612940bae17507312ea3425b17e25274235e3e5b08b119938abacf3fe9a.jpg"
+    },
+    {
+      "id": "f32980fa-045d-4ee8-bac3-dc08c3972864",
+      "title": "高达 异轨征途",
+      "date": "2027年3月5日",
+      "platforms": [
+        "PS5",
+        "XBOX Series",
+        "PC"
+      ],
+      "info": "《高达 异轨征途》是能体验高速自在的高机动战斗的动作游戏。玩家将化身螺旋高达驾驶「雷克斯」，和搭档哈啰「惟」一起挺身面对未知敌人带来的威胁。",
+      "image": "/template-assets/69a281ec2b9d768e5a07da669d972a2f2b11b8fa24991944dfc033bfda32cdcf.jpg"
+    },
+    {
+      "id": "5efdd989-04b5-4f4b-ac6f-de91cc150f92",
+      "title": "直到黎明2",
+      "date": "2027年1月28日",
+      "platforms": [
+        "PS5",
+        "XBOX Series",
+        "PC"
+      ],
+      "info": "主角团来到一个偏远小岛，岛上萦绕着一名女子关于恶魔与灵异现象的惊悚传闻。当传闻开始以恐怖的方式接连成真，这群人唯有战胜内心的恐惧，克服挡在眼前的重重阻碍，才能活着逃离小岛。他们的性命由您掌控。慎重做好每一个选择。",
+      "image": "/template-assets/3c743a8bf9d5034121cfd37ab1ab75bf9517c7886c1d3c50f3957025150860d8.jpg"
+    },
+    {
+      "id": "3a440e9e-53d7-48f1-b77d-a8a57ad36f96",
+      "title": "漫威金刚狼",
+      "date": "2026年9月15日",
+      "platforms": [
+        "PS5"
+      ],
+      "info": "为了变种人的未来，金刚狼必须与世界各地的变种人并肩作战，足迹遍及加拿大、日本，以及漫威宇宙中的岛国马德里坡。《漫威金刚狼》将于9月15日登陆PS5平台。",
+      "image": "/template-assets/3ea764706a4b998e4b91cd5d5d5d7f9bb3358475cb2261d2e36f1216e62ff7f0.jpg"
+    },
+    {
+      "id": "0087b8c7-5b3a-48b3-98d2-0771d810628b",
+      "title": "跑车浪漫旅7 「Spec IV」更新",
+      "date": "2026年底",
+      "platforms": [
+        "PS5"
+      ],
+      "info": "本次「Spec IV」更新将于今年晚些时候分两部分推出，更新内容包括新赛道、新车辆、家庭模式等，更多详细信息将于2026年10月和12月陆续公布。",
+      "image": "/template-assets/50dbef48b804adae105cd0f80bffe06351441dbc1a9ae35a17bebeba086857e0.jpg"
+    },
+    {
+      "id": "dcc635c7-060c-40a8-8aa7-f98e2ea199bf",
+      "title": "地铁2039",
+      "date": "2027年2月4日",
+      "platforms": [
+        "PS5",
+        "XBOX Series",
+        "PC"
+      ],
+      "info": "后末日之下，踏上一场直抵莫斯科黑暗腹地的苦痛之旅，在事关地铁存亡的争斗中寻找出路。游戏在PS5 Pro上将以4K、60FPS的规格运行，包含 4K、60FPS 以及光线追踪的性能模式将在PS5、PS5 Pro和XBOX Series X上全面提供。",
+      "image": "/template-assets/fdc15ef5e51ff70d504883905e2921f1a23b28f90f114c572546e63656e62ef6.jpg"
+    },
+    {
+      "id": "5e824505-7ed2-4334-ac83-e4d3b35d0fc4",
+      "title": "红色沙漠：增强版  DLC「未知征途」",
+      "date": "2026年10月15日",
+      "platforms": [
+        "PS5",
+        "XBOX Series",
+        "PC"
+      ],
+      "info": "探索帕卫尔的大陆与大洋，体验全新冒险。寻找机遇，再次写下新篇章。无论是陆地还是海洋，更强大的宿敌与全新的机遇正等待着挑战者到来！为了应对瞬息万变的战局，制定不同战略以迎接更加激烈的战斗吧。",
+      "image": "/template-assets/b2747e0ce4d7c41ef4bf6a365d20331117bdbfec7019227b79d62875866c2b15.jpg"
+    },
+    {
+      "id": "3f5625d4-6ba2-4c77-8336-5bf3e4899cfa",
+      "title": "最终幻想 RESONANCE",
+      "date": "2026年10月22日",
+      "platforms": [
+        "PS5",
+        "XBOX Series",
+        "Switch",
+        "Switch 2",
+        "PC"
+      ],
+      "info": "曾经爆发的惨烈战争、能够操控拥有强大力量的神秘存在「幻兽」的谜之少女、以及破坏各地「水晶」的铠甲男。一切错综交织，揭开一段跨越数百年的复仇与牵绊的故事。试玩Demo将于今日上线。",
+      "image": "/template-assets/49c178beef7e257a076f6163301f2b6a9c585050682e61da98d839898a988544.jpg"
+    },
+    {
+      "id": "40e1e184-5ae0-4c0d-98a7-4519026d017d",
+      "title": "乐高「PlayStation」积木套装",
+      "date": "2026年10月4日",
+      "platforms": [
+        "现已支持在LEGO.com加入愿望单"
+      ],
+      "info": "乐高与索尼强强联手，共同致敬传奇主机——初代PlayStation。套装售价179.99美元，共1911块积木。",
+      "image": "/template-assets/595821059087f23177cbb18ce167a45cad4ae92342353b9fb830e69623ddd3e8.jpg"
+    },
+    {
+      "id": "15f43b54-0697-486c-86c6-1d0f4b9702c6",
+      "title": "电影 生化危机：爆发夜",
+      "date": "2026年9月18日",
+      "platforms": [
+        "北美院线"
+      ],
+      "info": "电影《生化危机：爆发夜》改编自卡普空开发的《生化危机》系列游戏。受命前往浣熊市的医疗快递员，在运送神秘包裹的途中，意外卷入全面爆发的病毒危机。",
+      "image": "/template-assets/bd5bf69c0b643e7fa2461fbac20beca839f9b487103159bc7560089a8dca08f9.jpg"
+    },
+    {
+      "id": "e4810b78-de51-4d04-bdc1-dfc0351a090c",
+      "title": "Maneater 2",
+      "date": "2027年",
+      "platforms": [
+        "PS5",
+        "XBOX Series",
+        "Switch 2",
+        "PC"
+      ],
+      "info": "你将化身鲨鱼，在海王星王国一场仅限受邀者参加的预览活动中大快朵颐、四处探索、不断进化，并设法逃出生天。",
+      "image": "/template-assets/b02f5b2a669e7c15fb5f3e520ed721ac01df3a1743aab60b1236a10ff918a472.jpg"
+    },
+    {
+      "id": "538d3c2e-8133-4348-b3b9-2f3cd663913b",
+      "title": "Rhapsody in Scarlet",
       "date": "未定",
       "platforms": [
         "PS5",
-        "Xbox Series",
-        "Switch 2",
+        "XBOX Series",
         "PC"
       ],
-      "info": "在这里补充预购、价格、试玩、发售窗口或其他关键信息。",
-      "image": "/template-assets/8ec81a9113b97e623abd3cdf68c2cd0c4596a4b6c12916d24acebf6805ee39cf.png"
-    },
-    {
-      "id": "dea11862-5111-4e52-99c6-a77466486fd4",
-      "title": "异度神剑 GENESIS",
-      "date": "2027年",
-      "platforms": [
-        "Switch 2"
-      ],
-      "info": "在这里补充预购、价格、试玩、发售窗口或其他关键信息。",
-      "image": "/template-assets/31f46dc9bfa98f2ced7860775fc2c32668b6c50239285476d7ef592cd508a202.png"
-    },
-    {
-      "id": "e507a295-fdb8-4d84-85a1-99ef70624326",
-      "title": "宝可梦pokopia扩充票",
-      "date": "2026年6月9日开放购买，第一弹今年夏季更新",
-      "platforms": [
-        "Switch 2"
-      ],
-      "info": "在这里补充预购、价格、试玩、发售窗口或其他关键信息。",
-      "image": "/template-assets/2ad4b51aa1d18455b4449f138a658045c71b4889faed7dd4c76bce61e8f12756.png"
-    },
-    {
-      "id": "e2049f23-3bc2-4215-b2b5-e125c41bc82c",
-      "title": "DELTARUNE 第五章",
-      "date": "2026年6月24日",
-      "platforms": [
-        "Switch",
-        "Switch 2"
-      ],
-      "info": "在这里补充预购、价格、试玩、发售窗口或其他关键信息。",
-      "image": "/template-assets/733598892e8b16642a50a0cd7693063b7076e05ce3949a4b8d74871f52d2003f.png"
-    },
-    {
-      "id": "eee9a1ae-8859-47bc-b6a5-f951a790d1bb",
-      "title": "剑星",
-      "date": "2026年",
-      "platforms": [
-        "Switch 2"
-      ],
-      "info": "在这里补充预购、价格、试玩、发售窗口或其他关键信息。",
-      "image": "/template-assets/25f26e5071b1c646e8f4e203d208359f9d408db0a917b3b95bcaa89dd168204a.png"
-    },
-    {
-      "id": "d19fe278-a599-452d-b4e6-43e9618c37c3",
-      "title": "Switch 2版异度神剑123",
-      "date": "一代6月9日升级，二代7月30日升级，三代12月3日升级",
-      "platforms": [
-        "Switch 2"
-      ],
-      "info": "在这里补充预购、价格、试玩、发售窗口或其他关键信息。",
-      "image": "/template-assets/78e067347806013f0b811e62477b91a3f8a9b0ba1b35f7b7af441bd9ab4b05c3.jpg"
-    },
-    {
-      "id": "1eab5bbb-6fe1-48a5-b109-f3c8848bc187",
-      "title": "斯普拉遁涂击队",
-      "date": "2026年6月30日 专场直面会",
-      "platforms": [
-        "Switch 2"
-      ],
-      "info": "在这里补充预购、价格、试玩、发售窗口或其他关键信息。",
-      "image": "/template-assets/543782be40796dfcf4b1f4c8857fb6a7140b3837d39977dd92e7668980518110.png"
-    },
-    {
-      "id": "c290f370-7101-4996-9a69-157c485fb500",
-      "title": "斯普拉遁3 新祭典活动",
-      "date": "2026年7月10日~2026年7月12日",
-      "platforms": [
-        "Switch",
-        "Switch 2"
-      ],
-      "info": "在这里补充预购、价格、试玩、发售窗口或其他关键信息。",
-      "image": "/template-assets/8c534ba9647ad8199eff303cce9572649bb964d47bb7f797b445cc8a88631515.png"
-    },
-    {
-      "id": "4d0da2b1-ff26-4011-8d4d-77085ea9a65a",
-      "title": "星际火狐（试玩版今日上线）",
-      "date": "2026年6月25日",
-      "platforms": [
-        "Switch 2"
-      ],
-      "info": "在这里补充预购、价格、试玩、发售窗口或其他关键信息。",
-      "image": "/template-assets/6f4f104726b9ae2fb2320ed31af91aadb72dbec62b42657dd047f560457f16f5.jpg"
-    },
-    {
-      "id": "c9995f46-5655-4c27-bcd5-04a1f9957b7b",
-      "title": "Nintendo Sport Resort",
-      "date": "2026年10月22日",
-      "platforms": [
-        "Switch 2"
-      ],
-      "info": "在这里补充预购、价格、试玩、发售窗口或其他关键信息。",
-      "image": "/template-assets/4dc6f4df56a6e3fbb3b5730483fc94fc7f1ff31791f7019a505b2f003fe20185.png"
-    },
-    {
-      "id": "a6e1a7e5-cea5-45d2-88d5-65d9b8f01e55",
-      "title": "Joy-Con 2手柄新配色",
-      "date": "2026年7月23日",
-      "platforms": [
-        "Switch 2"
-      ],
-      "info": "在这里补充预购、价格、试玩、发售窗口或其他关键信息。",
-      "image": "/template-assets/44a7ff1a9903f42486f1bccec3ba86babc0591d565f78b4ea16894c438959b26.png"
-    },
-    {
-      "id": "5cac3cda-8cd6-486a-a229-56c6ab77302c",
-      "title": "鬼武者 Way of the Sword",
-      "date": "2026年9月25日",
-      "platforms": [
-        "PS5",
-        "Xbox Series",
-        "Switch 2",
-        "PC"
-      ],
-      "info": "在这里补充预购、价格、试玩、发售窗口或其他关键信息。",
-      "image": "/template-assets/8d0dcbba62641ef28fbb4bf5b2f6e67b283e803c2e71c7c6dc229645129b5d79.png"
-    },
-    {
-      "id": "d467a4d3-73cb-4425-ae5b-3814bc0048f9",
-      "title": "龙之信条2：Dark Arisen",
-      "date": "2026年10月9日",
-      "platforms": [
-        "Switch 2"
-      ],
-      "info": "在这里补充预购、价格、试玩、发售窗口或其他关键信息。",
-      "image": "/template-assets/2142011f3ffc2bb0fa9a642958b93ed700796959ebd35a1eb237040434f16ccd.jpg"
-    },
-    {
-      "id": "86de7030-6c7d-4ba0-94c7-306402a0b336",
-      "title": "堕落之主2",
-      "date": "2026年秋",
-      "platforms": [
-        "PS5",
-        "Xbox Series",
-        "Switch 2",
-        "PC"
-      ],
-      "info": "在这里补充预购、价格、试玩、发售窗口或其他关键信息。",
-      "image": "/template-assets/13ce782b90ca23631cc6cca2c8f02d910ae22bd2bdc6d37a903e8e7be2b08b1d.png"
-    },
-    {
-      "id": "3b0b08e3-7149-48d3-9e38-61489390f171",
-      "title": "匹诺曹的谎言：完全版",
-      "date": "2026年8月6日（数字版），2026年10月2日（实体版）",
-      "platforms": [
-        "Switch 2"
-      ],
-      "info": "在这里补充预购、价格、试玩、发售窗口或其他关键信息。",
-      "image": "/template-assets/826ceffc59cd392d0c944779cfc98ddd5ff902a781ed20d22c0898582d3253da.jpg"
-    },
-    {
-      "id": "3a91bbc4-1fa8-4768-98fb-962bb94d1b59",
-      "title": "鬼泣5：Devil Hunter版",
-      "date": "2026年6月23日",
-      "platforms": [
-        "Switch 2"
-      ],
-      "info": "在这里补充预购、价格、试玩、发售窗口或其他关键信息。",
-      "image": "/template-assets/98b724aee7b5b95aca430772acbc82613547f4508fd49c1aea468adfb2146c3c.png"
-    },
-    {
-      "id": "335eed33-ecff-4b47-9e01-fed6700f1c34",
-      "title": "暗喻幻想：ReFantazio",
-      "date": "2026年11月12日",
-      "platforms": [
-        "Switch 2"
-      ],
-      "info": "在这里补充预购、价格、试玩、发售窗口或其他关键信息。",
-      "image": "/template-assets/464177b00d052cf6763b84155b72f6a940f59a8ca37f7c4983189e37f6dc8649.jpg"
+      "info": "以爵士乐盛行的20世纪1920年代纽约为舞台，魔法师艾莉·迈尔斯将挺身而出，对抗足以撼动世界的威胁。",
+      "image": "/template-assets/efb7c498c1dedc4f7c6ed28f4fa4597a4f006e06c06c7bf7e300a0313909272b.jpg"
     }
   ]
 }
