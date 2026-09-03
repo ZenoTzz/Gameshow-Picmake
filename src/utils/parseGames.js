@@ -6,6 +6,7 @@ const platformAliases = [
   ["PS4", /\b(PS4|PlayStation\s*4)\b/i],
   ["PC", /\bPC\b|Steam|Epic|Windows/i],
   ["Mac", /\bMac\b|macOS/i],
+  ["移动端", /移动端|手游|\bMobile\b/i],
   ["iOS", /\biOS\b|iPhone|iPad/i],
   ["Android", /\bAndroid\b/i],
 ];

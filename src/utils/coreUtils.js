@@ -1,7 +1,7 @@
 import { blankGame, initialPoster } from "../data/sampleData";
 import { themes } from "../data/themes";
 
-export const platformOptions = ["PS5", "XBOX Series", "Switch", "Switch 2", "PC", "Mac", "iOS", "Android"];
+export const platformOptions = ["PS5", "XBOX Series", "Switch", "Switch 2", "PC", "Mac", "移动端", "iOS", "Android"];
 export const baseUrl = import.meta.env.BASE_URL ?? "/";
 export const templateStorageKey = "gameshow-pic-template-v1";
 export const templateHistoryStorageKey = "gameshow-pic-template-history-v1";
@@ -72,6 +72,7 @@ export const platformColors = {
   "Switch 2": { bg: "#e60012", text: "#ffffff" },
   PC: { bg: "#27272a", text: "#ffffff" },
   Mac: { bg: "#f5f5f7", text: "#111827" },
+  移动端: { bg: "#ff9f1c", text: "#211200" },
   iOS: { bg: "#f5f5f7", text: "#111827" },
   Android: { bg: "#3ddc84", text: "#052e16" },
 };
@@ -513,7 +514,9 @@ export function resolveLogoSrc(src) {
 export function normalizeGamePlatforms(platforms) {
   const normalizePlatformName = (platform) => {
     const normalizedPlatform = String(platform).trim();
-    return /^xbox\s+series$/i.test(normalizedPlatform) ? "XBOX Series" : normalizedPlatform;
+    if (/^xbox\s+series$/i.test(normalizedPlatform)) return "XBOX Series";
+    if (/^(移动端|mobile)$/i.test(normalizedPlatform)) return "移动端";
+    return normalizedPlatform;
   };
 
   if (Array.isArray(platforms)) {
