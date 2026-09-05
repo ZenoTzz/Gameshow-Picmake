@@ -41,6 +41,11 @@ export const defaultThemeText = {
     title: "发布会重磅直面会",
     subtitle: defaultSubtitle,
   },
+  nintendoDirectSoft: {
+    eventLabel: "Nintendo Direct",
+    title: "发布会重点内容",
+    subtitle: defaultSubtitle,
+  },
   nintendoDirectWarm: {
     eventLabel: "Nintendo Direct",
     title: "发布会重磅直面会",

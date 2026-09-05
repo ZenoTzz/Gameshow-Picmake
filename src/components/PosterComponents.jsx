@@ -5,7 +5,7 @@ import * as Core from "../utils/coreUtils";
 const { getPlatformColor, resolveLogoSrc, getThemeText, getPosterFonts, defaultLogoPosition, defaultInfoFontWeight } = Core;
 
 const builtinThemeIds = new Set([
-  "stateOfPlay", "summerGameFest", "gamescom2026", "xbox", "nintendoDirect", "nintendoDirectWarm",
+  "stateOfPlay", "summerGameFest", "gamescom2026", "xbox", "nintendoDirect", "nintendoDirectWarm", "nintendoDirectSoft",
 ]);
 
 function themeClassNames(theme) {

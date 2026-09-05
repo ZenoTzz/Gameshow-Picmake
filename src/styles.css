@@ -1391,6 +1391,64 @@ textarea:focus {
   color: rgba(255, 255, 255, 0.76);
 }
 
+.theme-nintendoDirectSoft::before,
+.theme-nintendoDirectSoft::after,
+.theme-nintendoDirectSoft .light-line {
+  display: none;
+}
+
+.theme-nintendoDirectSoft .poster-header {
+  min-height: 286px;
+}
+
+.theme-nintendoDirectSoft .logo-slot,
+.theme-nintendoDirectSoft .event-label,
+.theme-nintendoDirectSoft .headline h2 {
+  color: #ffffff;
+  text-shadow: var(--title-shadow);
+}
+
+.theme-nintendoDirectSoft .game-card {
+  border-radius: 10px;
+  box-shadow: none;
+}
+
+.theme-nintendoDirectSoft .card-number {
+  border-color: transparent;
+  border-radius: 7px;
+  box-shadow: none;
+  text-shadow: none;
+}
+
+.theme-nintendoDirectSoft .game-image {
+  background: #e4e4e4;
+  box-shadow: none;
+}
+
+.theme-nintendoDirectSoft .game-image span {
+  color: #666666;
+}
+
+.theme-nintendoDirectSoft .game-copy h3,
+.theme-nintendoDirectSoft .info-row,
+.theme-nintendoDirectSoft .poster-credit {
+  text-shadow: none;
+}
+
+.theme-nintendoDirectSoft .info-row svg,
+.theme-nintendoDirectSoft .footer-logo {
+  filter: none;
+}
+
+.theme-nintendoDirectSoft .platforms span {
+  box-shadow: none;
+}
+
+.theme-nintendoDirectSoft .footer-logo-placeholder {
+  border-color: rgba(255, 255, 255, 0.42);
+  color: rgba(255, 255, 255, 0.76);
+}
+
 /* A copied built-in keeps its original layout and decoration until a field is
    edited. Apply the same explicit overrides to preview, export and measurement. */
 :is(.poster, .measurement-layer):is(.theme-summerGameFest, .theme-nintendoDirect, .theme-nintendoDirectWarm):is([data-theme-overrides~="card"], [data-theme-overrides~="cardOverlay"]) .game-card {
