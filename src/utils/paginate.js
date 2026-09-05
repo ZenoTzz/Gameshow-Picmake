@@ -1,5 +1,5 @@
-export const PAGE_CONTENT_HEIGHT = 1540;
-export const FULL_PAGE_CONTENT_HEIGHT = 1836;
+export const PAGE_CONTENT_HEIGHT = 1516;
+export const FULL_PAGE_CONTENT_HEIGHT = 1812;
 export const CARD_GAP = 8;
 
 export function paginateGames(games, heights = [], options = {}) {

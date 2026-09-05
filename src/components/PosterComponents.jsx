@@ -1,17 +1,44 @@
-import React, { useRef, useState } from "react";
-import { CalendarDays, Gamepad2, Info, ImagePlus } from "lucide-react";
+import React, { useRef, useState, useLayoutEffect } from "react";
+import { CalendarDays, Gamepad2, Info } from "lucide-react";
 import * as Core from "../utils/coreUtils";
-import { themes } from "../data/themes";
 
 const { getPlatformColor, resolveLogoSrc, getThemeText, getPosterFonts, defaultLogoPosition, defaultInfoFontWeight } = Core;
+
+const builtinThemeIds = new Set([
+  "stateOfPlay", "summerGameFest", "gamescom2026", "xbox", "nintendoDirect", "nintendoDirectWarm",
+]);
+
+function themeClassNames(theme) {
+  const inherited = builtinThemeIds.has(theme.baseThemeId) && theme.baseThemeId !== theme.id
+    ? ` theme-${theme.baseThemeId}`
+    : "";
+  return `theme-${theme.id}${inherited}`;
+}
+
+function themeOverrides(theme) {
+  return Array.isArray(theme.styleOverrides) ? theme.styleOverrides.join(" ") : undefined;
+}
+
+function cardVariables(theme) {
+  return {
+    "--card-title": theme.cardTitle || "#ffffff",
+    "--card-text": theme.cardText || "#ffffff",
+    "--card-overlay": theme.cardOverlay ?? 0,
+    "--card-border": theme.cardBorder || theme.line || "#ffffff",
+    "--card-border-width": `${theme.cardBorderWidth ?? 2}px`,
+    "--card-number-bg": theme.cardNumberBg || `linear-gradient(180deg, color-mix(in srgb, ${theme.chipBg}, #ffffff 8%), color-mix(in srgb, ${theme.chipBg}, #001b4d 28%))`,
+  };
+}
 
 function MeasurementLayer({ fonts, games, infoFontSize, infoFontWeight, measureRef, showGameInfo, theme }) {
   return (
     <div
       aria-hidden="true"
-      className={`measurement-layer theme-${theme.id}`}
+      className={`measurement-layer ${themeClassNames(theme)}`}
+      data-theme-overrides={themeOverrides(theme)}
       ref={measureRef}
       style={{
+        ...cardVariables(theme),
         "--card": theme.card,
         "--line": theme.line,
         "--glow": theme.glow,
@@ -29,7 +56,7 @@ function MeasurementLayer({ fonts, games, infoFontSize, infoFontWeight, measureR
     >
       {games.map((game, index) => (
         <GameCard
-          key={`measure-${index}-${game.title}`}
+          key={game.id}
           game={game}
           infoFontSize={infoFontSize}
           number={index + 1}
@@ -51,7 +78,30 @@ function PosterPage({
   posterRef,
   theme,
   isLongPoster,
+  selectedGameId,
+  onGameSelect,
 }) {
+  const localPosterRef = useRef(null);
+  useLayoutEffect(() => {
+    const node = localPosterRef.current;
+    const wrapper = node?.parentElement;
+    if (!wrapper?.matches(".poster-scale-wrap, .long-poster-preview")) return;
+    const container = wrapper.parentElement;
+    const resize = () => {
+      const scale = Math.min(0.5, container.clientWidth / 1440);
+      const transform = `scale(${scale})`;
+      const width = `${1440 * scale}px`;
+      const height = `${node.offsetHeight * scale}px`;
+      if (node.style.transform !== transform) node.style.transform = transform;
+      if (wrapper.style.width !== width) wrapper.style.width = width;
+      if (wrapper.style.height !== height) wrapper.style.height = height;
+    };
+    const observer = new ResizeObserver(resize);
+    observer.observe(container);
+    observer.observe(node);
+    resize();
+    return () => observer.disconnect();
+  }, []);
   const themeText = getThemeText(poster, poster.theme);
   const logoPosition = poster.logoPositions?.[poster.theme] ?? defaultLogoPosition;
   const logoScale = poster.logoScales?.[poster.theme] ?? Core.defaultLogoScale;
@@ -60,23 +110,23 @@ function PosterPage({
 
   return (
     <div
-      className={`poster theme-${theme.id} ${isFullCardPage ? "full-card-page" : ""} ${isLongPoster ? "long-poster" : ""}`}
-      ref={posterRef}
+      className={`poster ${themeClassNames(theme)} ${isFullCardPage ? "full-card-page" : ""} ${isLongPoster ? "long-poster" : ""}`}
+      data-theme-overrides={themeOverrides(theme)}
+      ref={(node) => {
+        localPosterRef.current = node;
+        if (typeof posterRef === "function") posterRef(node);
+        else if (posterRef) posterRef.current = node;
+      }}
       style={{
         "--poster-bg": theme.bg,
         "--panel": theme.panel,
+        ...cardVariables(theme),
         "--card": theme.card,
         "--line": theme.line,
         "--glow": theme.glow,
         "--accent": theme.accent,
         "--chip-bg": theme.chipBg,
         "--chip-text": theme.chipText,
-        "--card-title": theme.cardTitle || "#ffffff",
-        "--card-text": theme.cardText || "#ffffff",
-        "--card-overlay": theme.cardOverlay ?? 0,
-        "--card-border": theme.cardBorder || theme.line || "#ffffff",
-        "--card-border-width": theme.cardBorderWidth !== undefined ? theme.cardBorderWidth + "px" : "2px",
-        "--card-number-bg": theme.cardNumberBg || `linear-gradient(180deg, color-mix(in srgb, ${theme.chipBg}, #ffffff 8%), color-mix(in srgb, ${theme.chipBg}, #001b4d 28%))`,
         "--title-shadow": theme.titleShadow,
         "--poster-font": fonts.poster,
         "--header-font": fonts.header,
@@ -117,11 +167,13 @@ function PosterPage({
       <section className={`poster-list ${fillSpace ? "fill-space" : ""}`}>
         {pageGames.map((game, index) => (
           <GameCard
-            key={`${game.title}-${index}`}
+            key={game.id}
             game={game}
             infoFontSize={infoFontSize}
             number={pageOffset + index + 1}
             showGameInfo={poster.showGameInfo ?? true}
+            isSelected={game.id === selectedGameId}
+            onGameSelect={onGameSelect}
           />
         ))}
       </section>
@@ -130,13 +182,14 @@ function PosterPage({
 }
 
 function BrandMark({ logoImage, logoPosition, logoScale, onLogoPositionChange, posterRef }) {
+  const interactive = Boolean(posterRef && onLogoPositionChange);
   const markRef = useRef(null);
   const dragRef = useRef(null);
   const [isDragging, setIsDragging] = useState(false);
 
   function getCanvasPoint(event) {
-    const posterRect = posterRef.current?.getBoundingClientRect();
-    if (!posterRect) return null;
+    const posterRect = posterRef?.current?.getBoundingClientRect();
+    if (!posterRect || !posterRect.width) return null;
 
     const scale = posterRect.width / 1440;
     return {
@@ -147,7 +200,7 @@ function BrandMark({ logoImage, logoPosition, logoScale, onLogoPositionChange, p
 
   function clampLogoPosition(position) {
     const markRect = markRef.current?.getBoundingClientRect();
-    const posterRect = posterRef.current?.getBoundingClientRect();
+    const posterRect = posterRef?.current?.getBoundingClientRect();
     const scale = posterRect ? posterRect.width / 1440 : 1;
     const logoWidth = markRect ? markRect.width / scale : 108;
     const logoHeight = markRect ? markRect.height / scale : 78;
@@ -159,6 +212,7 @@ function BrandMark({ logoImage, logoPosition, logoScale, onLogoPositionChange, p
   }
 
   function handlePointerDown(event) {
+    if (!interactive) return;
     event.preventDefault();
     const point = getCanvasPoint(event);
     if (!point) return;
@@ -199,14 +253,25 @@ function BrandMark({ logoImage, logoPosition, logoScale, onLogoPositionChange, p
       aria-label="Logo"
       className={`brand-mark logo-slot ${isDragging ? "is-dragging" : ""}`}
       ref={markRef}
-      role="button"
+      role={interactive ? "button" : undefined}
       style={{
+        cursor: interactive ? "grab" : "default",
+        pointerEvents: interactive ? "auto" : "none",
         left: `${logoPosition.x}px`,
         top: `${logoPosition.y}px`,
         width: `${108 * (logoScale / 100)}px`,
         height: `${78 * (logoScale / 100)}px`,
       }}
-      tabIndex={0}
+      tabIndex={interactive ? 0 : undefined}
+      onKeyDown={(event) => {
+        if (!interactive || !["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(event.key)) return;
+        event.preventDefault();
+        const step = event.shiftKey ? 10 : 1;
+        onLogoPositionChange(clampLogoPosition({
+          x: logoPosition.x + (event.key === "ArrowRight" ? step : event.key === "ArrowLeft" ? -step : 0),
+          y: logoPosition.y + (event.key === "ArrowDown" ? step : event.key === "ArrowUp" ? -step : 0),
+        }));
+      }}
       onPointerCancel={finishDrag}
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
@@ -256,17 +321,36 @@ function PosterDecor({ decor }) {
   );
 }
 
-function GameCard({ game, infoFontSize, number, showGameInfo }) {
+function GameCard({ game, infoFontSize, number, showGameInfo, isSelected, onGameSelect }) {
+  const interactive = typeof onGameSelect === "function";
+  const interactionProps = interactive ? {
+    role: "button",
+    tabIndex: 0,
+    "aria-label": `编辑游戏：${game.title || "未命名游戏"}`,
+    "aria-pressed": Boolean(isSelected),
+    "data-game-id": game.id,
+    onClick: () => onGameSelect(game.id),
+    onKeyDown: (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        onGameSelect(game.id);
+      }
+    },
+  } : {};
   return (
-    <article className="game-card" style={{ "--info-font-size": `${infoFontSize}px` }}>
+    <article
+      {...interactionProps}
+      className={`game-card${interactive && isSelected ? " is-selected" : ""}`}
+      style={{ "--info-font-size": `${infoFontSize}px` }}
+    >
       <div className="card-number">{String(number).padStart(2, "0")}</div>
       <div className="game-image">
         {game.image ? <img alt="" src={resolveLogoSrc(game.image)} /> : <span>16:9 图片位</span>}
       </div>
       <div className="game-copy">
         <h3>{game.title}</h3>
-        <InfoRow icon={<CalendarDays />} label="发售日期：" value={game.date} />
-        <div className="info-row platform-row">
+        {game.showDate !== false && <InfoRow icon={<CalendarDays />} label="发售日期：" value={game.date} />}
+        {game.showPlatforms !== false && <div className="info-row platform-row">
           <Gamepad2 />
           <span className="row-label">登陆平台：</span>
           <div className="platforms">
@@ -282,7 +366,7 @@ function GameCard({ game, infoFontSize, number, showGameInfo }) {
               </span>
             ))}
           </div>
-        </div>
+        </div>}
         {showGameInfo && <InfoRow className="detail-row" icon={<Info />} label="" value={game.info} />}
       </div>
     </article>

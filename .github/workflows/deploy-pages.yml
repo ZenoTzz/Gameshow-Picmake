@@ -33,10 +33,15 @@ jobs:
         working-directory: source
         run: npm ci
 
+      - name: Test project behavior
+        working-directory: source
+        run: npm test
+
       - name: Build site
         working-directory: source
         env:
           GITHUB_PAGES: "true"
+          VITE_BASE_PATH: ${{ vars.VITE_BASE_PATH }}
         run: npm run build
 
       - name: Check out Pages branch

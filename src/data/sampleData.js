@@ -87,6 +87,8 @@ export const initialPoster = {
 export const blankGame = {
   id: "",
   title: "新公布游戏",
+  showDate: true,
+  showPlatforms: true,
   date: "待公布",
   platforms: ["PS5"],
   info: "在这里填写预购、价格、试玩、发售窗口或其他关键信息。",

@@ -1,8 +1,9 @@
-import { blankGame, initialPoster } from "../data/sampleData";
-import { themes } from "../data/themes";
+import { withAbort } from "./asyncUtils.js";
+import { blankGame, initialPoster } from "../data/sampleData.js";
+import { themes } from "../data/themes.js";
 
 export const platformOptions = ["PS5", "XBOX Series", "Switch", "Switch 2", "PC", "Mac", "移动端", "iOS", "Android"];
-export const baseUrl = import.meta.env.BASE_URL ?? "/";
+export const baseUrl = import.meta.env?.BASE_URL ?? "/";
 export const templateStorageKey = "gameshow-pic-template-v1";
 export const templateHistoryStorageKey = "gameshow-pic-template-history-v1";
 export const githubTokenStorageKey = "gameshow-pic-github-token";
@@ -118,7 +119,7 @@ export function getThemeText(poster, themeId = poster.theme) {
 }
 
 export function getAllThemeText(poster) {
-  return Object.keys(themes).reduce((themeText, themeId) => {
+  return Object.keys({ ...themes, ...(poster.customThemes ?? {}) }).reduce((themeText, themeId) => {
     themeText[themeId] = getThemeText(poster, themeId);
     return themeText;
   }, {});
@@ -145,7 +146,39 @@ export function getDefaultLogoScales() {
   }, {});
 }
 
-export function normalizePosterTemplate(poster) {
+export function normalizePosterTemplate(input) {
+  if (!input || typeof input !== "object" || Array.isArray(input)) throw new Error("项目格式无效");
+  if (input.schemaVersion && input.schemaVersion > 2) throw new Error("项目版本较新，请更新应用后导入");
+  const poster = { ...initialPoster, ...input };
+  if (!Array.isArray(poster.games) || poster.games.length > 1000) throw new Error("游戏列表无效或超过 1000 条");
+  for (const field of ["theme", "footerCreditText", "footerLogoImage", "posterFontFamily", "headerFontFamily", "gameTitleFontFamily", "metadataFontFamily", "infoFontFamily", "creditFontFamily"]) {
+    if (poster[field] != null && typeof poster[field] !== "string") throw new Error(`项目字段 ${field} 必须是文字`);
+  }
+  for (const field of ["themeText", "logoPositions", "logoScales", "logoImages", "pageFillOverrides", "customThemes"]) {
+    if (poster[field] != null && (typeof poster[field] !== "object" || Array.isArray(poster[field]))) throw new Error(`项目字段 ${field} 无效`);
+  }
+  const customThemes = {};
+  for (const [id, value] of Object.entries(poster.customThemes ?? {})) {
+    if (!id.startsWith("custom_") || !value || typeof value !== "object") throw new Error("自定义主题无效");
+    customThemes[id] = { ...themes.stateOfPlay, ...value, id };
+    if (value.styleOverrides != null && (!Array.isArray(value.styleOverrides) || value.styleOverrides.length > 30 || value.styleOverrides.some((key) => typeof key !== "string" || !/^[a-zA-Z]+$/.test(key)))) throw new Error("自定义主题样式修改记录无效");
+    for (const key of ["label", "bg", "panel", "card", "line", "glow", "accent", "chipBg", "chipText", "fontFamily"]) {
+      if (typeof customThemes[id][key] !== "string") throw new Error("自定义主题字段无效");
+    }
+  }
+  const ids = new Set();
+  const games = poster.games.map((game) => {
+    const next = cloneGame(game);
+    if (ids.has(next.id)) next.id = crypto.randomUUID();
+    ids.add(next.id);
+    return next;
+  });
+  for (const value of Object.values(poster.logoImages ?? {})) {
+    if (typeof value !== "string") throw new Error("Logo 图片地址无效");
+  }
+  for (const value of Object.values(poster.themeText ?? {})) {
+    if (!value || typeof value !== "object" || Object.values(value).some((text) => typeof text !== "string")) throw new Error("主题文字无效");
+  }
   const themeText = {
     ...getDefaultThemeText(),
     ...(poster.themeText ?? {}),
@@ -188,12 +221,16 @@ export function normalizePosterTemplate(poster) {
 
   return {
     ...poster,
+    schemaVersion: 2,
+    games,
+    customThemes,
+    theme: Object.hasOwn({ ...themes, ...customThemes }, poster.theme) ? poster.theme : "stateOfPlay",
     themeText,
     logoPositions,
     logoScales,
     compactFollowupPages: poster.compactFollowupPages ?? false,
     showGameInfo: poster.showGameInfo ?? true,
-    infoFontSize: poster.infoFontSize ?? defaultInfoFontSize,
+    infoFontSize: Math.min(32, Math.max(14, Number(poster.infoFontSize) || defaultInfoFontSize)),
     infoFontWeight: poster.infoFontWeight ?? defaultInfoFontWeight,
     posterFontFamily: poster.posterFontFamily ?? "",
     headerFontFamily: poster.headerFontFamily ?? "",
@@ -204,25 +241,42 @@ export function normalizePosterTemplate(poster) {
   };
 }
 
-export async function waitForExportAssets(root) {
-  if (document.fonts?.ready) {
-    await document.fonts.ready;
+export async function waitForExportAssets(root, timeoutMs = 15000, signal) {
+  async function bounded(promise, message) {
+    let timer;
+    try {
+      await withAbort(Promise.race([promise, new Promise((_, reject) => {
+        timer = setTimeout(() => reject(new Error(message)), timeoutMs);
+      })]), signal);
+    } finally { clearTimeout(timer); }
   }
-
-  const images = Array.from(root.querySelectorAll("img"));
-  await Promise.all(
-    images.map((image) => {
-      if (image.complete && image.naturalWidth > 0) return Promise.resolve();
-      return new Promise((resolve) => {
-        image.onload = resolve;
-        image.onerror = resolve;
-      });
-    }),
-  );
+  signal?.throwIfAborted();
+  if (document.fonts?.ready) await bounded(document.fonts.ready, "字体加载超时，请稍后重试");
+  await Promise.all(Array.from(root.querySelectorAll("img")).map((image) => new Promise((resolve, reject) => {
+    let timer;
+    const finish = (error) => {
+      clearTimeout(timer);
+      image.removeEventListener("load", onLoad);
+      image.removeEventListener("error", onError);
+      signal?.removeEventListener("abort", onAbort);
+      error ? reject(error) : resolve();
+    };
+    const onLoad = () => finish(image.naturalWidth > 0 ? null : new Error("图片加载失败，请替换图片后重试"));
+    const onError = () => finish(new Error("图片加载失败，请替换图片后重试"));
+    const onAbort = () => finish(signal.reason ?? new DOMException("已取消", "AbortError"));
+    signal?.addEventListener("abort", onAbort, { once: true });
+    image.addEventListener("load", onLoad);
+    image.addEventListener("error", onError);
+    timer = setTimeout(() => finish(new Error("图片加载超时，请检查网络或替换图片")), timeoutMs);
+    if (signal?.aborted) onAbort();
+    else if (image.complete) onLoad();
+  })));
 }
 
 export function getTemplateFields(poster) {
   return {
+    schemaVersion: 2,
+    customThemes: poster.customThemes ?? {},
     theme: poster.theme,
     fillEmptySpace: poster.fillEmptySpace,
     compactFollowupPages: poster.compactFollowupPages ?? false,
@@ -233,7 +287,7 @@ export function getTemplateFields(poster) {
     logoScales: poster.logoScales,
     footerLogoImage: poster.footerLogoImage,
     footerCreditText: poster.footerCreditText,
-    infoFontSize: poster.infoFontSize ?? defaultInfoFontSize,
+    infoFontSize: Math.min(32, Math.max(14, Number(poster.infoFontSize) || defaultInfoFontSize)),
     infoFontWeight: poster.infoFontWeight ?? defaultInfoFontWeight,
     posterFontFamily: poster.posterFontFamily ?? "",
     headerFontFamily: poster.headerFontFamily ?? "",
@@ -341,30 +395,28 @@ export function formatHistoryTime(savedAt) {
 }
 
 export function getInitialPoster() {
-  if (typeof window === "undefined") return initialPoster;
+  const legacyThemes = Object.fromEntries(Object.entries(themes).filter(([id]) => id.startsWith("custom_")));
+  const defaults = { ...initialPoster, customThemes: legacyThemes };
+  if (typeof window === "undefined") return normalizePosterTemplate(defaults);
 
   try {
     const savedTemplate = window.localStorage.getItem(templateStorageKey);
-    if (!savedTemplate) return normalizePosterTemplate(initialPoster);
+    if (!savedTemplate) return normalizePosterTemplate(defaults);
     const parsedTemplate = JSON.parse(savedTemplate);
     return normalizePosterTemplate({
-      ...initialPoster,
+      ...defaults,
       ...parsedTemplate,
       games: (parsedTemplate.games ?? initialPoster.games).map(cloneGame),
     });
   } catch {
-    return normalizePosterTemplate(initialPoster);
+    return normalizePosterTemplate(defaults);
   }
 }
 
 export function getInitialGithubToken() {
-  if (typeof window === "undefined") return "";
-
-  try {
-    return window.localStorage.getItem(githubTokenStorageKey) ?? "";
-  } catch {
-    return "";
-  }
+  // Credentials are session-only. Remove the legacy persistent credential.
+  try { window.localStorage.removeItem(githubTokenStorageKey); } catch {}
+  return "";
 }
 
 export function encodeBase64(text) {
@@ -388,7 +440,7 @@ export async function githubRequest(path, token, options = {}) {
     },
   });
 
-  if (response.status === 404) return { ok: false, status: 404 };
+  if (response.status === 404 && (!options.method || options.method === "GET")) return { ok: false, status: 404 };
 
   const data = await response.json().catch(() => ({}));
   if (!response.ok) {
@@ -521,7 +573,7 @@ export function normalizeGamePlatforms(platforms) {
 
   if (Array.isArray(platforms)) {
     const normalizedPlatforms = [...new Set(platforms.map(normalizePlatformName).filter(Boolean))];
-    return normalizedPlatforms.length ? normalizedPlatforms : [...blankGame.platforms];
+    return normalizedPlatforms;
   }
 
   if (typeof platforms === "string") {
@@ -529,13 +581,20 @@ export function normalizeGamePlatforms(platforms) {
       .split(/[，,/\n]/)
       .map(normalizePlatformName)
       .filter(Boolean);
-    return normalizedPlatforms.length ? normalizedPlatforms : [...blankGame.platforms];
+    return normalizedPlatforms;
   }
 
   return [...blankGame.platforms];
 }
 
 export function cloneGame(game = blankGame) {
+  if (!game || typeof game !== "object" || Array.isArray(game)) throw new Error("游戏条目格式无效");
+  for (const key of ["showDate", "showPlatforms"]) {
+    if (game[key] != null && typeof game[key] !== "boolean") throw new Error(`卡片字段 ${key} 必须是开关值`);
+  }
+  for (const key of ["title", "date", "info", "image", "id"]) {
+    if (game[key] != null && typeof game[key] !== "string") throw new Error(`游戏字段 ${key} 必须是文字`);
+  }
   const normalizedGame = {
     ...blankGame,
     ...(game ?? {}),
@@ -544,6 +603,8 @@ export function cloneGame(game = blankGame) {
   return {
     ...normalizedGame,
     id: normalizedGame.id || crypto.randomUUID(),
+    showDate: normalizedGame.showDate ?? true,
+    showPlatforms: normalizedGame.showPlatforms ?? true,
     title: normalizedGame.title ?? blankGame.title,
     date: normalizedGame.date ?? blankGame.date,
     info: normalizedGame.info ?? blankGame.info,
@@ -551,4 +612,3 @@ export function cloneGame(game = blankGame) {
     platforms: normalizeGamePlatforms(normalizedGame.platforms),
   };
 }
-

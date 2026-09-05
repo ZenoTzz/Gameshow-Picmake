@@ -1,33 +1,37 @@
 import { useEffect, useRef, useState } from "react";
-import { persistLocalTemplate } from "../utils/coreUtils";
+import { saveProject } from "../utils/projectStorage.js";
 
-export function useAutoSave(poster, delay = 1500) {
-  const [saveStatus, setSaveStatus] = useState("idle"); // "idle" | "saving" | "saved" | "error"
-  const timerRef = useRef(null);
-  const isFirstRender = useRef(true);
+export function useAutoSave(poster, enabled = true, delay = 750, identity = null) {
+  const [saveStatus, setSaveStatus] = useState("idle");
+  const pending = useRef(false);
+  const [savedAt, setSavedAt] = useState(null);
 
   useEffect(() => {
-    // 跳过首次渲染（页面加载时不触发自动保存）
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-      return;
-    }
-    
+    if (!enabled) return;
+    let cancelled = false;
+    pending.current = true;
     setSaveStatus("saving");
-    clearTimeout(timerRef.current);
-    timerRef.current = setTimeout(() => {
+    const timer = setTimeout(async () => {
       try {
-        persistLocalTemplate(poster);
-        setSaveStatus("saved");
-        // 2 秒后隐藏"已保存"提示
-        setTimeout(() => setSaveStatus("idle"), 2000);
+        await saveProject(poster, identity);
+        if (!cancelled) {
+          pending.current = false;
+          setSaveStatus("saved");
+          setSavedAt(new Date());
+        }
       } catch {
-        setSaveStatus("error");
+        if (!cancelled) setSaveStatus("error");
       }
     }, delay);
+    return () => { cancelled = true; clearTimeout(timer); };
+  }, [poster, enabled, delay, identity]);
 
-    return () => clearTimeout(timerRef.current);
-  }, [poster, delay]);
-
-  return saveStatus;
+  useEffect(() => {
+    const onBeforeUnload = (event) => {
+      if (pending.current) { event.preventDefault(); event.returnValue = ""; }
+    };
+    window.addEventListener("beforeunload", onBeforeUnload);
+    return () => window.removeEventListener("beforeunload", onBeforeUnload);
+  }, []);
+  return { status: saveStatus, savedAt };
 }

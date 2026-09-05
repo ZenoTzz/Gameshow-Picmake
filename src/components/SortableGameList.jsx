@@ -1,6 +1,6 @@
 import React, { createContext, useContext } from "react";
-import { DndContext, closestCenter, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
-import { SortableContext, verticalListSortingStrategy, useSortable } from "@dnd-kit/sortable";
+import { DndContext, closestCenter, PointerSensor, KeyboardSensor, useSensor, useSensors } from "@dnd-kit/core";
+import { SortableContext, verticalListSortingStrategy, useSortable, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 
@@ -27,21 +27,22 @@ export function SortableGameCard({ id, children }) {
   };
 
   return (
-    <DragHandleContext.Provider value={listeners}>
-      <div ref={setNodeRef} style={style} {...attributes}>
+    <DragHandleContext.Provider value={{ ...attributes, ...listeners }}>
+      <div ref={setNodeRef} style={style}>
         {children}
       </div>
     </DragHandleContext.Provider>
   );
 }
 
-export function SortableGameList({ items, onDragEnd, onDragStart, children }) {
+export function SortableGameList({ items, onDragEnd, onDragStart, onDragCancel, children }) {
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
         distance: 5, // 拖动超过5px才认为是拖拽，防止误触点击
       },
-    })
+    }),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
   );
 
   return (
@@ -50,6 +51,7 @@ export function SortableGameList({ items, onDragEnd, onDragStart, children }) {
       collisionDetection={closestCenter}
       onDragStart={onDragStart}
       onDragEnd={onDragEnd}
+      onDragCancel={onDragCancel}
       modifiers={[restrictToVerticalAxis]}
     >
       <SortableContext items={items} strategy={verticalListSortingStrategy}>

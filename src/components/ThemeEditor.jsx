@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Check, X, ChevronDown, ChevronUp } from "lucide-react";
-import { addCustomTheme } from "../data/themes";
 
 /* ── 颜色工具函数 ── */
 
@@ -184,10 +183,10 @@ function BgField({ label, value, onChange }) {
 
 /* ── 主编辑器组件 ── */
 
-export function ThemeEditor({ initialTheme, onSave, onCancel, onPreview }) {
+export function ThemeEditor({ initialTheme, onSave, onCancel, onPreview, existingThemes = {}, isCopy = false }) {
   const [theme, setTheme] = useState(() => {
     const isEditingCustom = initialTheme && initialTheme.id && initialTheme.id.startsWith("custom_");
-    const newId = isEditingCustom ? initialTheme.id : `custom_${Date.now()}`;
+    const newId = isEditingCustom ? initialTheme.id : `custom_${crypto.randomUUID()}`;
     const newLabel = isEditingCustom ? (initialTheme.label || "自定义主题") : `自定义_${initialTheme.label || "主题"}`;
     return {
       logo: "CUSTOM",
@@ -207,37 +206,41 @@ export function ThemeEditor({ initialTheme, onSave, onCancel, onPreview }) {
       cardOverlay: 0,
       cardBorder: "#ffffff",
       cardBorderWidth: 2,
-      cardNumberBg: (initialTheme && initialTheme.chipBg) || "#0ea5e9",
+      cardNumberBg: initialTheme?.id ? initialTheme.cardNumberBg : "#0ea5e9",
       ...initialTheme,
       id: newId,
       label: newLabel,
     };
   });
 
-  useEffect(() => {
-    if (onPreview) onPreview(theme);
-  }, []); // eslint-disable-next-line react-hooks/exhaustive-deps
+  const previewRef = useRef(onPreview);
+  useEffect(() => { previewRef.current = onPreview; }, [onPreview]);
+  useEffect(() => { previewRef.current?.(theme); }, [theme]);
 
   const handleChange = (key, value) => {
     setTheme((c) => {
       const updated = { ...c, [key]: value };
-      if (onPreview) onPreview(updated);
+      if (c.baseThemeId && key !== "label") updated.styleOverrides = [...new Set([...(c.styleOverrides ?? []), key])];
       return updated;
     });
   };
 
+  const name = theme.label.trim();
+  const duplicateName = Object.values(existingThemes).some((item) => item.id !== theme.id && item.label === name);
   return (
     <div className="theme-editor-panel">
       <div className="section-title">
-        <span>自定义主题配置</span>
+        <span>{isCopy ? "编辑模板副本" : "自定义主题配置"}</span>
         <div style={{display: 'flex', gap: '8px'}}>
           <button className="secondary-button" onClick={onCancel} style={{padding: '0 8px', minHeight: '28px'}}><X size={14} /> 取消</button>
-          <button className="primary-button" onClick={() => onSave(theme)} style={{padding: '0 8px', minHeight: '28px'}}><Check size={14} /> 保存</button>
+          <button className="primary-button" disabled={!name || duplicateName} onClick={() => onSave({ ...theme, label: name })} style={{padding: '0 8px', minHeight: '28px'}}><Check size={14} /> 保存</button>
         </div>
       </div>
+      {isCopy && <p className="field-hint">保存后会切换到新模板；取消不会创建副本。标题、Logo 和位置会一并复制。</p>}
+      {duplicateName && <p className="field-hint" role="alert">已有同名模板，请换一个名称。</p>}
       <div className="field-grid" style={{ paddingBottom: '16px' }}>
         {/* 基本信息 */}
-        <label>主题名称<input value={theme.label} onChange={(e) => handleChange("label", e.target.value)} /></label>
+        <label>主题名称<input autoFocus value={theme.label} onChange={(e) => handleChange("label", e.target.value)} /></label>
 
         {/* 可视化颜色控件 */}
         <BgField label="背景色" value={theme.bg} onChange={(v) => handleChange("bg", v)} />

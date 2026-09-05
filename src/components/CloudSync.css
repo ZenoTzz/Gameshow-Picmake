@@ -1,0 +1,36 @@
+.cloud-sync { margin: 0 0 16px; border: 1px solid #394150; border-radius: 10px; background: #171d28; color: #e6e9ef; font-size: 13px; }
+.cloud-sync button { cursor: pointer; color: inherit; border: 1px solid #46536b; border-radius: 6px; background: #29364d; padding: 8px 12px; font: inherit; }
+.cloud-sync button:disabled { opacity: .5; cursor: default; }
+.cloud-sync .cloud-toggle { display: flex; justify-content: space-between; gap: 12px; width: 100%; background: transparent; border: 0; padding: 12px; text-align: left; }
+.cloud-toggle span { color: #b5c6e3; white-space: nowrap; }
+.cloud-panel { padding: 0 12px 12px; }
+.cloud-panel p { line-height: 1.6; margin: 8px 0; }
+.cloud-login, .cloud-choice, .cloud-history { display: grid; gap: 8px; margin: 12px 0; }
+.cloud-login label { display: grid; gap: 4px; }
+.cloud-login input { width: 100%; box-sizing: border-box; padding: 9px; border: 1px solid #4b566c; border-radius: 6px; color: #fff; background: #111723; }
+.cloud-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.cloud-choice { padding: 12px; border: 1px solid #647a9e; border-radius: 8px; }
+.cloud-panel .cloud-error { color: #ffbeae; }
+.cloud-history { max-height: 260px; overflow-y: auto; }
+.cloud-library { border-top: 1px solid #394150; border-bottom: 1px solid #394150; padding: 12px 0; margin: 12px 0; }
+.cloud-library h3 { font-size: 15px; margin: 0; }
+.cloud-library label { display: grid; gap: 4px; }
+.cloud-library input { box-sizing: border-box; width: 100%; min-width: 0; padding: 9px; border: 1px solid #4b566c; border-radius: 6px; color: #fff; background: #111723; }
+.cloud-library small { display: block; color: #b5c6e3; line-height: 1.5; }
+.cloud-project-list { list-style: none; padding: 0; margin: 0; max-height: 320px; overflow-y: auto; }
+.cloud-project-list li { display: flex; gap: 12px; justify-content: space-between; align-items: center; border-top: 1px solid #394150; padding: 10px 0; }
+.cloud-project-list li > div { min-width: 0; overflow-wrap: anywhere; }
+.cloud-project-list button { flex-shrink: 0; }
+.cloud-rename { display: flex; align-items: end; gap: 8px; }
+.cloud-rename label { flex: 1; min-width: 0; }
+.cloud-rename button { flex-shrink: 0; }
+.cloud-refresh { justify-self: start; }
+
+.cloud-library summary { cursor: pointer; font-size: 15px; font-weight: 600; padding: 4px 0; }
+.cloud-library-content { display: grid; gap: 10px; margin-top: 10px; }
+.cloud-checkpoint { display: flex; align-items: end; gap: 8px; margin-top: 12px; }
+.cloud-checkpoint label { display: grid; gap: 4px; flex: 1; min-width: 0; }
+.cloud-checkpoint input { width: 100%; box-sizing: border-box; padding: 9px; border: 1px solid #4b566c; border-radius: 6px; color: #fff; background: #111723; }
+.cloud-checkpoint button { flex-shrink: 0; }
+.cloud-storage { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; color: #b5c6e3; font-size: 12px; }
+.cloud-storage button { padding: 5px 8px; }
