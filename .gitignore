@@ -4,3 +4,7 @@ dist/
 .DS_Store
 npm-debug.log*
 data/
+ios/**/xcuserdata/
+ios/**/*.xcuserstate
+ios/build/
+ios/DerivedData/

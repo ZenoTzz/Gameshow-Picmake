@@ -106,3 +106,7 @@ npm run build
 - `src/utils/exportPoster.jsx`：按需渲染 PNG。
 - `src/utils/historyReducer.js`：纯函数撤销/重做。
 - `tests/`：解析、历史、分页、资源等待、模板校验和备份回归测试。
+
+## iPhone 原生应用
+
+仓库内的 `ios/Picmake.xcodeproj` 提供 SwiftUI 项目/卡片编辑、云端保存、历史与模板选择，以及内附海报渲染和系统分享。构建、同步行为与当前功能范围见 [iOS 说明](ios/README.md)。

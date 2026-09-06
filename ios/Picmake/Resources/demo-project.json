@@ -1,0 +1,85 @@
+{
+  "theme": "nintendoDirectSoft",
+  "fillEmptySpace": true,
+  "compactFollowupPages": false,
+  "showGameInfo": true,
+  "logoImages": {
+    "stateOfPlay": "",
+    "summerGameFest": "",
+    "xbox": "",
+    "nintendoDirect": "",
+    "nintendoDirectWarm": ""
+  },
+  "logoPositions": {
+    "stateOfPlay": {
+      "x": 72,
+      "y": 72
+    },
+    "summerGameFest": {
+      "x": 72,
+      "y": 72
+    },
+    "xbox": {
+      "x": 72,
+      "y": 72
+    },
+    "nintendoDirect": {
+      "x": 72,
+      "y": 72
+    },
+    "nintendoDirectWarm": {
+      "x": 72,
+      "y": 72
+    }
+  },
+  "logoScales": {
+    "stateOfPlay": 100,
+    "summerGameFest": 100,
+    "gamescom2026": 100,
+    "xbox": 100,
+    "nintendoDirect": 100,
+    "nintendoDirectWarm": 100
+  },
+  "footerLogoImage": "",
+  "footerCreditText": "信息整理",
+  "infoFontSize": 20,
+  "infoFontWeight": 600,
+  "posterFontFamily": "",
+  "headerFontFamily": "",
+  "gameTitleFontFamily": "",
+  "metadataFontFamily": "",
+  "infoFontFamily": "",
+  "creditFontFamily": "",
+  "eventLabel": "State of Play",
+  "title": "发布会重磅大作",
+  "subtitle": "发售日期 / 登陆平台 / 关键信息速览",
+  "games": [
+    {
+      "id": "demo-1",
+      "title": "示例游戏：星际旅程",
+      "date": "待公布",
+      "platforms": [
+        "Switch 2"
+      ],
+      "info": "这是一张本地演示卡片，用于检查文字排版和手机编辑流程。",
+      "image": ""
+    },
+    {
+      "id": "demo-2",
+      "title": "特别消息",
+      "date": "",
+      "showDate": false,
+      "showPlatforms": false,
+      "platforms": [],
+      "info": "非游戏内容可以隐藏日期与平台。",
+      "image": ""
+    }
+  ],
+  "themeText": {
+    "nintendoDirectSoft": {
+      "eventLabel": "Nintendo Direct",
+      "title": "手机制图示例",
+      "subtitle": ""
+    }
+  }
+}

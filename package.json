@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite --host 127.0.0.1",
     "build": "vite build",
+    "build:ios-renderer": "vite build --config vite.native.config.js",
     "preview": "vite preview --host 127.0.0.1",
     "test": "node --test tests/*.test.js"
   },

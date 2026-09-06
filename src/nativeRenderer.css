@@ -1,0 +1,6 @@
+html, body { min-width: 0; width: 100%; background: #111318; }
+#native-root { width: 100%; padding: 8px; }
+.native-canvas { position: relative; margin: 0 auto; overflow: hidden; }
+.native-canvas > .poster { transform-origin: top left; }
+/* The editor's small-screen rules must never alter the fixed export canvas. */
+.native-canvas .poster, .export-stage .poster { flex-shrink: 0; }

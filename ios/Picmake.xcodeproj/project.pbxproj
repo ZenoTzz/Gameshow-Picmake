@@ -1,0 +1,616 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		02F91B9CBBDD245F970F88D6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 243BF5E52FE511B422793C87 /* Assets.xcassets */; };
+		0403802AF29691BF9842E28C /* WorkspaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F123916DF7A6A187CF3769CD /* WorkspaceView.swift */; };
+		0C8FB2F3D7FC55B51D2B01AB /* demo-project.json in Resources */ = {isa = PBXBuildFile; fileRef = 9F44130FF3CF2654421607F0 /* demo-project.json */; };
+		3FF9DDD2B3C3F2B4A2030458 /* PhotoPickerSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38A4CB22963F4ECAC6AF2AF9 /* PhotoPickerSupport.swift */; };
+		469E0454CDDE51C4C49E63A7 /* TemplateSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4A8D5F65C6AFECFAC5DF5B9 /* TemplateSupport.swift */; };
+		5A330F0D8EB9ADB1A253355B /* TemplateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645EFD7C684A6F2E7FF0409C /* TemplateTests.swift */; };
+		7ECC87659D2E0C5B5D7CED05 /* SessionKeychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD213D15120A48AB9133E290 /* SessionKeychain.swift */; };
+		88824C9B97F70726CA6FE4C4 /* PosterPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E79674DA1D6C6B10286B1266 /* PosterPreviewView.swift */; };
+		8ECC74E0213AF4F9EAF7A438 /* CloudAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2823F81FB88863F06BB9888 /* CloudAPI.swift */; };
+		9A1A24A8D980B5C738AFD9D2 /* PicmakeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B2A33676CB5D2FA1E619A25 /* PicmakeApp.swift */; };
+		A20FC6325F4449228854B4C1 /* ProjectLibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B57184C97399DBFB5C24ED /* ProjectLibraryView.swift */; };
+		A345D76D65867BD7FA0AF39D /* ThemeEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BBDE9C2C897216F8D76EBA7 /* ThemeEditorView.swift */; };
+		B8377AB7AF9DCE79F88B2EDA /* themes.json in Resources */ = {isa = PBXBuildFile; fileRef = A374B68699B6A5A64FD9B828 /* themes.json */; };
+		BC9A12421254DD18C2D6EBE4 /* CoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245707F60A94E0017CA9B613 /* CoreTests.swift */; };
+		D317CE8BFE7C172AD5ED9A1E /* Renderer in Resources */ = {isa = PBXBuildFile; fileRef = 342B91C2B3F02358FC79CF60 /* Renderer */; };
+		E990D86D291B61D64876EAB6 /* CardEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78220865501DF4CD225A5536 /* CardEditorView.swift */; };
+		EC36FF2817D5FED62546DEF9 /* AppFlowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C1EBE6EE539E163BB0E49B3 /* AppFlowTests.swift */; };
+		F136E00E5A82288CF12E2419 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8780DAEDAAD65F14D5606CED /* Models.swift */; };
+		F2EF3F5F90903E5FAC241457 /* AppStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A29B55D1A8CB48ADE61A6608 /* AppStore.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		23D969E63E724EC4590C9329 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E756AE1C2F51181DF9E2D4C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BBA16009923E7C36623DC42D;
+			remoteInfo = Picmake;
+		};
+		F4EB902981F1A5ECCE9A3D06 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E756AE1C2F51181DF9E2D4C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BBA16009923E7C36623DC42D;
+			remoteInfo = Picmake;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		243BF5E52FE511B422793C87 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		245707F60A94E0017CA9B613 /* CoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreTests.swift; sourceTree = "<group>"; };
+		33B57184C97399DBFB5C24ED /* ProjectLibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectLibraryView.swift; sourceTree = "<group>"; };
+		342B91C2B3F02358FC79CF60 /* Renderer */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Renderer; path = Picmake/Renderer; sourceTree = SOURCE_ROOT; };
+		38A4CB22963F4ECAC6AF2AF9 /* PhotoPickerSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPickerSupport.swift; sourceTree = "<group>"; };
+		4C1EBE6EE539E163BB0E49B3 /* AppFlowTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFlowTests.swift; sourceTree = "<group>"; };
+		62B9D0BC52FE76AFFBDF6849 /* Picmake.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Picmake.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		645EFD7C684A6F2E7FF0409C /* TemplateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateTests.swift; sourceTree = "<group>"; };
+		78220865501DF4CD225A5536 /* CardEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardEditorView.swift; sourceTree = "<group>"; };
+		8780DAEDAAD65F14D5606CED /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		8BBDE9C2C897216F8D76EBA7 /* ThemeEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeEditorView.swift; sourceTree = "<group>"; };
+		93606DCEA6A3FACC4BE176C5 /* PicmakeUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = PicmakeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		9B2A33676CB5D2FA1E619A25 /* PicmakeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PicmakeApp.swift; sourceTree = "<group>"; };
+		9F44130FF3CF2654421607F0 /* demo-project.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "demo-project.json"; sourceTree = "<group>"; };
+		A29B55D1A8CB48ADE61A6608 /* AppStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStore.swift; sourceTree = "<group>"; };
+		A374B68699B6A5A64FD9B828 /* themes.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = themes.json; sourceTree = "<group>"; };
+		A4A8D5F65C6AFECFAC5DF5B9 /* TemplateSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateSupport.swift; sourceTree = "<group>"; };
+		AB19DF0D99877A51018E3DD1 /* PicmakeTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = PicmakeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E79674DA1D6C6B10286B1266 /* PosterPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PosterPreviewView.swift; sourceTree = "<group>"; };
+		F123916DF7A6A187CF3769CD /* WorkspaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkspaceView.swift; sourceTree = "<group>"; };
+		F2823F81FB88863F06BB9888 /* CloudAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudAPI.swift; sourceTree = "<group>"; };
+		FD213D15120A48AB9133E290 /* SessionKeychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionKeychain.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		1678BD52169EA9BA98B69348 /* PicmakeTests */ = {
+			isa = PBXGroup;
+			children = (
+				245707F60A94E0017CA9B613 /* CoreTests.swift */,
+				645EFD7C684A6F2E7FF0409C /* TemplateTests.swift */,
+			);
+			path = PicmakeTests;
+			sourceTree = "<group>";
+		};
+		2180D865E3FB960822F37273 /* PicmakeUITests */ = {
+			isa = PBXGroup;
+			children = (
+				4C1EBE6EE539E163BB0E49B3 /* AppFlowTests.swift */,
+			);
+			path = PicmakeUITests;
+			sourceTree = "<group>";
+		};
+		7E1E140D317EEF16EC8EF6B2 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				9B2A33676CB5D2FA1E619A25 /* PicmakeApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		87A81C25349CA6A1B8EB5E9B = {
+			isa = PBXGroup;
+			children = (
+				BA9903A0BB91A75FED8E8888 /* Picmake */,
+				1678BD52169EA9BA98B69348 /* PicmakeTests */,
+				2180D865E3FB960822F37273 /* PicmakeUITests */,
+				9FF87FB15DE16AD52AD17734 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		9144CB72F4C7E15B15595921 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				9F44130FF3CF2654421607F0 /* demo-project.json */,
+				A374B68699B6A5A64FD9B828 /* themes.json */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		9FF87FB15DE16AD52AD17734 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				62B9D0BC52FE76AFFBDF6849 /* Picmake.app */,
+				AB19DF0D99877A51018E3DD1 /* PicmakeTests.xctest */,
+				93606DCEA6A3FACC4BE176C5 /* PicmakeUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		B0F7CCD7269C5A059B288921 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				78220865501DF4CD225A5536 /* CardEditorView.swift */,
+				38A4CB22963F4ECAC6AF2AF9 /* PhotoPickerSupport.swift */,
+				E79674DA1D6C6B10286B1266 /* PosterPreviewView.swift */,
+				33B57184C97399DBFB5C24ED /* ProjectLibraryView.swift */,
+				8BBDE9C2C897216F8D76EBA7 /* ThemeEditorView.swift */,
+				F123916DF7A6A187CF3769CD /* WorkspaceView.swift */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		BA9903A0BB91A75FED8E8888 /* Picmake */ = {
+			isa = PBXGroup;
+			children = (
+				243BF5E52FE511B422793C87 /* Assets.xcassets */,
+				342B91C2B3F02358FC79CF60 /* Renderer */,
+				7E1E140D317EEF16EC8EF6B2 /* App */,
+				C101C251895BDE5E405F50F0 /* Core */,
+				B0F7CCD7269C5A059B288921 /* Features */,
+				9144CB72F4C7E15B15595921 /* Resources */,
+			);
+			path = Picmake;
+			sourceTree = "<group>";
+		};
+		C101C251895BDE5E405F50F0 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				A29B55D1A8CB48ADE61A6608 /* AppStore.swift */,
+				F2823F81FB88863F06BB9888 /* CloudAPI.swift */,
+				8780DAEDAAD65F14D5606CED /* Models.swift */,
+				FD213D15120A48AB9133E290 /* SessionKeychain.swift */,
+				A4A8D5F65C6AFECFAC5DF5B9 /* TemplateSupport.swift */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		338FD4E99844F119B53CA959 /* PicmakeUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DB086EFE073AEA84F7A03F2E /* Build configuration list for PBXNativeTarget "PicmakeUITests" */;
+			buildPhases = (
+				D1566DB5DA4D8410D83B6F55 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				41CF8582C1CD558EB1CCB494 /* PBXTargetDependency */,
+			);
+			name = PicmakeUITests;
+			packageProductDependencies = (
+			);
+			productName = PicmakeUITests;
+			productReference = 93606DCEA6A3FACC4BE176C5 /* PicmakeUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		BBA16009923E7C36623DC42D /* Picmake */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3437B9174AA1BE8030579EF6 /* Build configuration list for PBXNativeTarget "Picmake" */;
+			buildPhases = (
+				379308360C62C5FFAC680449 /* Sources */,
+				462746409E08AEAA734D1678 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Picmake;
+			packageProductDependencies = (
+			);
+			productName = Picmake;
+			productReference = 62B9D0BC52FE76AFFBDF6849 /* Picmake.app */;
+			productType = "com.apple.product-type.application";
+		};
+		DACA797A8D4542A485198EC5 /* PicmakeTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A440A37C060FCB395902F943 /* Build configuration list for PBXNativeTarget "PicmakeTests" */;
+			buildPhases = (
+				C5EE5B3538DCAE21431DB372 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				707F74E82974529212257506 /* PBXTargetDependency */,
+			);
+			name = PicmakeTests;
+			packageProductDependencies = (
+			);
+			productName = PicmakeTests;
+			productReference = AB19DF0D99877A51018E3DD1 /* PicmakeTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		6E756AE1C2F51181DF9E2D4C /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					338FD4E99844F119B53CA959 = {
+						DevelopmentTeam = 27V23KNM5P;
+						ProvisioningStyle = Automatic;
+						TestTargetID = BBA16009923E7C36623DC42D;
+					};
+					BBA16009923E7C36623DC42D = {
+						DevelopmentTeam = 27V23KNM5P;
+						ProvisioningStyle = Automatic;
+					};
+					DACA797A8D4542A485198EC5 = {
+						DevelopmentTeam = 27V23KNM5P;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = DECFDF350D7E7C9000F2E219 /* Build configuration list for PBXProject "Picmake" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 87A81C25349CA6A1B8EB5E9B;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 9FF87FB15DE16AD52AD17734 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				BBA16009923E7C36623DC42D /* Picmake */,
+				DACA797A8D4542A485198EC5 /* PicmakeTests */,
+				338FD4E99844F119B53CA959 /* PicmakeUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		462746409E08AEAA734D1678 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				02F91B9CBBDD245F970F88D6 /* Assets.xcassets in Resources */,
+				D317CE8BFE7C172AD5ED9A1E /* Renderer in Resources */,
+				0C8FB2F3D7FC55B51D2B01AB /* demo-project.json in Resources */,
+				B8377AB7AF9DCE79F88B2EDA /* themes.json in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		379308360C62C5FFAC680449 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F2EF3F5F90903E5FAC241457 /* AppStore.swift in Sources */,
+				E990D86D291B61D64876EAB6 /* CardEditorView.swift in Sources */,
+				8ECC74E0213AF4F9EAF7A438 /* CloudAPI.swift in Sources */,
+				F136E00E5A82288CF12E2419 /* Models.swift in Sources */,
+				3FF9DDD2B3C3F2B4A2030458 /* PhotoPickerSupport.swift in Sources */,
+				9A1A24A8D980B5C738AFD9D2 /* PicmakeApp.swift in Sources */,
+				88824C9B97F70726CA6FE4C4 /* PosterPreviewView.swift in Sources */,
+				A20FC6325F4449228854B4C1 /* ProjectLibraryView.swift in Sources */,
+				7ECC87659D2E0C5B5D7CED05 /* SessionKeychain.swift in Sources */,
+				469E0454CDDE51C4C49E63A7 /* TemplateSupport.swift in Sources */,
+				A345D76D65867BD7FA0AF39D /* ThemeEditorView.swift in Sources */,
+				0403802AF29691BF9842E28C /* WorkspaceView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C5EE5B3538DCAE21431DB372 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BC9A12421254DD18C2D6EBE4 /* CoreTests.swift in Sources */,
+				5A330F0D8EB9ADB1A253355B /* TemplateTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D1566DB5DA4D8410D83B6F55 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EC36FF2817D5FED62546DEF9 /* AppFlowTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		41CF8582C1CD558EB1CCB494 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BBA16009923E7C36623DC42D /* Picmake */;
+			targetProxy = F4EB902981F1A5ECCE9A3D06 /* PBXContainerItemProxy */;
+		};
+		707F74E82974529212257506 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BBA16009923E7C36623DC42D /* Picmake */;
+			targetProxy = 23D969E63E724EC4590C9329 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		0024CA59A88415D3759D230F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "展会制图";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "将导出的海报保存到你的相册。";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = uk.zenohy.picmake;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		4290E578DFDFBAF367D4CB38 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = uk.zenohy.PicmakeUITests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Picmake;
+			};
+			name = Debug;
+		};
+		5260AE51B5EA832431BC338A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 27V23KNM5P;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		5F0DC8E6E9E51B3A21C6E7B0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = uk.zenohy.PicmakeUITests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Picmake;
+			};
+			name = Release;
+		};
+		717FA2997536351377DCD03C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 27V23KNM5P;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		A88BDE9810FEACF74E0A681E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "展会制图";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "将导出的海报保存到你的相册。";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = uk.zenohy.picmake;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		CC4D975A6A67AFB2BC1BE5EF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = uk.zenohy.PicmakeTests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Picmake.app/Picmake";
+			};
+			name = Release;
+		};
+		DAEB252FD7F2AADE29AC19A6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = uk.zenohy.PicmakeTests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Picmake.app/Picmake";
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		3437B9174AA1BE8030579EF6 /* Build configuration list for PBXNativeTarget "Picmake" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A88BDE9810FEACF74E0A681E /* Debug */,
+				0024CA59A88415D3759D230F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		A440A37C060FCB395902F943 /* Build configuration list for PBXNativeTarget "PicmakeTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DAEB252FD7F2AADE29AC19A6 /* Debug */,
+				CC4D975A6A67AFB2BC1BE5EF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		DB086EFE073AEA84F7A03F2E /* Build configuration list for PBXNativeTarget "PicmakeUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4290E578DFDFBAF367D4CB38 /* Debug */,
+				5F0DC8E6E9E51B3A21C6E7B0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		DECFDF350D7E7C9000F2E219 /* Build configuration list for PBXProject "Picmake" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				717FA2997536351377DCD03C /* Debug */,
+				5260AE51B5EA832431BC338A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 6E756AE1C2F51181DF9E2D4C /* Project object */;
+}
