@@ -1,36 +1,62 @@
-.cloud-sync { margin: 0 0 16px; border: 1px solid #394150; border-radius: 10px; background: #171d28; color: #e6e9ef; font-size: 13px; }
-.cloud-sync button { cursor: pointer; color: inherit; border: 1px solid #46536b; border-radius: 6px; background: #29364d; padding: 8px 12px; font: inherit; }
-.cloud-sync button:disabled { opacity: .5; cursor: default; }
-.cloud-sync .cloud-toggle { display: flex; justify-content: space-between; gap: 12px; width: 100%; background: transparent; border: 0; padding: 12px; text-align: left; }
-.cloud-toggle span { color: #b5c6e3; white-space: nowrap; }
-.cloud-panel { padding: 0 12px 12px; }
-.cloud-panel p { line-height: 1.6; margin: 8px 0; }
-.cloud-login, .cloud-choice, .cloud-history { display: grid; gap: 8px; margin: 12px 0; }
-.cloud-login label { display: grid; gap: 4px; }
-.cloud-login input { width: 100%; box-sizing: border-box; padding: 9px; border: 1px solid #4b566c; border-radius: 6px; color: #fff; background: #111723; }
-.cloud-actions { display: flex; flex-wrap: wrap; gap: 8px; }
-.cloud-choice { padding: 12px; border: 1px solid #647a9e; border-radius: 8px; }
-.cloud-panel .cloud-error { color: #ffbeae; }
-.cloud-history { max-height: 260px; overflow-y: auto; }
-.cloud-library { border-top: 1px solid #394150; border-bottom: 1px solid #394150; padding: 12px 0; margin: 12px 0; }
-.cloud-library h3 { font-size: 15px; margin: 0; }
-.cloud-library label { display: grid; gap: 4px; }
-.cloud-library input { box-sizing: border-box; width: 100%; min-width: 0; padding: 9px; border: 1px solid #4b566c; border-radius: 6px; color: #fff; background: #111723; }
-.cloud-library small { display: block; color: #b5c6e3; line-height: 1.5; }
-.cloud-project-list { list-style: none; padding: 0; margin: 0; max-height: 320px; overflow-y: auto; }
-.cloud-project-list li { display: flex; gap: 12px; justify-content: space-between; align-items: center; border-top: 1px solid #394150; padding: 10px 0; }
+.cloud-sync-global { display: contents; }
+.cloud-dialog { box-sizing: border-box; width: min(820px, calc(100vw - 32px)); max-height: min(850px, calc(100dvh - 48px)); padding: 0; color: #e6e9ef; background: #171d28; border: 1px solid #46536b; border-radius: 18px; box-shadow: 0 24px 90px #0009; font-size: 14px; }
+.cloud-dialog::backdrop { background: #030814b8; backdrop-filter: blur(4px); }
+.cloud-dialog-header { position: sticky; top: 0; z-index: 1; display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 20px 24px; background: #171d28; border-bottom: 1px solid #394150; }
+.cloud-dialog-header small { color: #a7b8d3; font-size: 12px; }
+.cloud-dialog-header h2 { margin: 5px 0 0; font-size: 22px; }
+.cloud-dialog button { cursor: pointer; color: inherit; border: 1px solid #46536b; border-radius: 8px; background: #29364d; padding: 10px 14px; font: inherit; }
+.cloud-dialog button:disabled { opacity: .5; cursor: default; }
+.cloud-dialog button:focus-visible, .cloud-dialog input:focus-visible { outline: 2px solid #80c6ff; outline-offset: 3px; }
+.cloud-dialog .cloud-primary { background: #2466cc; border-color: #4082e6; color: white; font-weight: 650; }
+.cloud-panel { padding: 22px 24px 26px; }
+.cloud-panel > *:first-child { margin-top: 0; }
+.cloud-panel p { line-height: 1.7; margin: 12px 0; }
+.cloud-panel h3 { font-size: 15px; margin: 0; }
+.cloud-panel label { display: grid; gap: 7px; }
+.cloud-panel input { width: 100%; min-width: 0; box-sizing: border-box; padding: 12px; border: 1px solid #4b566c; border-radius: 8px; color: #fff; background: #111723; font: inherit; }
+.cloud-hint, .cloud-panel small { color: #b5c6e3; line-height: 1.6; }
+.cloud-login, .cloud-choice, .cloud-history { display: grid; gap: 12px; }
+.cloud-actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 20px 0 0; }
+.cloud-choice { padding: 16px; border: 1px solid #647a9e; border-radius: 10px; }
+.cloud-panel .cloud-error { color: #ffbeae; padding: 12px; border: 1px solid #8b554a; border-radius: 8px; }
+.cloud-search { display: flex; align-items: end; gap: 12px; margin: 20px 0; }
+.cloud-search label { flex: 1; }
+.cloud-search button { flex-shrink: 0; }
+.cloud-project-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
+.cloud-project-list li { display: flex; gap: 16px; justify-content: space-between; align-items: center; background: #1c2533; border: 1px solid #394659; border-radius: 12px; padding: 18px; }
+.cloud-project-list li.current { border-color: #477bbc; }
 .cloud-project-list li > div { min-width: 0; overflow-wrap: anywhere; }
+.cloud-project-list strong { display: inline; font-size: 16px; }
+.cloud-project-list small { display: block; margin-top: 6px; }
 .cloud-project-list button { flex-shrink: 0; }
-.cloud-rename { display: flex; align-items: end; gap: 8px; }
-.cloud-rename label { flex: 1; min-width: 0; }
-.cloud-rename button { flex-shrink: 0; }
-.cloud-refresh { justify-self: start; }
-
-.cloud-library summary { cursor: pointer; font-size: 15px; font-weight: 600; padding: 4px 0; }
-.cloud-library-content { display: grid; gap: 10px; margin-top: 10px; }
-.cloud-checkpoint { display: flex; align-items: end; gap: 8px; margin-top: 12px; }
-.cloud-checkpoint label { display: grid; gap: 4px; flex: 1; min-width: 0; }
-.cloud-checkpoint input { width: 100%; box-sizing: border-box; padding: 9px; border: 1px solid #4b566c; border-radius: 6px; color: #fff; background: #111723; }
-.cloud-checkpoint button { flex-shrink: 0; }
-.cloud-storage { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; color: #b5c6e3; font-size: 12px; }
-.cloud-storage button { padding: 5px 8px; }
+.cloud-current-badge { display: inline-block; font-size: 11px; color: #aad4ff; background: #254569; border-radius: 4px; margin-left: 10px; padding: 3px 6px; vertical-align: middle; }
+.cloud-rename, .cloud-checkpoint { display: flex; align-items: end; gap: 10px; margin: 20px 0; }
+.cloud-rename label, .cloud-checkpoint label { flex: 1; min-width: 0; }
+.cloud-rename button, .cloud-checkpoint button { flex-shrink: 0; }
+.cloud-history { border-top: 1px solid #394150; padding: 20px 0; margin-top: 20px; }
+.cloud-history button { text-align: left; }
+.cloud-storage { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; color: #b5c6e3; font-size: 13px; }
+.cloud-steps { display: flex; list-style: none; gap: 10px; margin: 0 0 24px; padding: 0; }
+.cloud-steps li { flex: 1; border-bottom: 2px solid #394659; color: #a7b8d3; padding-bottom: 12px; font-size: 13px; }
+.cloud-steps li.active { border-color: #61a9ff; color: #c6e3ff; font-weight: 700; }
+.cloud-template-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.cloud-template-grid button { text-align: left; padding: 8px; display: grid; gap: 7px; }
+.cloud-template-grid strong, .cloud-template-grid small { padding: 0 4px; overflow-wrap: anywhere; }
+.cloud-template-grid small { font-size: 11px; }
+.cloud-dialog button.selected { border-color: #84bcff; background-color: #253f62; box-shadow: 0 0 0 1px #84bcff; }
+.cloud-template-swatch { display: flex; align-items: center; justify-content: center; height: 70px; border-radius: 5px; }
+.cloud-template-swatch i { display: block; width: 70%; height: 32px; border: 1px solid; border-radius: 3px; }
+.cloud-section-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 24px 0 14px; }
+.cloud-shared-templates { display: flex; flex-wrap: wrap; gap: 10px; }
+.cloud-empty { padding: 40px 16px; text-align: center; color: #b5c6e3; border: 1px dashed #46536b; border-radius: 12px; }
+@media (max-width: 600px) {
+  .cloud-dialog { width: calc(100vw - 16px); max-height: calc(100dvh - 24px); border-radius: 12px; }
+  .cloud-dialog-header { padding: 16px; }
+  .cloud-dialog-header h2 { font-size: 19px; }
+  .cloud-panel { padding: 18px 16px; }
+  .cloud-template-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cloud-project-list li { padding: 14px; flex-wrap: wrap; }
+  .cloud-project-list li > div { flex: 1 1 200px; }
+  .cloud-rename, .cloud-checkpoint { flex-wrap: wrap; }
+  .cloud-rename label, .cloud-checkpoint label { flex-basis: 100%; }
+}

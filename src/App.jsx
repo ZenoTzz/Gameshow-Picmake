@@ -18,6 +18,7 @@ import { WorkspaceToolbar } from "./components/WorkspaceToolbar.jsx";
 import { CloudSync } from "./components/CloudSync.jsx";
 import { TemplateLibrary } from "./components/TemplateLibrary.jsx";
 import { createProjectFromTemplate } from "./utils/projectCreation.js";
+import { CardInspector } from "./components/CardInspector.jsx";
 import { GameEditor } from "./components/GameEditor.jsx";
 import { BulkImport } from "./components/BulkImport.jsx";
 import { ImageCropper } from "./components/ImageCropper";
@@ -59,6 +60,8 @@ function App() {
   const [pageIndex, setPageIndex] = useState(0);
   const [selectedGameId, setSelectedGameId] = useState(null);
   const [expandedGameId, setExpandedGameId] = useState(null);
+  const [workspaceTab, setWorkspaceTab] = useState("cards");
+  const [cloudWorkflow, setCloudWorkflow] = useState({});
   const [mobileView, setMobileView] = useState("editor");
   const editorPanelRef = useRef(null);
   const previewPanelRef = useRef(null);
@@ -104,7 +107,7 @@ function App() {
     if (!selectedGameId || !poster.games.some((game) => game.id === selectedGameId)) {
       const id = poster.games[0]?.id ?? null;
       setSelectedGameId(id);
-      setExpandedGameId(id);
+      setExpandedGameId(null);
     }
   }, [poster.games, selectedGameId]);
 
@@ -389,7 +392,7 @@ function App() {
       setExpandedGameId(null);
       setPageIndex(0);
       setPendingExternal(null);
-      setTemplateMessage(mode === 'new' ? '已载入独立草稿，原云端项目未被替换。请在“历史项目”填写名称并保存为新项目。' : `已明确替换“${identity.projectName}”，原内容已备份到本机历史。`);
+      setTemplateMessage(mode === 'new' ? '已载入独立草稿，原云端项目未被替换。请点击顶部“保存项目”，将草稿存入服务器历史。' : `已明确替换“${identity.projectName}”，原内容已备份到本机历史。`);
     } catch (error) { setTemplateMessage(error.message); }
     finally { busyRef.current = false; setIsProjectBusy(false); }
   }
@@ -461,6 +464,7 @@ function App() {
   }
 
   function selectGame(gameId, source = "editor") {
+    setWorkspaceTab("cards");
     setSelectedGameId(gameId);
     setExpandedGameId(gameId);
     const page = pages.findIndex((games) => games.some((game) => game.id === gameId));
@@ -474,7 +478,7 @@ function App() {
         const panelRect = panel.getBoundingClientRect();
         const cardRect = card.getBoundingClientRect();
         panel.scrollTo({ top: panel.scrollTop + cardRect.top - panelRect.top - 80, behavior: "smooth" });
-        if (source === "preview") card.querySelector(".game-summary-toggle")?.focus({ preventScroll: true });
+
       }
     });
   }
@@ -597,10 +601,17 @@ function App() {
     }
   }
 
+  const editingIndex = poster.games.findIndex((game) => game.id === expandedGameId);
+  const editingGame = workspaceTab === "cards" && editingIndex >= 0 ? poster.games[editingIndex] : null;
+  function closeCardEditor() {
+    setExpandedGameId(null);
+    requestAnimationFrame(() => document.getElementById(`game-summary-${expandedGameId}`)?.querySelector('.game-summary-toggle')?.focus({ preventScroll: true }));
+  }
+
   if (!isReady) return <main style={{ padding: 24 }}><p role="status">{loadError || "正在读取本机项目…"}</p>{loadError && <button onClick={() => window.location.reload()}>重新读取</button>}</main>;
 
   return (
-    <main className={`app-shell mobile-${mobileView}`}>
+    <main className={`app-shell mobile-${mobileView} workspace-${workspaceTab}${editingGame ? " has-inspector" : ""}`}>
       {pendingExternal && <dialog className="external-project-dialog" ref={externalDialog} onCancel={(event) => { event.preventDefault(); if (!isProjectBusy) setPendingExternal(null); }}>
         <h2>载入项目内容</h2>
         <p>{pendingExternal.title} · {pendingExternal.poster.games.length} 张卡片</p>
@@ -611,14 +622,8 @@ function App() {
           <button className="secondary-button" disabled={isProjectBusy} onClick={() => setPendingExternal(null)}>取消</button>
         </div>
       </dialog>}
-      <WorkspaceToolbar saveStatus={saveStatus} savedAt={savedAt} canUndo={canUndo} canRedo={canRedo} undo={undo} redo={redo} onSave={saveTemplate} busy={isSaving || isSyncing || isProjectBusy} isSaving={isSaving} isExporting={isExporting} onExport={exportImages} onCancelExport={() => exportAbortRef.current?.abort()} onBackup={backupProject} onImport={() => importRef.current?.click()} currentPage={currentPage} pageCount={pages.length} gameCount={poster.games.length}/>
-      <input ref={importRef} hidden type="file" accept=".zip,.json" onChange={(event) => { const file = event.target.files[0]; event.target.value = ""; importProject(file); }} />
-      <nav className="mobile-workspace-tabs" aria-label="工作区视图">
-        <button type="button" aria-pressed={mobileView === "editor"} onClick={() => setMobileView("editor")}>编辑内容</button>
-        <button type="button" aria-pressed={mobileView === "preview"} onClick={() => setMobileView("preview")}>查看预览</button>
-      </nav>
-      <section className="editor-panel" ref={editorPanelRef} aria-label="项目编辑">
-        <CloudSync controllerRef={cloudController} hasLocalDraft={hasLocalDraft} localIdentity={projectIdentity} onIdentityChange={setProjectIdentity} poster={poster} enabled={isReady && !isProjectBusy && !showThemeEditor && !cropState} onNewProject={() => createProjectFromTemplate(latestPoster.current)} onLoad={(project, options) => {
+      <WorkspaceToolbar saveStatus={saveStatus} savedAt={savedAt} canUndo={canUndo} canRedo={canRedo} undo={undo} redo={redo} onSave={() => cloudController.current?.saveProject()} onNew={() => cloudController.current?.startProject()} onHistory={() => cloudController.current?.showHistory()} onLocalSave={saveTemplate} onLocalHistory={() => { setWorkspaceTab("tools"); setExpandedGameId(null); setMobileView("editor"); requestAnimationFrame(() => { const history = document.querySelector(".history-section"); if (history) { history.open = true; history.scrollIntoView({ block: "start" }); } }); }} projectName={projectIdentity?.projectName} cloudStatus={cloudWorkflow.status} onAccount={() => cloudController.current?.showAccount()} busy={isSaving || isSyncing || isProjectBusy || cloudWorkflow.busy || Boolean(showThemeEditor) || Boolean(cropState)} isSaving={isSaving} isExporting={isExporting} onExport={exportImages} onCancelExport={() => exportAbortRef.current?.abort()} onBackup={backupProject} onImport={() => importRef.current?.click()} currentPage={currentPage} pageCount={pages.length} gameCount={poster.games.length}/>
+        <CloudSync themes={themes} onWorkflowChange={setCloudWorkflow} onOpenEditor={() => { setWorkspaceTab("cards"); setMobileView("editor"); }} controllerRef={cloudController} hasLocalDraft={hasLocalDraft} localIdentity={projectIdentity} onIdentityChange={setProjectIdentity} poster={poster} enabled={isReady && !isProjectBusy && !showThemeEditor && !cropState} onNewProject={() => createProjectFromTemplate(latestPoster.current)} onLoad={(project, options) => {
           const normalized = normalizePosterTemplate(project);
           setHasLocalDraft(true);
           if (options?.resetHistory) {
@@ -630,27 +635,44 @@ function App() {
           setPreviewTheme(null);
           setPageIndex(0);
         }} onPreserve={async (project, identity) => { setTemplateHistory(await saveProjectHistory(project, identity)); }} />
-        <div className="project-heading"><h2>编辑内容</h2><span>{poster.games.length} 款游戏</span></div>
+      <input ref={importRef} hidden type="file" accept=".zip,.json" onChange={(event) => { const file = event.target.files[0]; event.target.value = ""; importProject(file); }} />
+      <nav className="mobile-workspace-tabs" aria-label="工作区视图">
+        <button type="button" aria-pressed={mobileView === "editor"} onClick={() => setMobileView("editor")}>编辑内容</button>
+        <button type="button" aria-pressed={mobileView === "preview"} onClick={() => setMobileView("preview")}>查看预览</button>
+      </nav>
+      <section className="editor-panel" ref={editorPanelRef} aria-label="项目编辑">
+        <nav className="workspace-section-tabs" aria-label="编辑工具">
+          {[["cards", "卡片"], ["layout", "模板与排版"], ["tools", "更多工具"]].map(([value, label]) => <button type="button" key={value} aria-pressed={workspaceTab === value} disabled={Boolean(showThemeEditor) || Boolean(cropState)} onClick={() => { setWorkspaceTab(value); setExpandedGameId(null); }}>{label}</button>)}
+        </nav>
+        <div hidden={workspaceTab !== "layout"} className="workspace-section">
+        <div className="project-heading"><h2>模板与排版</h2></div>
+        <p className="field-hint">调整当前项目的外观。模板只保存样式，项目保留本次文字和图片。</p>
         <PosterSettings {...{ poster, themes, currentThemeText, currentLogoScale, updatePoster, updateThemeText, updateLogoScale, chooseLibraryLogo, handleLogoImage, handleFooterLogoImage, setPoster, setPageIndex, showThemeEditor, setShowThemeEditor, setPreviewTheme }} />
         <TemplateLibrary poster={poster} onApply={setPoster} enabled={isReady && !isProjectBusy && !showThemeEditor && !cropState} />
-        <BulkImport key={projectEpoch} currentCount={poster.games.length} onApply={applyParsedGames}/>
+        </div>
+        <div hidden={workspaceTab !== "cards"} className="workspace-section">
+        <div className="project-heading"><h2>卡片目录</h2><span>{poster.games.length} 张卡片</span></div>
         <div className="games-editor">
-          <div className="section-title"><span>游戏列表</span><div className="list-actions">
-            {expandedGameId && <button type="button" className="text-button" onClick={() => setExpandedGameId(null)}>收起编辑</button>}
+          <div className="section-title"><span>本次项目内容</span><div className="list-actions">
             <button type="button" onClick={addGame}><Plus size={16}/>添加游戏</button>
           </div></div>
-          <p className="field-hint">点击游戏编辑，也可以直接点击右侧预览卡片。</p>
-          {poster.games.length === 0 && <div className="empty-games"><p>还没有游戏内容</p><span>添加一款游戏，或展开“批量导入”粘贴发布会信息。</span><button className="secondary-button" type="button" onClick={addGame}>添加第一款游戏</button></div>}
+          <p className="field-hint">点击卡片编辑，拖动手柄排序。也可以点击海报中的卡片。</p>
+          {poster.games.length === 0 && <div className="empty-games"><p>还没有游戏内容</p><span>添加第一张卡片，或到「更多工具」批量导入。</span><button className="secondary-button" type="button" onClick={addGame}>添加第一款游戏</button></div>}
           <SortableGameList items={poster.games.map(game => game.id)} onDragStart={() => setIsDragging(true)} onDragCancel={() => setIsDragging(false)} onDragEnd={(event) => { setIsDragging(false); handleDragEnd(event); }}>
             {poster.games.map((game, index) => <SortableGameCard id={game.id} key={game.id}>
               <div data-editor-game-id={game.id} className={selectedGameId === game.id ? "selected-editor-game" : ""}>
-                <GameEditor key={`${projectEpoch}:${game.id}`} game={game} index={index} total={poster.games.length} isExpanded={!isDragging && expandedGameId === game.id} onSelect={() => { if (expandedGameId === game.id) setExpandedGameId(null); else selectGame(game.id); }} onChange={(key, value) => updateGame(index, key, value)} onMove={(direction) => moveGame(index, direction)} onRemove={() => removeGame(index)} onImage={(file) => handleImage(game.id, file)} onIgdbImage={(dataUrl, source) => handleIgdbImage(game.id, dataUrl, source)} onRecrop={() => recropGame(game)}/>
+                <GameEditor mode="summary" key={`${projectEpoch}:${game.id}`} game={game} index={index} total={poster.games.length} isExpanded={!isDragging && expandedGameId === game.id} onSelect={() => { if (expandedGameId === game.id) setExpandedGameId(null); else selectGame(game.id); }} onChange={(key, value) => updateGame(index, key, value)} onMove={(direction) => moveGame(index, direction)} onRemove={() => removeGame(index)} onImage={(file) => handleImage(game.id, file)} onIgdbImage={(dataUrl, source) => handleIgdbImage(game.id, dataUrl, source)} onRecrop={() => recropGame(game)}/>
               </div>
             </SortableGameCard>)}
           </SortableGameList>
         </div>
-        <details className="settings-section history-section"><summary>本机历史记录 <span>{templateHistory.length} 条</span></summary>
-          <div className="history-list">{templateHistory.map((item, index) => <button key={item.id ?? `${item.savedAt}-${index}`} type="button" onClick={() => restoreHistory(item)}>{item.projectName || "旧版未标记项目"} · {formatHistoryTime(item.savedAt)} · {themes[item.poster?.theme ?? item.template?.theme]?.label ?? "模板"}</button>)}{!templateHistory.length && <p className="field-hint">点击“保存到本机”可保留完整历史版本。</p>}</div>
+        </div>
+        <div hidden={workspaceTab !== "tools"} className="workspace-section">
+        <div className="project-heading"><h2>更多工具</h2></div>
+        <BulkImport key={projectEpoch} currentCount={poster.games.length} onApply={(games, mode) => { applyParsedGames(games, mode); setWorkspaceTab("cards"); }}/>
+        <details className="settings-section history-section"><summary>本机恢复记录 <span>{templateHistory.length} 条</span></summary>
+          <p className="field-hint">这里仅用于恢复本机内容，不是服务器历史项目。</p>
+          <div className="history-list">{templateHistory.map((item, index) => <button key={item.id ?? `${item.savedAt}-${index}`} type="button" onClick={() => restoreHistory(item)}>{item.projectName || "旧版未标记项目"} · {formatHistoryTime(item.savedAt)} · {themes[item.poster?.theme ?? item.template?.theme]?.label ?? "模板"}</button>)}{!templateHistory.length && <p className="field-hint">在顶部「备份」中保存本机副本。服务器保存的项目请到「历史项目」查看。</p>}</div>
         </details>
           <details className="wide-field">
             <summary>线上发布（可选）</summary>
@@ -665,6 +687,7 @@ function App() {
             </div>
           </details>
 
+        </div>
         <datalist id="poster-fonts">{fontOptions.map((font) => <option value={font} key={font}/>)}</datalist>
       </section>
       <section className="preview-panel" ref={previewPanelRef} aria-label="海报预览">
@@ -677,6 +700,10 @@ function App() {
           {stitchPages ? <div className="long-poster-preview"><PosterPage infoFontSize={poster.infoFontSize ?? defaultInfoFontSize} isFullCardPage={false} pageGames={poster.games} pageOffset={0} fillSpace={false} onLogoPositionChange={updateLogoPosition} poster={poster} posterRef={posterRef} theme={theme} isLongPoster={true} selectedGameId={selectedGameId} onGameSelect={(id) => selectGame(id, "preview")}/></div> : pages.map((pageGames, index) => <div key={`preview-page-${index}`} data-preview-page={index} className="poster-scale-wrap"><PosterPage infoFontSize={poster.infoFontSize ?? defaultInfoFontSize} isFullCardPage={poster.compactFollowupPages && index > 0} pageGames={pageGames} pageOffset={pageStartOffsets[index] ?? 0} fillSpace={getPageFillSetting(poster, index)} onLogoPositionChange={index === currentPage ? updateLogoPosition : () => {}} poster={poster} posterRef={index === currentPage ? posterRef : null} theme={theme} selectedGameId={selectedGameId} onGameSelect={(id) => selectGame(id, "preview")}/></div>)}
         </div>
       </section>
+      {editingGame && <CardInspector key={`${projectEpoch}:${editingGame.id}`} game={editingGame} index={editingIndex} total={poster.games.length}
+        onClose={closeCardEditor} onSelectAdjacent={(direction) => selectGame(poster.games[editingIndex + direction].id)}
+        onChange={(key, value) => updateGame(editingIndex, key, value)} onMove={(direction) => moveGame(editingIndex, direction)} onRemove={() => removeGame(editingIndex)}
+        onImage={(file) => handleImage(editingGame.id, file)} onIgdbImage={(dataUrl, source) => handleIgdbImage(editingGame.id, dataUrl, source)} onRecrop={() => recropGame(editingGame)} />}
       <MeasurementLayer fonts={posterFonts} games={poster.games} infoFontSize={poster.infoFontSize ?? defaultInfoFontSize} infoFontWeight={poster.infoFontWeight ?? defaultInfoFontWeight} measureRef={measureRef} showGameInfo={poster.showGameInfo ?? true} theme={theme}/>
       {templateMessage && <div className="workspace-message" role="status"><span>{templateMessage}</span><button type="button" aria-label="关闭提示" onClick={() => setTemplateMessage("")}>×</button></div>}
       {cropState && <ImageCropper imageSrc={cropState.imageSrc} onCropComplete={handleCropComplete} onCancel={() => setCropState(null)}/>}

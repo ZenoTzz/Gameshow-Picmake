@@ -1,0 +1,90 @@
+/* The directory, canvas, and card inspector each keep their own scroll position. */
+.app-shell { grid-template-columns: 288px minmax(0, 1fr); }
+.app-shell.has-inspector { grid-template-columns: 288px minmax(0, 1fr) 368px; }
+.app-shell.workspace-layout, .app-shell.workspace-tools { grid-template-columns: 390px minmax(0, 1fr); }
+.workspace-toolbar { gap: 16px; padding: 12px 18px; flex-wrap: wrap; }
+.workspace-brand p { max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.workspace-save-status { text-align: left; background: transparent; padding: 0; border: 0; max-width: 250px; line-height: 1.5; }
+.workspace-save-status.saved .status-dot { background: #94a3b8; }
+.workspace-save-status[data-synced=true] .status-dot { background: #34d399; }
+.workspace-save-status small { display: block; font-size: 10px; color: #8194ac; }
+.workspace-actions { gap: 6px; }
+.workspace-actions > button { font-size: 12px; padding: 0 10px; }
+.workspace-actions .save-button { background: #16709b; border-color: #2587b5; color: #fff; }
+.editor-panel { padding: 0 14px 40px; }
+.workspace-section-tabs { display: flex; gap: 4px; position: sticky; top: 0; z-index: 6; padding: 14px 0; margin-bottom: 10px; background: #0f172a; }
+.workspace-section-tabs button, .card-editor-tabs button { flex: 1; padding: 9px 5px; border: 1px solid transparent; border-radius: 7px; color: #92a5bf; background: transparent; font-size: 12px; white-space: nowrap; }
+.workspace-section-tabs button[aria-pressed=true], .card-editor-tabs button[aria-pressed=true] { color: #cef0ff; background: #1b344e; border-color: #315775; }
+.workspace-section[hidden], .card-editor-pane[hidden] { display: none; }
+.workspace-section .project-heading { margin-bottom: 12px; }
+.workspace-section .project-heading h2 { font-size: 17px; }
+.workspace-section .games-editor { margin-top: 0; }
+.workspace-section .game-editor-card { padding: 7px 5px; }
+.workspace-section .game-summary-toggle { gap: 7px; min-height: 48px; }
+.workspace-section .game-summary-thumbnail { width: 38px; height: 31px; }
+.workspace-section .game-summary-title { font-size: 12px; }
+.workspace-section .game-summary-date { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.workspace-section .game-summary-toggle > svg { width: 12px; flex-shrink: 0; }
+.workspace-section .game-summary .drag-handle { width: 20px; min-width: 20px; }
+.workspace-section > details.wide-field { border: 1px solid #29364e; border-radius: 9px; padding: 12px; font-size: 12px; }
+.workspace-section > details.wide-field > summary { cursor: pointer; }
+.workspace-section .history-section > p { padding: 0 12px; }
+.preview-panel { padding: 0 24px 40px; }
+.card-inspector { grid-column: 3; grid-row: 2; min-width: 0; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 0 16px 18px; background: #0f172a; border-left: 1px solid #29364e; }
+.inspector-heading { position: sticky; top: 0; z-index: 7; background: #0f172a; display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 16px 0 12px; border-bottom: 1px solid #29364e; }
+.inspector-heading small { color: #8fa1b9; font-size: 11px; }
+.inspector-heading h2 { font-size: 17px; margin: 5px 0 0; }
+.inspector-navigation { display: flex; gap: 4px; }
+.inspector-navigation .icon-button { min-width: 30px; width: 30px; height: 32px; min-height: 32px; }
+.card-inspector .game-editor-card { border: 0; background: transparent; padding: 0; margin: 0; }
+.card-inspector .game-details { border: 0; margin: 0; padding: 0; gap: 12px; }
+.card-editor-tabs { display: flex; gap: 5px; padding: 12px 0 0; }
+.card-editor-pane { display: grid; gap: 16px; min-width: 0; padding-bottom: 12px; }
+.card-editor-pane textarea { min-height: 180px; resize: vertical; }
+.card-editor-pane label { min-width: 0; }
+.card-editor-pane input, .card-editor-pane textarea { width: 100%; min-width: 0; }
+.card-editor-pane input[type=checkbox] { width: 16px; }
+.card-editor-pane .igdb-game-results { max-height: 245px; overflow-y: auto; }
+.card-editor-pane .igdb-game-result { min-height: 54px; }
+.inspector-card-actions { display: flex; justify-content: flex-end; gap: 12px; padding: 16px 0; border-top: 1px solid #29364e; }
+.inspector-card-actions .text-button { background: transparent; border: 0; color: #9aafc8; font-size: 11px; padding: 6px 0; }
+.inspector-card-actions .text-button:last-child { color: #fda4af; margin-left: auto; }
+.inspector-footer { display: flex; justify-content: space-between; align-items: center; gap: 12px; font-size: 11px; color: #8fa1b9; }
+.inspector-footer button { font-size: 12px; }
+@media (min-width: 1280px) and (max-width: 1450px) {
+  .workspace-save-status { order: 3; max-width: none; width: 100%; }
+  .workspace-save-status small { display: inline; margin-left: 12px; }
+}
+@media (min-width: 761px) and (max-width: 1279px) {
+  .app-shell.has-inspector { grid-template-columns: 360px minmax(0, 1fr); }
+  .has-inspector .editor-panel { display: none; }
+  .card-inspector { grid-column: 1; border-left: 0; border-right: 1px solid #29364e; }
+  .workspace-save-status { order: 3; width: 100%; max-width: none; }
+  .workspace-save-status small { display: inline; margin-left: 12px; }
+}
+@media (max-width: 760px) {
+  .app-shell, .app-shell.has-inspector, .app-shell.workspace-layout, .app-shell.workspace-tools { grid-template-columns: minmax(0, 1fr); }
+  .workspace-toolbar { padding: 10px 12px; gap: 8px; }
+  .workspace-brand { display: flex; width: 100%; }
+  .workspace-brand .brand-icon, .workspace-brand h1 { display: none; }
+  .workspace-brand p { margin: 0; max-width: calc(100vw - 24px); font-size: 12px; }
+  .workspace-actions { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px; }
+  .workspace-actions button { white-space: nowrap; }
+  .workspace-actions .create-project-button { grid-area: 1 / 1 / 2 / 3; }
+  .workspace-actions .history-project-button { grid-area: 1 / 3 / 2 / 5; }
+  .workspace-actions .save-button { grid-area: 1 / 5 / 2 / 7; }
+  .workspace-actions > button { flex: 1; min-height: 36px; }
+  .workspace-actions .undo-actions { grid-area: 2 / 1 / 3 / 3; order: 0; margin: 0; border: 0; padding: 0; }
+  .workspace-actions .toolbar-popover-wrap { grid-row: 2; grid-column: span 2; order: 0; }
+  .workspace-actions .toolbar-popover-wrap > button { width: 100%; min-height: 34px; }
+  .workspace-save-status { text-align: left; background: transparent; padding: 0; border: 0; max-width: none; width: 100%; }
+  .workspace-save-status small { display: inline; margin-left: 8px; }
+  .card-inspector { grid-column: 1; grid-row: 3; border: 0; padding: 0 16px 28px; }
+  .mobile-editor.has-inspector .editor-panel, .mobile-preview .card-inspector { display: none; }
+  .workspace-section-tabs { margin-bottom: 6px; }
+  .editor-panel { padding: 0 12px 35px; }
+  .preview-panel { padding: 0 12px 35px; }
+  .card-editor-pane input, .card-editor-pane textarea { font-size: 16px; }
+  .workspace-section .game-summary-toggle { min-height: 52px; }
+  .workspace-section .game-summary .drag-handle { width: 28px; min-width: 28px; }
+}

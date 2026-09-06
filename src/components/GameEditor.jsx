@@ -4,8 +4,9 @@ import { IgdbImagePicker } from "./IgdbImagePicker";
 import { DragHandle } from "./SortableGameList";
 import { platformOptions, resolveLogoSrc } from "../utils/coreUtils";
 
-export function GameEditor({ game, index, total, isExpanded, onSelect, onChange, onMove, onRemove, onImage, onIgdbImage, onRecrop }) {
+export function GameEditor({ game, index, total, isExpanded, onSelect, onChange, onMove, onRemove, onImage, onIgdbImage, onRecrop, mode = "full" }) {
   const detailsId = useId();
+  const [tab, setTab] = useState("content");
   const fileInput = useRef(null);
   const [customPlatform, setCustomPlatform] = useState("");
   const [isDragOver, setIsDragOver] = useState(false);
@@ -47,7 +48,7 @@ export function GameEditor({ game, index, total, isExpanded, onSelect, onChange,
   }
 
   return (
-    <article className={`game-editor-card${isExpanded ? " is-selected" : ""}`} id={`game-editor-${game.id}`}
+    <article className={`game-editor-card${isExpanded ? " is-selected" : ""}`} id={`game-${mode}-${game.id}`}
       onPaste={(event) => {
         const file = Array.from(event.clipboardData.files).find((item) => item.type.startsWith("image/"));
         if (!file) return;
@@ -55,11 +56,11 @@ export function GameEditor({ game, index, total, isExpanded, onSelect, onChange,
         event.stopPropagation();
         receiveImage(file);
       }}>
-      <div className="game-summary">
+      {mode !== "details" && <div className="game-summary">
         <DragHandle className="icon-button drag-handle" aria-label={`拖动排序：${title}`} title="拖动排序，也可聚焦后按空格和方向键排序">
           <GripVertical size={16} />
         </DragHandle>
-        <button className="game-summary-toggle" type="button" aria-expanded={isExpanded} aria-controls={detailsId} onClick={onSelect}>
+        <button className="game-summary-toggle" type="button" aria-expanded={isExpanded} aria-controls={mode === "summary" ? "card-inspector" : detailsId} onClick={onSelect}>
           <span className="game-summary-thumbnail">
             {game.image ? <img src={resolveLogoSrc(game.image)} alt="" loading="lazy" /> : <ImagePlus size={19} />}
           </span>
@@ -69,14 +70,22 @@ export function GameEditor({ game, index, total, isExpanded, onSelect, onChange,
           </span>
           {isExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
         </button>
-        <div className="game-editor-actions">
+        {mode !== "summary" && <div className="game-editor-actions">
           <button aria-label={`上移：${title}`} title="上移" className="icon-button order-button" disabled={index === 0} type="button" onClick={() => onMove(-1)}><ChevronUp size={16} /></button>
           <button aria-label={`下移：${title}`} title="下移" className="icon-button order-button" disabled={index === total - 1} type="button" onClick={() => onMove(1)}><ChevronDown size={16} /></button>
           <button aria-label={`删除游戏：${title}`} title="删除游戏" className="icon-button" type="button" onClick={onRemove}><Trash2 size={16} /></button>
+        </div>}
+      </div>}
+      {mode !== "summary" && isExpanded && <div className="game-details" id={detailsId}>
+        <div className="card-editor-tabs" role="group" aria-label="卡片编辑分类">
+          {[["content", "文字"], ["image", "配图"], ["display", "日期与平台"]].map(([value, label]) => <button key={value} type="button" aria-pressed={tab === value} onClick={() => setTab(value)}>{label}</button>)}
         </div>
-      </div>
-      {isExpanded && <div className="game-details" id={detailsId}>
+        <div className="card-editor-pane" hidden={tab !== "content"}>
         <label>游戏名<input value={game.title} onCompositionStart={() => setTitleComposing(true)} onCompositionEnd={() => setTitleComposing(false)} onChange={(event) => onChange("title", event.target.value)} /></label>
+        <label>关键信息<textarea aria-label="关键信息" value={game.info} onChange={(event) => onChange("info", event.target.value)} /></label>
+        <p className="field-hint">文字会实时显示在海报中。填写游戏名后，可到「配图」选择 IGDB 图片。</p>
+        </div>
+        <div className="card-editor-pane" hidden={tab !== "display"}>
         <fieldset className="card-visibility">
           <legend>本卡片显示内容</legend>
           <div className="card-visibility-options">
@@ -102,7 +111,8 @@ export function GameEditor({ game, index, total, isExpanded, onSelect, onChange,
             <button className="secondary-button" type="button" disabled={!customPlatform.trim()} onClick={addCustomPlatforms}>添加</button>
           </div>
         </fieldset>}
-        <label>关键信息<textarea value={game.info} onChange={(event) => onChange("info", event.target.value)} /></label>
+        </div>
+        <div className="card-editor-pane" hidden={tab !== "image"}>
         <IgdbImagePicker key={imageRevision} title={game.title} composing={titleComposing} image={game.image} onChoose={onIgdbImage} />
         <div className={`image-editor${isDragOver ? " is-drag-over" : ""}`} tabIndex={0} role="group" aria-label="游戏图片，可拖入图片或粘贴截图"
           onDragOver={(event) => {
@@ -130,6 +140,7 @@ export function GameEditor({ game, index, total, isExpanded, onSelect, onChange,
           <input ref={fileInput} aria-label="上传游戏图片" type="file" accept="image/*" hidden onChange={(event) => { receiveImage(event.target.files[0]); event.target.value = ""; }} />
           <span className="field-hint">可拖入图片，或点击此区域后粘贴截图。上传后可裁剪为 16:9。</span>
           {imageError && <span role="alert" className="field-hint">{imageError}</span>}
+        </div>
         </div>
       </div>}
     </article>

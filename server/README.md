@@ -108,3 +108,5 @@ systemctl start picmake
 
 
 2026-09-06 生产 IGDB 发布：`/opt/picmake/releases/20260906-igdb`。凭据位于 root 所有、0600 权限的 `/etc/picmake-igdb.env`，由 `picmake.service.d/igdb.conf` 加载；本机 `.env.igdb.local` 及其交换文件不进入 Git。发布前备份为 `/var/backups/picmake/picmake-20260906T153258Z-1049585.tar.gz`。配置更新后重启服务生效；更换凭据无需重新构建客户端。
+
+2026-09-07 工作区流程发布：`/opt/picmake/releases/20260907-workspace`，上一个版本 `20260906-igdb` 保留供回退。服务器数据备份：`/var/backups/picmake/picmake-20260906T160436Z-1050532.tar.gz`（UTC 时间）。此次修改网站编辑界面与项目入口，服务端接口、账号和素材目录沿用原配置。
