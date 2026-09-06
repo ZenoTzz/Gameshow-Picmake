@@ -30,8 +30,16 @@ actor CloudAPI {
         _ = try await request("/logout", method: "POST", value: .object([:]))
         cookie = nil; csrf = ""; if persistSession { try SessionKeychain.save(nil) }
     }
-    private func send(_ path: String, method: String = "GET", data: Data? = nil, mime: String? = nil, refreshCSRF: Bool = true) async throws -> (Data, HTTPURLResponse) {
-        var request = URLRequest(url: baseURL.appendingPathComponent("api" + path))
+    private func send(_ path: String, method: String = "GET", data: Data? = nil, mime: String? = nil, refreshCSRF: Bool = true, query: [URLQueryItem] = []) async throws -> (Data, HTTPURLResponse) {
+        var components = URLComponents(url: baseURL.appendingPathComponent("api" + path), resolvingAgainstBaseURL: false)
+        if !query.isEmpty {
+            components?.queryItems = query
+            // URLSearchParams treats a literal + as a space; game names can contain +.
+            let encoded = components?.percentEncodedQuery?.replacingOccurrences(of: "+", with: "%2B")
+            components?.percentEncodedQuery = encoded
+        }
+        guard let url = components?.url else { throw CloudError(status: 0, message: "请求地址无效。") }
+        var request = URLRequest(url: url)
         request.httpMethod = method; request.httpBody = data
         request.setValue(baseURL.absoluteString.trimmingCharacters(in: CharacterSet(charactersIn: "/")), forHTTPHeaderField: "Origin")
         if let cookie { request.setValue("picmake_session=" + cookie, forHTTPHeaderField: "Cookie") }
@@ -43,7 +51,7 @@ actor CloudAPI {
             let message = (try? JSONDecoder().decode(JSONValue.self, from: bytes))?["error"].string ?? "请求失败（\(response.statusCode)）。"
             if response.statusCode == 403 && refreshCSRF && message == "会话校验失败，请刷新重试" {
                 _ = try await self.request("/session")
-                return try await send(path, method: method, data: data, mime: mime, refreshCSRF: false)
+                return try await send(path, method: method, data: data, mime: mime, refreshCSRF: false, query: query)
             }
             if response.statusCode == 401 { cookie = nil; csrf = ""; if persistSession { try SessionKeychain.save(nil) } }
             throw CloudError(status: response.statusCode, message: response.statusCode == 409 ? "电脑或其他设备已更新此项目。手机草稿已保留；请返回查看云端版本，或另存为新项目。" : message)
@@ -55,9 +63,9 @@ actor CloudAPI {
         }
         return (bytes, response)
     }
-    private func request(_ path: String, method: String = "GET", value: JSONValue? = nil) async throws -> JSONValue {
+    private func request(_ path: String, method: String = "GET", value: JSONValue? = nil, query: [URLQueryItem] = []) async throws -> JSONValue {
         let encoder = JSONEncoder(); encoder.outputFormatting = [.sortedKeys]
-        let (data, _) = try await send(path, method: method, data: value.map { try encoder.encode($0) }, mime: value == nil ? nil : "application/json")
+        let (data, _) = try await send(path, method: method, data: value.map { try encoder.encode($0) }, mime: value == nil ? nil : "application/json", query: query)
         let result = try JSONDecoder().decode(JSONValue.self, from: data)
         if let token = result["csrfToken"].string { csrf = token }
         return result
@@ -72,6 +80,31 @@ actor CloudAPI {
     }
     func templates() async throws -> [TemplateSummary] { try decode(await request("/templates")["templates"], as: [TemplateSummary].self) }
     func template(id: String) async throws -> ProjectEnvelope { try decode(await request("/templates/\(try checkedID(id))"), as: ProjectEnvelope.self) }
+    func igdbConfigured() async throws -> Bool {
+        let result = try await request("/igdb/status")
+        guard let configured = result["configured"].bool else { throw CloudError(status: 0, message: "搜图服务返回了无效响应。") }
+        return configured
+    }
+    func igdbSearch(query: String) async throws -> [IGDBGame] {
+        let normalized = IGDBSupport.query(query)
+        guard IGDBSupport.validQuery(normalized) else { throw CloudError(status: 0, message: "请输入 2–120 个字符的游戏名称。") }
+        return try decode(await request("/igdb/search", query: [URLQueryItem(name: "q", value: normalized)])["games"], as: [IGDBGame].self)
+    }
+    func igdbImages(gameID: Int) async throws -> IGDBGallery {
+        guard gameID > 0 else { throw CloudError(status: 0, message: "游戏标识无效。") }
+        return try decode(await request("/igdb/games/\(gameID)/images"), as: IGDBGallery.self)
+    }
+    func igdbImport(gameID: Int, image: IGDBImage) async throws -> IGDBImportResult {
+        guard gameID > 0, IGDBSupport.validImageID(image.id) else { throw CloudError(status: 0, message: "图片标识无效。") }
+        let result = try decode(await request("/igdb/import", method: "POST", value: .object([
+            "gameId": .number(Double(gameID)), "imageId": .string(image.id), "kind": .string(image.kind.rawValue)
+        ])), as: IGDBImportResult.self)
+        guard result.source.provider == "igdb", result.source.gameId == gameID,
+              result.source.imageId == image.id, result.source.kind == image.kind,
+              result.dataUrl.hasPrefix("data:image/") else { throw CloudError(status: 0, message: "搜图服务返回的图片与选择不一致。") }
+        _ = try AssetCodec.pack(.string(result.dataUrl))
+        return result
+    }
     private func checkedID(_ id: String) throws -> String {
         guard id == "legacy" || UUID(uuidString: id) != nil || AssetCodec.validID(id) else { throw CloudError(status: 0, message: "项目标识无效。") }; return id.lowercased()
     }

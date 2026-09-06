@@ -5,6 +5,7 @@ import path from 'node:path';
 import { randomBytes, randomUUID, createHash, scrypt as scryptCallback, timingSafeEqual } from 'node:crypto';
 import { promisify } from 'node:util';
 import { ASSET_ID, IMAGE_TYPE, PROJECT_LIMITS, mapProject, validateProject } from '../src/utils/projectAssets.js';
+import { createIGDB } from './igdb.js';
 const scrypt = promisify(scryptCallback);
 const hash = (value) => createHash('sha256').update(value).digest('hex');
 const random = () => randomBytes(32).toString('hex');
@@ -20,7 +21,8 @@ async function jsonBody(req, limit = PROJECT_LIMITS.manifest + 1024) {
   if (req.headers['content-type']?.split(';')[0].trim() !== 'application/json') throw fail(415, '需要 JSON 请求');
   try { return JSON.parse(await body(req, limit)); } catch (error) { if (error.status) throw error; throw fail(400, 'JSON 无效'); }
 }
-export async function createApp({ dataDir, publicDir, origin, bootstrapToken, allowInsecureCookies = false }) {
+export async function createApp({ dataDir, publicDir, origin, bootstrapToken, allowInsecureCookies = false, igdbClientId, igdbClientSecret, igdbFetch }) {
+  const igdb = createIGDB({ clientId: igdbClientId, clientSecret: igdbClientSecret, fetchImpl: igdbFetch });
   if (!origin || new URL(origin).origin !== origin) throw new Error('PUBLIC_ORIGIN must be an exact origin');
   dataDir = path.resolve(dataDir);
   if (publicDir && (dataDir === path.resolve(publicDir) || dataDir.startsWith(`${path.resolve(publicDir)}${path.sep}`))) throw new Error('DATA_DIR must not be inside PUBLIC_DIR');
@@ -170,6 +172,11 @@ export async function createApp({ dataDir, publicDir, origin, bootstrapToken, al
       }
       if (!session) throw fail(401, '请先登录');
       if (writing && !equal(req.headers['x-csrf-token'], session.csrf)) throw fail(403, '会话校验失败，请刷新重试');
+      if (route === '/api/igdb/status' && method === 'GET') { send(200, { configured: igdb.configured }); return; }
+      if (route === '/api/igdb/search' && method === 'GET') { send(200, await igdb.search(url.searchParams.get('q'))); return; }
+      const igdbImages = /^\/api\/igdb\/games\/(\d+)\/images$/.exec(route);
+      if (igdbImages && method === 'GET') { send(200, await igdb.images(Number(igdbImages[1]))); return; }
+      if (route === '/api/igdb/import' && method === 'POST') { send(200, await igdb.importImage(await jsonBody(req, 2048))); return; }
       if (route === '/api/logout' && method === 'POST') {
         await jsonBody(req, 1024); db.prepare('DELETE FROM sessions WHERE id=?').run(session.id); res.setHeader('Set-Cookie', cookie('', 0)); send(200, { authenticated: false }); return;
       }

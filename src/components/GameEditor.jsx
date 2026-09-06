@@ -1,14 +1,17 @@
 import React, { useId, useRef, useState } from "react";
 import { ChevronDown, ChevronUp, Crop, GripVertical, ImagePlus, Trash2, X } from "lucide-react";
+import { IgdbImagePicker } from "./IgdbImagePicker";
 import { DragHandle } from "./SortableGameList";
 import { platformOptions, resolveLogoSrc } from "../utils/coreUtils";
 
-export function GameEditor({ game, index, total, isExpanded, onSelect, onChange, onMove, onRemove, onImage, onRecrop }) {
+export function GameEditor({ game, index, total, isExpanded, onSelect, onChange, onMove, onRemove, onImage, onIgdbImage, onRecrop }) {
   const detailsId = useId();
   const fileInput = useRef(null);
   const [customPlatform, setCustomPlatform] = useState("");
   const [isDragOver, setIsDragOver] = useState(false);
   const [imageError, setImageError] = useState("");
+  const [titleComposing, setTitleComposing] = useState(false);
+  const [imageRevision, setImageRevision] = useState(0);
   const platforms = game.platforms ?? [];
   const hasPlatform = (name) => platforms.some((platform) => platform.toLowerCase() === name.toLowerCase());
   const customPlatforms = platforms.filter((platform) => !platformOptions.some((option) => option.toLowerCase() === platform.toLowerCase()));
@@ -39,6 +42,7 @@ export function GameEditor({ game, index, total, isExpanded, onSelect, onChange,
       return;
     }
     setImageError("");
+    setImageRevision((value) => value + 1);
     onImage(file);
   }
 
@@ -72,7 +76,7 @@ export function GameEditor({ game, index, total, isExpanded, onSelect, onChange,
         </div>
       </div>
       {isExpanded && <div className="game-details" id={detailsId}>
-        <label>游戏名<input value={game.title} onChange={(event) => onChange("title", event.target.value)} /></label>
+        <label>游戏名<input value={game.title} onCompositionStart={() => setTitleComposing(true)} onCompositionEnd={() => setTitleComposing(false)} onChange={(event) => onChange("title", event.target.value)} /></label>
         <fieldset className="card-visibility">
           <legend>本卡片显示内容</legend>
           <div className="card-visibility-options">
@@ -99,6 +103,7 @@ export function GameEditor({ game, index, total, isExpanded, onSelect, onChange,
           </div>
         </fieldset>}
         <label>关键信息<textarea value={game.info} onChange={(event) => onChange("info", event.target.value)} /></label>
+        <IgdbImagePicker key={imageRevision} title={game.title} composing={titleComposing} image={game.image} onChoose={onIgdbImage} />
         <div className={`image-editor${isDragOver ? " is-drag-over" : ""}`} tabIndex={0} role="group" aria-label="游戏图片，可拖入图片或粘贴截图"
           onDragOver={(event) => {
             if (!Array.from(event.dataTransfer.types).includes("Files")) return;
@@ -118,7 +123,7 @@ export function GameEditor({ game, index, total, isExpanded, onSelect, onChange,
           <div className="image-editor-actions">
             <button className="secondary-button" type="button" onClick={() => fileInput.current?.click()}><ImagePlus size={16} />{game.image ? "替换图片" : "上传图片"}</button>
             {game.image && <>
-              <button className="secondary-button" type="button" onClick={onRecrop}><Crop size={16} />重新裁剪</button>
+              <button className="secondary-button" type="button" onClick={() => { setImageRevision((value) => value + 1); onRecrop(); }}><Crop size={16} />重新裁剪</button>
               <button className="secondary-button" type="button" onClick={() => onChange("image", "")}><X size={16} />移除</button>
             </>}
           </div>

@@ -10,6 +10,7 @@
 - `HOST` / `PORT`：默认 `127.0.0.1` / `8790`。
 - `BOOTSTRAP_TOKEN`：首次注册需要的高熵随机一次性令牌，通过安全环境文件配置；账号建立后不能再次注册，可移除此变量。
 - `ALLOW_INSECURE_COOKIES=true`：仅本机 HTTP 测试使用，生产不得启用。
+- `IGDB_CLIENT_ID` / `IGDB_CLIENT_SECRET`：可选，Twitch 开发者应用的 Client ID 和 Client Secret，用于 IGDB 游戏选图；仅配置在服务器，不能使用 `VITE_` 前缀或写入网站/iOS 构建。
 
 首次设置账号时密码至少 12 字符。密码使用随机盐 scrypt；会话有效 7 天。Cookie 为 HttpOnly、Secure、SameSite=Lax。写请求必须发送准确 Origin，JSON 请求使用 application/json；除登录和首次注册外，还须发送 X-CSRF-Token。代理应限制请求速率及连接数，限制上传请求体约 21MB，并仅向应用转发受信来源的请求。应用按直连 IP 与全局限制认证尝试（15 分钟内 15 / 100 次），共享反向代理 IP 的个人使用场景适用，不信任客户端 X-Forwarded-For。
 
@@ -33,6 +34,26 @@
 `picmake.service` 为参考 systemd 单元：使用独立 picmake 系统用户、只写 `/var/lib/picmake`、默认站点 `https://pic.zenohy.uk`，反向代理到 `127.0.0.1:8790`。运行时放在 `/opt/picmake/runtime/node`（Node 24+），应是服务用户可执行且不位于 root 家目录的独立二进制；根据实际安装路径调整 ExecStart。`/opt/picmake/current` 应包含 dist、server、src/utils/projectAssets.js 及 package.json（ESM 类型配置）。首次注册令牌放在仅 root 可读的 `/etc/picmake.env`，不要放在仓库、构建输出或公开日志中。服务端初始化账号后移除令牌并重启不会删除账号。
 
 `sudo sh server/backup.sh /var/backups/picmake` 会短暂停止服务，打包整个数据目录并验证压缩包，随后恢复原先正在运行的服务。脚本不删除旧备份。备份含私人图片、账号和会话，应限制访问，并另行复制到异机；同一 VPS 上的副本不能应对磁盘损坏。恢复时先停止服务，备份当前数据，把压缩包中的 picmake 目录恢复到 `/var/lib`，将权限归属设回 picmake 用户，再启动服务。
+
+## IGDB 游戏选图
+
+在 [Twitch 开发者控制台](https://dev.twitch.tv/console/apps) 注册应用（账号需开启双重验证），创建 Client Secret。此服务使用应用凭据授权，不要求网站用户登录 Twitch；控制台必填 OAuth Redirect URL 时可填 `http://localhost`，本功能不使用该回调。将以下两项通过服务器管理员编辑器加入 `/etc/picmake.env`，保持 root 所有、权限 `600`，保存后 `systemctl restart picmake`。不要把真实凭据贴到聊天、命令参数、仓库、日志或客户端配置中。
+
+```dotenv
+IGDB_CLIENT_ID=填写控制台的Client_ID
+IGDB_CLIENT_SECRET=填写控制台的Client_Secret
+```
+
+不配置时其他功能正常；已登录的 `GET /api/igdb/status` 返回 `{configured:false}`，搜索/读取/导入接口返回 HTTP 503。`configured:true` 只表示两项配置存在，实际搜索才能验证凭据是否有效。Client Secret 更新后需要更新环境文件并重启。Twitch access token 自动取得、在到期前刷新，并在 IGDB 拒绝 token 时重试一次；不会下发到客户端或落盘。
+
+以下接口要求现有会话；POST 额外要求同源 Origin 与 X-CSRF-Token：
+
+- `GET /api/igdb/status` → `{configured}`。
+- `GET /api/igdb/search?q=游戏名` → `{query,games:[{id,name,alternativeNames,year,platforms,cover}]}`。cover 为 null 或 `{imageId,thumbnailUrl}`。搜索同名游戏时用年份和平台区分；中文名称查 IGDB 别名，必要时查本地化名称。未收录的译名可改搜英文，不会自动猜测并替换用户卡片。
+- `GET /api/igdb/games/:id/images` → `{game:{id,name,url},images:[{id,kind,width,height,thumbnailUrl,previewUrl}]}`。kind 为 screenshot / artwork / cover，优先展示截图和宣传图。
+- `POST /api/igdb/import` `{gameId,imageId,kind}` → `{dataUrl,source:{provider,gameId,gameName,imageId,kind,url}}`。确认图片确属游戏后，从固定 IGDB CDN 下载 1080p 尺寸，限制 20MB，校验 MIME 与文件头，禁止重定向和任意地址。客户端裁剪后沿用项目素材保存流程，此接口本身不写数据库或素材目录。
+
+IGDB API 请求串行且间隔至少 270ms（低于每秒 4 次），队列最多 16 项，等待过久返回 429；相同搜索/图片列表合并请求并缓存 5 分钟，最多 100 项。下载最多同时 3 张；每次上游请求含响应体读取限时 12 秒。上游限流返回 429、凭据未配或失效返回 503、连接/响应故障返回 502，并提供中文提示，不泄露上游错误正文。候选缩略图直接由 IGDB CDN 提供，采用后的图片保存进私人项目，历史项目无需依赖临时 CDN 地址。
 
 
 ## 多项目接口与旧站迁移
@@ -84,3 +105,6 @@ systemctl start picmake
 ```
 
 成功后保留用户名、所有项目与图片，撤销全部设备会话。用新密码重新登录即可。若命令失败，原密码和会话保持原状。
+
+
+2026-09-06 生产 IGDB 发布：`/opt/picmake/releases/20260906-igdb`。凭据位于 root 所有、0600 权限的 `/etc/picmake-igdb.env`，由 `picmake.service.d/igdb.conf` 加载；本机 `.env.igdb.local` 及其交换文件不进入 Git。发布前备份为 `/var/backups/picmake/picmake-20260906T153258Z-1049585.tar.gz`。配置更新后重启服务生效；更换凭据无需重新构建客户端。

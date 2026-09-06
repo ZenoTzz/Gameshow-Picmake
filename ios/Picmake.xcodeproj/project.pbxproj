@@ -13,15 +13,20 @@
 		3FF9DDD2B3C3F2B4A2030458 /* PhotoPickerSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38A4CB22963F4ECAC6AF2AF9 /* PhotoPickerSupport.swift */; };
 		469E0454CDDE51C4C49E63A7 /* TemplateSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4A8D5F65C6AFECFAC5DF5B9 /* TemplateSupport.swift */; };
 		5A330F0D8EB9ADB1A253355B /* TemplateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645EFD7C684A6F2E7FF0409C /* TemplateTests.swift */; };
+		5E21DA01DBE62B4CC87A7FD4 /* IGDBDemo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A09D360D91200295ABB6FD64 /* IGDBDemo.swift */; };
+		5F29B1DCEF3DE9E14A87FD05 /* IGDBImagePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9EBEDFECF82A861C5105709 /* IGDBImagePickerView.swift */; };
 		7ECC87659D2E0C5B5D7CED05 /* SessionKeychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD213D15120A48AB9133E290 /* SessionKeychain.swift */; };
 		88824C9B97F70726CA6FE4C4 /* PosterPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E79674DA1D6C6B10286B1266 /* PosterPreviewView.swift */; };
 		8ECC74E0213AF4F9EAF7A438 /* CloudAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2823F81FB88863F06BB9888 /* CloudAPI.swift */; };
 		9A1A24A8D980B5C738AFD9D2 /* PicmakeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B2A33676CB5D2FA1E619A25 /* PicmakeApp.swift */; };
 		A20FC6325F4449228854B4C1 /* ProjectLibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B57184C97399DBFB5C24ED /* ProjectLibraryView.swift */; };
 		A345D76D65867BD7FA0AF39D /* ThemeEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BBDE9C2C897216F8D76EBA7 /* ThemeEditorView.swift */; };
+		B4026FC20EFDC2AC2C8B78E4 /* IGDBModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287A89B951D0D275A5AADF0F /* IGDBModels.swift */; };
 		B8377AB7AF9DCE79F88B2EDA /* themes.json in Resources */ = {isa = PBXBuildFile; fileRef = A374B68699B6A5A64FD9B828 /* themes.json */; };
 		BC9A12421254DD18C2D6EBE4 /* CoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245707F60A94E0017CA9B613 /* CoreTests.swift */; };
 		D317CE8BFE7C172AD5ED9A1E /* Renderer in Resources */ = {isa = PBXBuildFile; fileRef = 342B91C2B3F02358FC79CF60 /* Renderer */; };
+		D531CDD6EB2ADCB802D7D339 /* IGDBFlowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC01B1E3F60AEEB0AA92E938 /* IGDBFlowTests.swift */; };
+		DC588557B25E5593D8069713 /* IGDBTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5060084120BBE157EC5324C /* IGDBTests.swift */; };
 		E990D86D291B61D64876EAB6 /* CardEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78220865501DF4CD225A5536 /* CardEditorView.swift */; };
 		EC36FF2817D5FED62546DEF9 /* AppFlowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C1EBE6EE539E163BB0E49B3 /* AppFlowTests.swift */; };
 		F136E00E5A82288CF12E2419 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8780DAEDAAD65F14D5606CED /* Models.swift */; };
@@ -48,6 +53,7 @@
 /* Begin PBXFileReference section */
 		243BF5E52FE511B422793C87 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		245707F60A94E0017CA9B613 /* CoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreTests.swift; sourceTree = "<group>"; };
+		287A89B951D0D275A5AADF0F /* IGDBModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IGDBModels.swift; sourceTree = "<group>"; };
 		33B57184C97399DBFB5C24ED /* ProjectLibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectLibraryView.swift; sourceTree = "<group>"; };
 		342B91C2B3F02358FC79CF60 /* Renderer */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Renderer; path = Picmake/Renderer; sourceTree = SOURCE_ROOT; };
 		38A4CB22963F4ECAC6AF2AF9 /* PhotoPickerSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPickerSupport.swift; sourceTree = "<group>"; };
@@ -60,11 +66,15 @@
 		93606DCEA6A3FACC4BE176C5 /* PicmakeUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = PicmakeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B2A33676CB5D2FA1E619A25 /* PicmakeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PicmakeApp.swift; sourceTree = "<group>"; };
 		9F44130FF3CF2654421607F0 /* demo-project.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "demo-project.json"; sourceTree = "<group>"; };
+		A09D360D91200295ABB6FD64 /* IGDBDemo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IGDBDemo.swift; sourceTree = "<group>"; };
 		A29B55D1A8CB48ADE61A6608 /* AppStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStore.swift; sourceTree = "<group>"; };
 		A374B68699B6A5A64FD9B828 /* themes.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = themes.json; sourceTree = "<group>"; };
 		A4A8D5F65C6AFECFAC5DF5B9 /* TemplateSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateSupport.swift; sourceTree = "<group>"; };
 		AB19DF0D99877A51018E3DD1 /* PicmakeTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = PicmakeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		C9EBEDFECF82A861C5105709 /* IGDBImagePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IGDBImagePickerView.swift; sourceTree = "<group>"; };
+		D5060084120BBE157EC5324C /* IGDBTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IGDBTests.swift; sourceTree = "<group>"; };
 		E79674DA1D6C6B10286B1266 /* PosterPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PosterPreviewView.swift; sourceTree = "<group>"; };
+		EC01B1E3F60AEEB0AA92E938 /* IGDBFlowTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IGDBFlowTests.swift; sourceTree = "<group>"; };
 		F123916DF7A6A187CF3769CD /* WorkspaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkspaceView.swift; sourceTree = "<group>"; };
 		F2823F81FB88863F06BB9888 /* CloudAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudAPI.swift; sourceTree = "<group>"; };
 		FD213D15120A48AB9133E290 /* SessionKeychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionKeychain.swift; sourceTree = "<group>"; };
@@ -75,6 +85,7 @@
 			isa = PBXGroup;
 			children = (
 				245707F60A94E0017CA9B613 /* CoreTests.swift */,
+				D5060084120BBE157EC5324C /* IGDBTests.swift */,
 				645EFD7C684A6F2E7FF0409C /* TemplateTests.swift */,
 			);
 			path = PicmakeTests;
@@ -84,6 +95,7 @@
 			isa = PBXGroup;
 			children = (
 				4C1EBE6EE539E163BB0E49B3 /* AppFlowTests.swift */,
+				EC01B1E3F60AEEB0AA92E938 /* IGDBFlowTests.swift */,
 			);
 			path = PicmakeUITests;
 			sourceTree = "<group>";
@@ -129,6 +141,7 @@
 			isa = PBXGroup;
 			children = (
 				78220865501DF4CD225A5536 /* CardEditorView.swift */,
+				C9EBEDFECF82A861C5105709 /* IGDBImagePickerView.swift */,
 				38A4CB22963F4ECAC6AF2AF9 /* PhotoPickerSupport.swift */,
 				E79674DA1D6C6B10286B1266 /* PosterPreviewView.swift */,
 				33B57184C97399DBFB5C24ED /* ProjectLibraryView.swift */,
@@ -156,6 +169,8 @@
 			children = (
 				A29B55D1A8CB48ADE61A6608 /* AppStore.swift */,
 				F2823F81FB88863F06BB9888 /* CloudAPI.swift */,
+				A09D360D91200295ABB6FD64 /* IGDBDemo.swift */,
+				287A89B951D0D275A5AADF0F /* IGDBModels.swift */,
 				8780DAEDAAD65F14D5606CED /* Models.swift */,
 				FD213D15120A48AB9133E290 /* SessionKeychain.swift */,
 				A4A8D5F65C6AFECFAC5DF5B9 /* TemplateSupport.swift */,
@@ -287,6 +302,9 @@
 				F2EF3F5F90903E5FAC241457 /* AppStore.swift in Sources */,
 				E990D86D291B61D64876EAB6 /* CardEditorView.swift in Sources */,
 				8ECC74E0213AF4F9EAF7A438 /* CloudAPI.swift in Sources */,
+				5E21DA01DBE62B4CC87A7FD4 /* IGDBDemo.swift in Sources */,
+				5F29B1DCEF3DE9E14A87FD05 /* IGDBImagePickerView.swift in Sources */,
+				B4026FC20EFDC2AC2C8B78E4 /* IGDBModels.swift in Sources */,
 				F136E00E5A82288CF12E2419 /* Models.swift in Sources */,
 				3FF9DDD2B3C3F2B4A2030458 /* PhotoPickerSupport.swift in Sources */,
 				9A1A24A8D980B5C738AFD9D2 /* PicmakeApp.swift in Sources */,
@@ -304,6 +322,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BC9A12421254DD18C2D6EBE4 /* CoreTests.swift in Sources */,
+				DC588557B25E5593D8069713 /* IGDBTests.swift in Sources */,
 				5A330F0D8EB9ADB1A253355B /* TemplateTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -313,6 +332,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EC36FF2817D5FED62546DEF9 /* AppFlowTests.swift in Sources */,
+				D531CDD6EB2ADCB802D7D339 /* IGDBFlowTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -337,7 +357,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "展会制图";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "将导出的海报保存到你的相册。";
@@ -348,7 +368,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.1.0;
+				MARKETING_VERSION = 0.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = uk.zenohy.picmake;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -519,7 +539,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "展会制图";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "将导出的海报保存到你的相册。";
@@ -530,7 +550,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.1.0;
+				MARKETING_VERSION = 0.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = uk.zenohy.picmake;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";

@@ -4,6 +4,7 @@ import PhotosUI
 @MainActor
 struct CardEditorView: View {
     @Binding var card: GameCard
+    @EnvironmentObject private var store: AppStore
 
     @State private var selectedPhoto: PhotosPickerItem?
     @State private var photoTask: Task<Void, Never>?
@@ -14,10 +15,24 @@ struct CardEditorView: View {
     @State private var previewFailed = false
     @State private var customPlatform = ""
     @State private var confirmsImageRemoval = false
+    @State private var matchedGames: [IGDBGame] = []
+    @State private var matchMessage: String?
+    @State private var matching = false
+    @State private var igdbPicker: IGDBPickerRequest?
     @FocusState private var focusedField: Field?
 
     private enum Field: Hashable { case title, date, info, customPlatform }
     private let platformOptions = ["PS5", "XBOX Series", "Switch", "Switch 2", "PC", "Mac", "移动端", "iOS", "Android"]
+
+    private struct IGDBPickerRequest: Identifiable {
+        let id = UUID()
+        let cardID: String
+        let imageRequestID: UUID
+        let previousImage: String
+        let query: String
+        let games: [IGDBGame]
+        let selectedGame: IGDBGame?
+    }
 
     var body: some View {
         let photoLabel = card.image.isEmpty ? "从相册选择图片" : "替换图片"
@@ -34,6 +49,39 @@ struct CardEditorView: View {
                 imagePreview
                 PhotosPicker(selection: $selectedPhoto, matching: .images, photoLibrary: .shared()) {
                     Label(photoLabel, systemImage: "photo.badge.plus")
+                }
+                if store.authenticated {
+                    Button { openIGDB() } label: {
+                        Label("搜索游戏图片", systemImage: "magnifyingglass")
+                    }
+                    .accessibilityIdentifier("card.searchImages")
+                    if matching {
+                        HStack(spacing: 8) {
+                            ProgressView()
+                            Text("正在匹配游戏…").font(.footnote).foregroundStyle(.secondary)
+                        }
+                    }
+                    ForEach(matchedGames.prefix(3)) { game in
+                        Button { openIGDB(game: game) } label: {
+                            VStack(alignment: .leading, spacing: 3) {
+                                Text(game.name).font(.subheadline)
+                                if !game.detail.isEmpty {
+                                    Text(game.detail).font(.caption).foregroundStyle(.secondary).lineLimit(2)
+                                }
+                            }
+                        }
+                        .accessibilityLabel("查看 \(game.name) 的图片，\(game.detail)")
+                    }
+                    if let matchMessage {
+                        Text(matchMessage).font(.footnote).foregroundStyle(.secondary)
+                    }
+                } else {
+                    Text("返回项目，使用网站账号登录后可按游戏名称搜索图片。")
+                        .font(.footnote).foregroundStyle(.secondary)
+                }
+                if card.raw["imageSource"]?["provider"].string == "igdb" {
+                    Text("图片资料：IGDB · \(card.raw["imageSource"]?["gameName"].string ?? "")")
+                        .font(.caption).foregroundStyle(.secondary)
                 }
                 if isImporting {
                     HStack(spacing: 10) {
@@ -118,14 +166,31 @@ struct CardEditorView: View {
             customPlatform = ""
             imageError = nil
             focusedField = nil
+            igdbPicker = nil
+            matchedGames = []
+            matchMessage = nil
         }
         .onDisappear { cancelPhotoImport() }
         .task(id: card.image) { await loadPreview() }
+        .task(id: "\(card.id)|\(card.title)|\(store.authenticated)") { await matchGameTitle() }
+        .sheet(item: $igdbPicker) { request in
+            IGDBImagePickerView(query: request.query, games: request.games, selectedGame: request.selectedGame) { result in
+                guard igdbPicker?.id == request.id, card.id == request.cardID,
+                      photoRequestID == request.imageRequestID, card.image == request.previousImage else { return false }
+                var updated = card
+                updated.image = result.dataUrl
+                updated.raw["imageSource"] = result.source.jsonValue
+                card = updated
+                imageError = nil
+                return true
+            }
+        }
         .confirmationDialog("移除这张卡片的图片？", isPresented: $confirmsImageRemoval, titleVisibility: .visible) {
             Button("移除图片", role: .destructive) {
                 cancelPhotoImport()
                 selectedPhoto = nil
                 card.image = ""
+                card.raw.removeValue(forKey: "imageSource")
                 imageError = nil
             }
             Button("取消", role: .cancel) { }
@@ -209,6 +274,7 @@ struct CardEditorView: View {
 
     private func importPhoto(_ photo: PhotosPickerItem?) {
         guard let photo else { return }
+        igdbPicker = nil
         cancelPhotoImport()
         let requestID = photoRequestID
         let cardID = card.id
@@ -238,12 +304,52 @@ struct CardEditorView: View {
                 try Task.checkCancellation()
                 guard card.id == cardID, photoRequestID == requestID, card.image == previousImage else { return }
                 card.image = dataURL
+                card.raw.removeValue(forKey: "imageSource")
             } catch is CancellationError {
                 // A different selection or leaving the editor cancels this request.
             } catch {
                 guard card.id == cardID, photoRequestID == requestID, !Task.isCancelled else { return }
                 imageError = error.localizedDescription
             }
+        }
+    }
+
+    private func openIGDB(game: IGDBGame? = nil) {
+        guard store.authenticated else { return }
+        cancelPhotoImport()
+        selectedPhoto = nil
+        focusedField = nil
+        igdbPicker = IGDBPickerRequest(cardID: card.id, imageRequestID: photoRequestID,
+                                      previousImage: card.image, query: card.title,
+                                      games: matchedGames, selectedGame: game)
+    }
+
+    private func matchGameTitle() async {
+        let cardID = card.id
+        let query = IGDBSupport.query(card.title)
+        matchedGames = []
+        matchMessage = nil
+        matching = false
+        guard store.authenticated, IGDBSupport.validQuery(query) else { return }
+        do {
+            try await Task.sleep(for: .milliseconds(700))
+            try Task.checkCancellation()
+            matching = true
+            guard try await store.api.igdbConfigured() else {
+                guard !Task.isCancelled, card.id == cardID, IGDBSupport.query(card.title) == query else { return }
+                matching = false
+                matchMessage = "搜图服务尚未配置。"
+                return
+            }
+            let games = try await store.api.igdbSearch(query: query)
+            guard !Task.isCancelled, card.id == cardID, IGDBSupport.query(card.title) == query, store.authenticated else { return }
+            matching = false
+            matchedGames = games
+            matchMessage = games.isEmpty ? "未找到匹配游戏，可点搜图尝试英文名或简称。" : "点选游戏查看图片；只有选图后才会替换当前图片。"
+        } catch {
+            guard !Task.isCancelled, card.id == cardID, IGDBSupport.query(card.title) == query else { return }
+            matching = false
+            matchMessage = "暂时无法匹配游戏，可点搜图重试。\(error.localizedDescription)"
         }
     }
 

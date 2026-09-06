@@ -8,3 +8,7 @@ ios/**/xcuserdata/
 ios/**/*.xcuserstate
 ios/build/
 ios/DerivedData/
+
+.env.igdb.local*
+*.swp
+*.swo

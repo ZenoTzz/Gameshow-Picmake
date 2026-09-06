@@ -68,6 +68,10 @@ function App() {
   const [stitchPages, setStitchPages] = useState(false);
   const [showThemeEditor, setShowThemeEditor] = useState(false);
   const [cropState, setCropState] = useState(null);
+  const imageOperation = useRef(0);
+  const latestProjectEpoch = useRef(projectEpoch);
+  latestProjectEpoch.current = projectEpoch;
+  useEffect(() => { imageOperation.current += 1; setCropState(null); }, [projectEpoch]);
   const [isDragging, setIsDragging] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
   const [previewTheme, setPreviewTheme] = useState(null);
@@ -297,7 +301,7 @@ function App() {
     setPoster((current) => ({
       ...current,
       games: current.games.map((game, gameIndex) =>
-        gameIndex === index ? { ...game, [key]: value } : game,
+        gameIndex === index ? { ...game, [key]: value, ...(key === "image" ? { imageSource: null } : {}) } : game,
       ),
     }));
   }
@@ -402,14 +406,30 @@ function App() {
     reader.readAsDataURL(file);
   }
 
-  function handleImage(index, file) {
-    const gameId = poster.games[index].id;
-    readImage(file, (imageSrc) => setCropState({ gameId, imageSrc }));
+  function handleImage(gameId, file) {
+    const operation = ++imageOperation.current;
+    const epoch = projectEpoch;
+    const originalImage = latestPoster.current.games.find((game) => game.id === gameId)?.image;
+    readImage(file, (imageSrc) => {
+      if (operation !== imageOperation.current || epoch !== latestProjectEpoch.current) return;
+      const game = latestPoster.current.games.find((item) => item.id === gameId);
+      if (!game || game.image !== originalImage) return;
+      setCropState({ gameId, imageSrc, epoch, originalImage, source: null });
+    });
+  }
+
+  function handleIgdbImage(gameId, imageSrc, source) {
+    const game = latestPoster.current.games.find((item) => item.id === gameId);
+    if (!game) return;
+    imageOperation.current += 1;
+    setCropState({ gameId, imageSrc, source, epoch: projectEpoch, originalImage: game.image });
   }
 
   function handleCropComplete(dataUrl) {
-    if (!cropState) return;
-    setPoster((current) => ({ ...current, games: current.games.map((game) => game.id === cropState.gameId ? { ...game, image: dataUrl } : game) }));
+    if (!cropState || cropState.epoch !== latestProjectEpoch.current) return;
+    setPoster((current) => ({ ...current, games: current.games.map((game) =>
+      game.id === cropState.gameId && game.image === cropState.originalImage
+        ? { ...game, image: dataUrl, imageSource: cropState.source ?? null } : game) }));
     setCropState(null);
   }
 
@@ -460,7 +480,8 @@ function App() {
   }
 
   function recropGame(game) {
-    if (game.image) setCropState({ gameId: game.id, imageSrc: Core.resolveLogoSrc(game.image) });
+    imageOperation.current += 1;
+    if (game.image) setCropState({ gameId: game.id, imageSrc: Core.resolveLogoSrc(game.image), epoch: projectEpoch, originalImage: game.image, source: game.imageSource });
   }
 
   async function saveTemplate() {
@@ -623,7 +644,7 @@ function App() {
           <SortableGameList items={poster.games.map(game => game.id)} onDragStart={() => setIsDragging(true)} onDragCancel={() => setIsDragging(false)} onDragEnd={(event) => { setIsDragging(false); handleDragEnd(event); }}>
             {poster.games.map((game, index) => <SortableGameCard id={game.id} key={game.id}>
               <div data-editor-game-id={game.id} className={selectedGameId === game.id ? "selected-editor-game" : ""}>
-                <GameEditor game={game} index={index} total={poster.games.length} isExpanded={!isDragging && expandedGameId === game.id} onSelect={() => { if (expandedGameId === game.id) setExpandedGameId(null); else selectGame(game.id); }} onChange={(key, value) => updateGame(index, key, value)} onMove={(direction) => moveGame(index, direction)} onRemove={() => removeGame(index)} onImage={(file) => handleImage(index, file)} onRecrop={() => recropGame(game)}/>
+                <GameEditor key={`${projectEpoch}:${game.id}`} game={game} index={index} total={poster.games.length} isExpanded={!isDragging && expandedGameId === game.id} onSelect={() => { if (expandedGameId === game.id) setExpandedGameId(null); else selectGame(game.id); }} onChange={(key, value) => updateGame(index, key, value)} onMove={(direction) => moveGame(index, direction)} onRemove={() => removeGame(index)} onImage={(file) => handleImage(game.id, file)} onIgdbImage={(dataUrl, source) => handleIgdbImage(game.id, dataUrl, source)} onRecrop={() => recropGame(game)}/>
               </div>
             </SortableGameCard>)}
           </SortableGameList>

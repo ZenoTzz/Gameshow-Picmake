@@ -14,11 +14,12 @@ import CryptoKit
     private let demo: Bool
     private var started = false
     init(api: CloudAPI = CloudAPI(), directory: URL? = nil) {
-        self.api = api
         #if DEBUG
         demo = ProcessInfo.processInfo.arguments.contains("--demo")
+        self.api = IGDBDemo.enabled ? IGDBDemo.makeAPI() : api
         #else
         demo = false
+        self.api = api
         #endif
         self.directory = directory ?? FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0].appendingPathComponent(demo ? "DemoDrafts" : "ProjectDrafts")
     }
@@ -33,6 +34,12 @@ import CryptoKit
                     try persistDraft(ProjectDraft(id: UUID().uuidString, cloudID: nil, name: "Nintendo Direct 示例", revision: 0, project: document))
                 }
             } catch { self.error = error.localizedDescription }
+            #if DEBUG
+            if IGDBDemo.enabled {
+                authenticated = true
+                username = "本地演示"
+            }
+            #endif
             return
         }
         isBusy = true; defer { isBusy = false }

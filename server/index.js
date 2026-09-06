@@ -5,6 +5,8 @@ const app = await createApp({
   publicDir: path.resolve(process.env.PUBLIC_DIR || './dist'),
   origin: process.env.PUBLIC_ORIGIN,
   bootstrapToken: process.env.BOOTSTRAP_TOKEN,
+  igdbClientId: process.env.IGDB_CLIENT_ID,
+  igdbClientSecret: process.env.IGDB_CLIENT_SECRET,
   allowInsecureCookies: process.env.ALLOW_INSECURE_COOKIES === 'true',
 });
 app.server.listen(Number(process.env.PORT || 8790), process.env.HOST || '127.0.0.1', () => console.log('Picmake server ready'));
